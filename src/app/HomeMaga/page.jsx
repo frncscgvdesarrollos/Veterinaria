@@ -1,22 +1,25 @@
 'use client';
 import { useState, useEffect } from 'react';
-import { getTurnosChekeo, clienteExiste } from '../firebase';
+import { getTurnosChekeo } from '../firebase';
 
 export default function Negocio() {
-    const [turnos, setChequeos] = useState([]);
+    const [turnos, setTurnos] = useState([]);
     const [opcionSeleccionada, setOpcionSeleccionada] = useState('turnosVeterinariaHoy');
+    const [cargar , setCargar] = useState(true);
+
+    const fetchTurnos = () => {
+        console.log('Cargando turnos...');
+        getTurnosChekeo()
+            .then(turnosData => setTurnos(turnosData))
+            .catch(error => console.error('Error al obtener los turnos:', error));
+            setCargar(false);
+    };
 
     useEffect(() => {
-        const fetchTurnos = () => {
-            getTurnosChekeo()
-                .then(turnosData => setChequeos(turnosData))
-                .catch(error => console.error('Error al obtener los turnos:', error));
-        };
-
+        if (cargar === false){
         fetchTurnos();
-    }, []);
-
-
+        }
+    }, []); // <- Array vacío para ejecutar el efecto solo una vez
 
     const obtenerTurnosHoy = () => {
         const fechaHoy = new Date();
@@ -58,21 +61,17 @@ export default function Negocio() {
         turnosMostrados = turnos.filter(turno => turno.selectedLocation === 'veterinaria');
     }
 
-    function handleClients(){
-        
-    }
-
     return (
         <div className="bg-gray-100 min-h-screen p-4 sm:p-6 md:p-8 lg:p-10">
-            <h1 className="text-2xl font-semibold mb-4">Home Negocio</h1>
-            <div className="flex justify-between mb-6">
+            <h1 className="text-3xl font-semibold mb-8 text-center">Turnos de la Veterinaria</h1>
+            <div className="flex justify-around mb-6">
                 <button
                     className={`p-2 rounded-md ${
                         opcionSeleccionada === 'todosTurnosVeterinaria' ? 'bg-blue-500 text-white' : 'bg-gray-300'
                     }`}
                     onClick={() => setOpcionSeleccionada('todosTurnosVeterinaria')}
                 >
-                    Todos los Turnos Veterinaria
+                    Todos los Turnos
                 </button>
                 <button
                     className={`p-2 rounded-md ${
@@ -80,7 +79,7 @@ export default function Negocio() {
                     }`}
                     onClick={() => setOpcionSeleccionada('turnosVeterinariaHoy')}
                 >
-                    Turnos Veterinaria Hoy
+                    Turnos de Hoy
                 </button>
                 <button
                     className={`p-2 rounded-md ${
@@ -88,12 +87,12 @@ export default function Negocio() {
                     }`}
                     onClick={() => setOpcionSeleccionada('turnosVeterinariaSemana')}
                 >
-                    Turnos Veterinaria Semana
+                    Turnos de la Semana
                 </button>
             </div>
-            <div>
+            <div className="grid gap-6 lg:grid-cols-3 md:grid-cols-2">
                 {turnosMostrados.map((turno, index) => (
-                    <div key={index} className="bg-white rounded-md shadow-md p-4 mb-4">
+                    <div key={index} className="bg-white rounded-lg shadow-md p-6">
                         <p className="text-lg font-semibold">Usuario: {turno.usuarioId}</p>
                         <p className="mb-2">Mascota: {turno.selectedPet}</p>
                         <p className="mb-2">Lugar: {turno.selectedLocation}</p>

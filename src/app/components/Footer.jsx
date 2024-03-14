@@ -1,6 +1,27 @@
+'use client';
 import Image from 'next/image';
+import { UserAuth } from '../context/AuthContext';
 
 export default function Footer() {
+  const { user  } = UserAuth();
+  const uid = user?.uid;
+  if(uid === "fgGyxXX05NNN5aMakZ7mRChW0gY2" || uid === "L6nqm2J1UuZCmZ4dS5K7Mhonxx42"){
+    return (
+      <footer className="bg-gray-200 p-6 sm:p-10 flex flex-col sm:flex-row items-center footerContainer">
+      <div className="w-full p-4 sm:p-0 mb-6 sm:mb-0">
+        <div className="p-4 sm:p-0"> 
+          <Image
+            src="/LOGO3.svg"
+            alt="logo"
+            width={100}
+            height={100}
+          />
+        </div>
+      </div>
+    </footer>
+
+    )
+  }
   return (
     <footer className="bg-gray-200 p-6 sm:p-10 flex flex-col sm:flex-row items-center footerContainer">
       <div className="w-full p-4 sm:p-0 mb-6 sm:mb-0">
