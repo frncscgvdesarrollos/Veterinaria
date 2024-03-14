@@ -1,0 +1,131 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+:root {
+  --foreground-rgb: 0, 0, 0;
+  --background-start-rgb: 214, 219, 220;
+  --background-end-rgb: 255, 255, 255;
+}
+
+@media (prefers-color-scheme: dark) {
+  :root {
+    --foreground-rgb: 255, 255, 255;
+    --background-start-rgb: 0, 0, 0;
+    --background-end-rgb: 0, 0, 0;
+  }
+}
+.object-contain {
+  object-fit: contain;
+  height: 250px !important;
+  max-height: 250px !important  ;
+  width: auto !important;
+  border-radius: 100%;
+}
+body {
+  scrollbar-color:  #323ffd #232999;
+  scrollbar-width: auto;
+  color: rgb(var(--foreground-rgb));
+  background: linear-gradient(
+      to bottom,
+      transparent,
+      rgb(var(--background-end-rgb))
+    )
+    rgb(var(--background-start-rgb));
+}
+
+.borde-pasos{
+  margin: auto;
+  z-index: 999;
+  border: 5px solid;
+  border-radius: 100%;
+  border-color: crimson ;
+}
+.hr-position{
+  position: relative;
+  top: -100px;
+}
+
+.contenedorVeterinaria {
+  scrollbar-color: blue yellow;
+  font-size: 25px;
+  color: rgb(57, 156, 153);
+  /* background: radial-gradient( circle, rgba(60, 137, 245, 0.586) , #e170d97a );   */
+}
+.imagenVeterinaria {
+  border-radius:  100%;
+}
+.textoVeterinaria {
+
+  font-weight: bolder;
+  letter-spacing: 5px;
+
+}
+@keyframes changeBorderColor {
+  0% {
+    border-color: white;
+  }
+  25% {
+    border-color: #ff0000; /* Rojo */
+  }
+  50% {
+    border-color: #ffff00; /* Amarillo */
+  }
+  75% {
+    border-color: #00ff00; /* Verde */
+  }
+  100% {
+    border-color: white;
+  }
+}
+
+.container-reservas, .container-reservas2 {
+  animation: changeBorderColor 8s infinite; /* La animación dura 8 segundos y se repite infinitamente */
+}
+
+.container-reservas {
+  border-bottom-right-radius: 50px;
+  border-bottom-left-radius: 50px;
+  border-top-right-radius: 30%;
+  border-top-left-radius: 10%;
+  background: linear-gradient(to bottom, transparent, #2d2b51bc);
+}
+
+.container-reservas2 {
+  border-bottom-left-radius: 50px;
+  border-top-left-radius: 30%;
+  border-top-right-radius: 10%;
+  background: linear-gradient(to bottom, transparent, #2d2b51bc);
+}
+.HomeCliente{
+  background-image: url('/patron2.jpg');
+
+
+}
+@keyframes slide {
+  0% {
+    opacity: 0;
+    transform: translateY(50px);
+  }
+  100% {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+.animate-slide {
+  animation: slide 5s ease-out;
+}
+.clase-fondo{
+  background-image: url('/patron1.jpg');
+  background-repeat: no-repeat;
+  background-size: cover;
+  background-position: center;
+  
+}
+.footerContainer{
+  background-image: url('/h2.jpg');
+  background-repeat: no-repeat;
+  background-size: cover;
+  background-position: center;
+}
