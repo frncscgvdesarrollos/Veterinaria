@@ -290,3 +290,33 @@ export async function getClientes() {
   return clientes
   
 }
+
+
+export async function getProducts() {
+  const products = [];
+  const q = await query(collection(db, "productos"));
+  const querySnapshot = await getDocs(q);
+  querySnapshot.forEach((doc) => {
+    products.push(doc.data());
+  })
+  console.log(products)
+  return products
+}
+export async function createProduct(product) {
+  try {
+    const docRef = await addDoc(collection(db, "productos"), product);
+    console.log("Document written with ID: ", docRef.id);
+  } catch (e) {
+    console.error("Error adding document: ", e);
+  }
+}
+export  async function deleteProduct(id) {
+  try {
+    const docRef = doc(db, "productos", id);
+    await deleteDoc(docRef);
+    console.log("Document deleted successfully");
+  } catch (error) {
+    console.error("Error deleting document: ", error);
+  }
+}
+

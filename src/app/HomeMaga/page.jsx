@@ -1,6 +1,7 @@
 'use client'
 import { useState , useEffect } from 'react';
 import { UserAuth } from '../context/AuthContext';
+import Productos from '../components/Productos';
 export default function Page() {
     const {user} = UserAuth();
     const uid = user?.uid;
@@ -10,9 +11,7 @@ export default function Page() {
                 <h1 className='text-xl font-bold text-cyan-800'>Oficina</h1> 
                 <div className='grid grid-cols-3 gap-4 p-16'>
                     <div className='col-span-1  bg-red-300 h-[300px]'>
-                        <h3 className='text-xl text-center'>Repartos de productos</h3>
-                        <hr></hr>
-                        <h4 className='font-bold'>Estado de los repartos</h4>
+                            <Productos/>
                     </div>
                     <div className='col-span-1 bg-red-300 h-[300px]'>
                         <h3 className='text-xl text-center'>Traslados</h3>
