@@ -297,6 +297,7 @@ export async function getProducts() {
   const q = await query(collection(db, "productos"));
   const querySnapshot = await getDocs(q);
   querySnapshot.forEach((doc) => {
+    console.log(doc.data())
     products.push(doc.data());
   })
   console.log(products)

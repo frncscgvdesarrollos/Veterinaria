@@ -1,5 +1,5 @@
-'use client'
-import { useState , useEffect } from 'react';
+'use client';
+
 import { UserAuth } from '../context/AuthContext';
 import Productos from '../components/Productos';
 export default function Page() {
@@ -11,7 +11,7 @@ export default function Page() {
                 <h1 className='text-xl font-bold text-cyan-800'>Oficina</h1> 
                 <div className='grid grid-cols-3 gap-4 p-16'>
                     <div className='col-span-1  bg-red-300 h-[300px]'>
-                            <Productos/>
+                        <Productos />
                     </div>
                     <div className='col-span-1 bg-red-300 h-[300px]'>
                         <h3 className='text-xl text-center'>Traslados</h3>
@@ -32,9 +32,7 @@ export default function Page() {
                 </div>
             </div>
         )
-    }
-
-    return (
+    } else return (
         <h1>No estas autorizado</h1>    
     )
  

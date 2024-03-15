@@ -1,38 +1,47 @@
-import { useState , useEffect } from 'react'
+'use client'
+import { useState, useEffect } from 'react';
+import { getProducts } from '../firebase';
 
 export default function Productos() {
-    const [productos , setProductos] = useState([])
-    const [isLoading , setIsLoading] = useState(false)
-    
-    const pro = new Promise((resolve, reject) => {
-        getProducts()
-        .then((products) => {
-            setProductos(products)
-            resolve(products)
-        })
-        .catch((error) => {
-            reject(error)
-        })
-    })
+    const [productos, setProductos] = useState([]);
+    const [isLoading, setIsLoading] = useState(true);
 
     useEffect(() => {
-        pro()
-    }, [productos]);
+        const fetchData = () => {
+            return new Promise((resolve, reject) => {
+                getProducts()
+                    .then((products) => {
+                        setProductos(products);
+                        setIsLoading(false);
+                        resolve(products);
+                    })
+                    .catch((error) => {
+                        console.error('Error fetching products:', error);
+                        reject(error);
+                    });
+            });
+        };
+
+        if (isLoading) {
+            fetchData();
+        }
+    }, [isLoading]);
+
     return (
-    <>
-    <h3 className='text-xl text-center'>Repartos de productos</h3>
-    <hr></hr>
-    <h4 className='font-bold'>Estado de los repartos</h4>
-    <div>
-        {productos.map((product) => (
-            <div key={product.id}>
-                <p>{product.name}</p>
-                <p>{product.description}</p>
-                <p>{product.price}</p>
-                <p>{product.state}</p>
+        <>
+            <h3 className='text-xl text-center'>Repartos de productos</h3>
+            <hr />
+            <h4 className='font-bold'>Estado de los repartos</h4>
+            <div>
+                {productos.map((product) => (
+                    <div key={product.id}>
+                        <p>{product.nombre}</p>
+                        <p>{product.descripcion}</p>
+                        <p>{product.precio}</p>
+                        <p>{product.tipo}</p>
+                    </div>
+                ))}
             </div>
-        ))}
-    </div>
-  </>
-  )
+        </>
+    );
 }
