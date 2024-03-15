@@ -26,7 +26,9 @@ const MyCalendarPeluqueria = () => {
     largo: '0',
     info: '',
     selectedDate: new Date(),
-    transporte: true
+    transporte: true,
+    estadoTransporte: "buscar",
+    estadoPeluqueria: "esperando"
   });
   console.log(formData);
   useEffect(() => {
@@ -63,7 +65,7 @@ const MyCalendarPeluqueria = () => {
     }
 
     postTurnoPeluqueria(formData);
-    sumarTurnoPeluqueria(userId);
+    sumarTurnoPeluqueria(uid);
     alert('Turno registrado exitosamente');
   };
 
