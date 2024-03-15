@@ -47,7 +47,7 @@ export default function Header() {
     handlePremium();
   }, [user]);
   
-  if(uid === "L6nqm2J1UuZCmZ4dS5K7Mhonxx42" ){
+  if(uid === "L6nqm2J1UuZCmZ4dS5K7Mhonxx42"  || uid === "fgGyxXX05NNN5aMakZ7mRChW0gY2"  ){
     return (
       <header className="bg-gray-800 flex flex-col sm:flex-col justify-between items-center px-4 sm:px-8 py-4">
       <div>

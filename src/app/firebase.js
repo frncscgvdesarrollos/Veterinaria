@@ -279,3 +279,14 @@ export async function getTurnosPeluqueria() {
   return turnos
 }
 
+export async function getClientes() {
+  const clientes = [];
+  const q = await query(collection(db, "clientes"));
+  const querySnapshot = await getDocs(q);
+  querySnapshot.forEach((doc) => {
+    clientes.push(doc.data());
+  })
+  console.log(clientes)
+  return clientes
+  
+}
