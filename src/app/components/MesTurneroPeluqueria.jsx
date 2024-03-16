@@ -5,15 +5,17 @@ import 'react-calendar/dist/Calendar.css';
 import { MascotasContext } from '../context/MascotaContext';
 import { UserAuth } from '../context/AuthContext';
 import { UseClient } from '../context/ClientContext';
-import { postTurnoPeluqueria, sumarTurnoPeluqueria } from '../firebase';
+import { postTurnoPeluqueria, sumarTurnoPeluqueria , getLastTurnoPeluqueriaId } from '../firebase';
 
-const MyCalendarPeluqueria = () => {
-  
+export default function MyCalendarPeluqueria()  {
+
   const { user } = UserAuth();
   const uid = user?.uid;
   const { datosCliente } = UseClient();
   const { mascota } = MascotasContext();
+
   const [formData, setFormData] = useState({
+    id: null,
     usuarioid: uid,
     pago: false,
     nombre: datosCliente?.datosCliente?.nombre || '',
@@ -27,67 +29,77 @@ const MyCalendarPeluqueria = () => {
     info: '',
     selectedDate: new Date(),
     transporte: true,
-    estadoTransporte: "buscar",
-    estadoPeluqueria: "esperando"
+    estadoTransporte: 'buscar',
+    estadoPeluqueria: 'esperando',
   });
-  console.log(formData);
+
   useEffect(() => {
     if (datosCliente && datosCliente.length > 0) {
       const clienteData = datosCliente[0]?.datosCliente;
-      console.log(clienteData);
       const { nombre, apellido, direccion, telefono } = clienteData;
-      setFormData(prevData => ({
+      setFormData((prevData) => ({
         ...prevData,
         nombre: nombre || '',
         apellido: apellido || '',
         direccion: direccion || '',
-        telefono: telefono || ''
+        telefono: telefono || '',
       }));
     }
-    console.log(formData);
   }, [datosCliente]);
-  
 
-  const handleDateChange = newDate => {
-    setFormData(prevData => ({
+  const handleDateChange = (newDate) => {
+    setFormData((prevData) => ({
       ...prevData,
-      selectedDate: newDate
+      selectedDate: newDate,
     }));
   };
 
-  const handleFormSubmit = e => {
+  const handleFormSubmit = (e) => {
     e.preventDefault();
+    getLastTurnoPeluqueriaId()
+      .then((id) => {
+        const nuevoId = id + 1;
+        setFormData((prevData) => ({
+          ...prevData,
+          id: nuevoId,
+        }));
+        console.log('ID del nuevo turno:', nuevoId);
 
-    const emptyFields = Object.values(formData).filter(value => value === '').length;
-    if (emptyFields > 0) {
-      alert('Por favor completa todos los campos.');
-      return;
-    }
+        const emptyFields = Object.values(formData).filter((value) => value === '').length;
+        if (emptyFields > 0) {
+          alert('Por favor completa todos los campos.');
+          return;
+        }
 
-    postTurnoPeluqueria(formData);
-    sumarTurnoPeluqueria(uid);
-    alert('Turno registrado exitosamente');
+        postTurnoPeluqueria(formData);
+        sumarTurnoPeluqueria(uid);
+        alert('Turno registrado exitosamente');
+      })
+      .catch((error) => {
+        console.error('Error obteniendo el último turno:', error);
+        alert('Hubo un error al registrar el turno. Por favor, inténtalo de nuevo.');
+      });
   };
 
-  const handleChange = e => {
+  const handleChange = (e) => {
+    console.log(formData);
     const { name, value, type, checked } = e.target;
     const newValue = type === 'checkbox' ? checked : value;
-    setFormData(prevData => ({
+    setFormData((prevData) => ({
       ...prevData,
-      [name]: newValue
+      [name]: newValue,
     }));
   };
 
   const tileDisabled = ({ date, view }) => {
     return view === 'month' && (date.getDay() === 0 || date.getDay() === 6);
   };
-
   return (
     <div className="bg-gray-100 p-4 sm:p-6 md:p-8 lg:p-10">
       <div className="p-4 sm:p-6 md:p-8 lg:p-10">
         <form className="flex flex-col items-center" onSubmit={handleFormSubmit}>
           <div className="w-full mb-4">
-            <label htmlFor="selectedPet">Seleccione la mascota que necesita atención:</label>
+          <label htmlFor="selectedPet">Seleccione la mascota que necesita atención:</label>
             <select
               className="w-full p-2 border border-gray-300 rounded-md focus:outline-none"
               name="selectedPet"
@@ -95,12 +107,14 @@ const MyCalendarPeluqueria = () => {
               onChange={handleChange}
               value={formData.selectedPet}
             >
-              <option value="">Selecciona tu mascota</option>
-              {mascota && mascota.length > 0 && mascota.map(mascota => (
-                <option key={mascota.id} value={mascota.nombre}>
-                  {mascota.nombre}
-                </option>
-              ))}
+              <option value={''}>Selecciona tu mascota</option>
+              {mascota &&
+                mascota.length > 0 &&
+                mascota.map((mascotaItem, index) => (
+                  <option key={index} value={mascotaItem.nombre}>
+                    {mascotaItem.nombre}
+                  </option>
+                ))}
             </select>
           </div>
           <div className="w-full mb-4">
@@ -179,4 +193,3 @@ const MyCalendarPeluqueria = () => {
   );
 };
 
-export default MyCalendarPeluqueria;

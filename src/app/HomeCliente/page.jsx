@@ -1,3 +1,4 @@
+'use client'
 import Veterinaria from '../components/Veterinaria';
 
 export default function HomeCliente() {

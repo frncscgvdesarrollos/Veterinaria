@@ -1,6 +1,6 @@
 import { initializeApp } from "firebase/app";
 import { getAuth  } from "firebase/auth";
-import { getFirestore , collection, addDoc , getDocs, getDoc ,setDoc,  deleteDoc ,query, where, doc , updateDoc, arrayUnion } from "firebase/firestore";
+import { getFirestore , collection, addDoc , getDocs, getDoc ,setDoc,  deleteDoc ,query, where, doc , updateDoc, arrayUnion , orderBy, limit } from "firebase/firestore";
 import { getStorage , ref,  uploadBytes, getDownloadURL, getBytes  } from "firebase/storage";
 
 const firebaseConfig = {
@@ -273,6 +273,9 @@ export function getTurnosPeluqueriaBuscar() {
       throw error; // Propaga el error para que el manejador de errores en el componente pueda atraparlo
     });
 }
+export function getTurnosPeluqueriaBuscado(id){
+
+}
 export async function postTurnoPeluqueria (formData) {
   try {
     // Añadir un nuevo documento con los datos del formulario a la colección "turnosPeluqueria"
@@ -294,6 +297,24 @@ export async function getTurnosPeluqueria() {
   console.log(turnos)
   return turnos
 }
+export async function getLastTurnoPeluqueriaId() {
+  try {
+    const q = query(collection(db, 'turnosPeluqueria'), orderBy('id', 'desc'), limit(1));
+    const querySnapshot = await getDocs(q);
+    if (querySnapshot.empty) {
+      // No hay turnos existentes
+      console.log(querySnapshot);
+      return 0;
+    } else {
+      // Retorna el ID del primer turno encontrado (el mayor)
+      return querySnapshot.docs[0].data().id;
+    }
+  } catch (error) {
+    console.error('Error getting last turno ID:', error);
+    throw error;
+  }
+}
+
 
 export async function getClientes() {
   const clientes = [];
