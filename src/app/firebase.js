@@ -259,7 +259,10 @@ export async function getTurnosChekeo() {
 }
 export function getTurnosPeluqueriaBuscar() {
   const turnosBuscar = [];
-  const q = query(collection(db, "turnosPeluqueria"), where("estadoTransporte", "==", "buscar"));
+  const q = query(
+    collection(db, "turnosPeluqueria"),
+    where("estadoTransporte", "in", ["buscar", "buscado", "En Veterinaria"])
+  );
   return getDocs(q)
     .then((querySnapshot) => {
       querySnapshot.forEach((doc) => {
@@ -273,8 +276,99 @@ export function getTurnosPeluqueriaBuscar() {
       throw error; // Propaga el error para que el manejador de errores en el componente pueda atraparlo
     });
 }
-export function getTurnosPeluqueriaBuscado(id){
 
+export async function postNuevoEstadoTransporte(id) {
+  try {
+    // Obtener el documento específico con el ID proporcionado
+    const q = query(collection(db, "turnosPeluqueria"), where("id", "==", id));
+    const querySnapshot = await getDocs(q);
+    
+    if (querySnapshot.empty) {
+      throw new Error("No se encontró ningún documento con el ID especificado");
+    }
+
+    // Actualizar el campo estadoTransporte y estadoPeluqueria según corresponda
+    const docSnapshot = querySnapshot.docs[0];
+    const docRef = doc(db, "turnosPeluqueria", docSnapshot.id);
+    let nuevoEstadoTransporte = "";
+    let nuevoEstadoPeluqueria = "";
+
+    // Verificar el estado actual y actualizar según corresponda
+    if (docSnapshot.data().estadoTransporte === "buscar") {
+      nuevoEstadoTransporte = "buscado";
+    } else if (docSnapshot.data().estadoTransporte === "buscado") {
+      nuevoEstadoTransporte = "En Veterinaria";
+      nuevoEstadoPeluqueria = "En Peluqueria"
+    } else {
+      throw new Error("El estado actual no es válido para ser actualizado.");
+    }
+
+    // Actualizar los campos estadoTransporte y estadoPeluqueria con los nuevos estados
+    const updateData = {
+      estadoTransporte: nuevoEstadoTransporte,
+    };
+
+    if (nuevoEstadoPeluqueria === "En Peluqueria") {
+      updateData.estadoPeluqueria = nuevoEstadoPeluqueria;
+    }
+
+    await updateDoc(docRef, updateData);
+
+    // Devolver el documento actualizado
+    return { id: docSnapshot.id, ...docSnapshot.data(), estadoTransporte: nuevoEstadoTransporte };
+  } catch (error) {
+    console.error("Error actualizando documento:", error);
+    throw error;
+  }
+}
+export async function postNuevoEstadoPeluqueria(id) {
+  try {
+    // Obtener el documento específico con el ID proporcionado
+    const q = query(collection(db, "turnosPeluqueria"), where("id", "==", id));
+    const querySnapshot = await getDocs(q);
+    
+    if (querySnapshot.empty) {
+      throw new Error("No se encontró ningún documento con el ID especificado");
+    }
+
+    // Actualizar el campo estadoTransporte y estadoPeluqueria según corresponda
+    const docSnapshot = querySnapshot.docs[0];
+    const docRef = doc(db, "turnosPeluqueria", docSnapshot.id);
+    let nuevoEstadoTransporte = "";
+    let nuevoEstadoPeluqueria = "";
+
+    // Verificar el estado actual y actualizar según corresponda
+    if (docSnapshot.data().estadoPeluqueria === "esperando") {
+      nuevoEstadoPeluqueria = "En Peluqueria";
+    } else if (docSnapshot.data().estadoPeluqueria === "En Peluqueria") {
+      nuevoEstadoPeluqueria = "finalizado";
+      nuevoEstadoTransporte = "buscar"
+    } else {
+      throw new Error("El estado actual de la peluquería no es válido para ser actualizado.");
+    }
+
+    // Actualizar los campos estadoTransporte y estadoPeluqueria con los nuevos estados
+  
+    if(nuevoEstadoTransporte != "buscar"){
+      const updateData = {
+        estadoPeluqueria: nuevoEstadoPeluqueria
+      }
+      return     await updateDoc(docRef, updateData);
+    }else if (nuevoEstadoTransporte === "buscar") {
+      const updateData = {
+        estadoTransporte: nuevoEstadoTransporte,
+        estadoPeluqueria : nuevoEstadoPeluqueria
+      }
+      await updateDoc(docRef, updateData);
+    }
+
+
+    // Devolver el documento actualizado
+    return { id: docSnapshot.id, ...docSnapshot.data(), estadoTransporte: nuevoEstadoTransporte, estadoPeluqueria: nuevoEstadoPeluqueria };
+  } catch (error) {
+    console.error("Error actualizando documento:", error);
+    throw error;
+  }
 }
 export async function postTurnoPeluqueria (formData) {
   try {
@@ -358,3 +452,13 @@ export  async function deleteProduct(id) {
   }
 }
 
+export async function getTurnosPeluqueriaEsperando(){
+  const turnos = [];
+  const q = query(collection(db,"turnosPeluqueria") , where("estadoPeluqueria","==","esperando"))
+  const docs = await getDocs(q);
+  docs.forEach(doc => {
+    turnos.push(doc.data())
+  })
+  console.log(turnos)
+  return turnos
+}
