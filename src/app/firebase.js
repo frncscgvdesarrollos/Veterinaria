@@ -257,6 +257,22 @@ export async function getTurnosChekeo() {
   console.log(turnos)
   return turnos
 }
+export function getTurnosPeluqueriaBuscar() {
+  const turnosBuscar = [];
+  const q = query(collection(db, "turnosPeluqueria"), where("estadoTransporte", "==", "buscar"));
+  return getDocs(q)
+    .then((querySnapshot) => {
+      querySnapshot.forEach((doc) => {
+        turnosBuscar.push(doc.data());
+      });
+      console.log(turnosBuscar);
+      return turnosBuscar;
+    })
+    .catch((error) => {
+      console.error("Error getting documents: ", error);
+      throw error; // Propaga el error para que el manejador de errores en el componente pueda atraparlo
+    });
+}
 export async function postTurnoPeluqueria (formData) {
   try {
     // Añadir un nuevo documento con los datos del formulario a la colección "turnosPeluqueria"
