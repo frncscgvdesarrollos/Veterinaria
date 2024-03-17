@@ -100,6 +100,7 @@ export default function Page() {
                     </div>
                     </div>
                      <div className="col-span-1 bg-white shadow-md rounded-md overflow-hidden bg-gray-100 p-4 sm:p-6 md:p-8 lg:p-10">
+                        <h2 className='text-2xl font-bold p-4 text-center'>Llamar para confirmar</h2>
                         <LlamarA/>    
                     </div>               
                     {/* Tabla de turnos de peluquería */}

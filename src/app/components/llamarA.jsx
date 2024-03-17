@@ -60,16 +60,17 @@ export default function LlamarA() {
 
     return (
         <div className='w-full m-auto p-4 bg-violet-300 rounded-lg'>
-            <h3>Llamar a :</h3>
             {turnosAConfirmar.map((turno) => (
                 <div key={turno.id} className='flex justify-space-around items-center'>
                 {turno.estadoDelTurno != "confirmar" ? null :
                 <>
-                    <li className='w-1/3'>{turno.nombre}</li>
-                    <li className='w-1/3'>{turno.telefono}</li>
+                <div className='flex  mr-auto justify-around items-center'>
+                    <span className='w-1/3 mx-2 text-2xl'>{turno.nombre}</span>
+                    <span className='w-1/3 mx-2 text-2xl'>{turno.telefono}</span>
+                </div>
                     <span className='w-1/3'>
                         {turno.estadoDelTurno === "confirmar" &&
-                            <div className='flex justify-around'>
+                            <div className='flex mr-auto    justify-around'>
                                 <button onClick={() => handleConfirmar(turno.id)} className='bg-blue-500 text-white rounded-lg p-4 m-2'>Confirmar</button>
                                 <button onClick={() => handleCancelar(turno.id)} className='bg-red-500 text-yellow-300 rounded-lg p-4 m-2'>Cancelar</button>
                             </div>
