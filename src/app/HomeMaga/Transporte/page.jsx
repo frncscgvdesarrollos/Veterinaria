@@ -1,6 +1,6 @@
-'use client'
+'use client';
 import { useState, useEffect } from 'react';
-import { postNuevoEstadoTransporte, getTurnosPeluqueriaBuscar } from '../../firebase';
+import { avanzarEstadoTurno, getTurnosPeluqueria } from '../../firebase';
 
 function TransporteHome() {
   const [turnos, setTurnos] = useState([]);
@@ -8,7 +8,7 @@ function TransporteHome() {
 
   useEffect(() => {
     const fetchData = () => {
-      getTurnosPeluqueriaBuscar()
+      getTurnosPeluqueria()
         .then(data => {
           setTurnos(data);
           setIsLoading(false);
@@ -26,21 +26,26 @@ function TransporteHome() {
   const handleEstadoUpdate = (id, estadoActual) => {
     let proximoEstado;
 
-    if (estadoActual === 'buscar') {
-      proximoEstado = 'buscado';
-    } else if (estadoActual === 'buscado') {
-      proximoEstado = 'En Veterinaria';
-    } else if (estadoActual === 'En Veterinaria') {
-      proximoEstado = 'esperando';
+    switch (estadoActual) {
+      case 'buscar':
+        proximoEstado = 'buscado';
+        break;
+      case 'buscado':
+        proximoEstado = 'En Veterinaria';
+        break;
+      case 'En Veterinaria':
+        proximoEstado = 'esperando';
+        break;
+      default:
+        proximoEstado = '';
     }
 
-    // Llamar a la función para actualizar el estadoTransporte
-    postNuevoEstadoTransporte(id)
+    avanzarEstadoTurno(id)
       .then(() => {
-        // Actualizar el estado local después de la actualización exitosa
+        setIsLoading(true)
         setTurnos(turnos.map(turno => {
           if (turno.id === id) {
-            turno.estadoTransporte = proximoEstado;
+            turno.estadoDelTurno = proximoEstado;
           }
           return turno;
         }));
@@ -57,7 +62,6 @@ function TransporteHome() {
         <table className="min-w-full divide-y divide-gray-200">
           <thead className="bg-gray-50">
             <tr>
-              <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Turno</th>
               <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Nombre</th>
               <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Apellido</th>
               <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Dirección</th>
@@ -69,27 +73,46 @@ function TransporteHome() {
           </thead>
           <tbody className="bg-white divide-y divide-gray-200">
             {turnos.map(turno => (
-              <tr key={turno.id} className={turno.id % 2 === 0 ? 'bg-violet-100' : 'bg-cyan-100'}>
-                <td className="px-6 py-4 whitespace-nowrap">{turno.id + 1}</td>
-                <td className="px-6 py-4 whitespace-nowrap">{turno.nombre}</td>
-                <td className="px-6 py-4 whitespace-nowrap">{turno.apellido}</td>
-                <td className="px-6 py-4 whitespace-nowrap">{turno.direccion}</td>
-                <td className="px-6 py-4 whitespace-nowrap">{turno.telefono}</td>
-                <td className="px-6 py-4 whitespace-nowrap">{turno.selectedPet}</td>
-                <td className={`px-6 py-4 whitespace-nowrap ${turno.estadoTransporte === 'buscar' || turno.estadoTransporte === 'buscado' || turno.estadoTransporte === 'En Veterinaria' ? 'bg-red-500 text-yellow-300' : 'bg-orange-500 text-yellow-300'}`}>
-                  {turno.estadoTransporte}
-                </td>
-                <td>
-                  {/* Renderización condicional del botón o span */}
-                  {turno.estadoTransporte !== 'En Veterinaria' ? (
-                    <button className='btn' onClick={() => handleEstadoUpdate(turno.id, turno.estadoTransporte)}>
-                      {turno.estadoTransporte === 'buscar' ? 'buscado' : turno.estadoTransporte === 'buscado' ? 'En Veterinaria' : 'esperando'}
-                    </button>
-                  ) : (
-                    <span>esperando</span>
-                  )}
-                </td>
-              </tr>
+              (turno.estadoDelTurno !== 'confirmar' && turno.estadoDelTurno !== 'finalizado' && turno.estadoDelTurno !== 'cancelado') && (
+                <tr key={turno.id} className={turno.id % 2 === 0 ? 'bg-violet-100' : 'bg-cyan-100'}>
+                  <td className="px-6 py-4 whitespace-nowrap">{turno.nombre}</td>
+                  <td className="px-6 py-4 whitespace-nowrap">{turno.apellido}</td>
+                  <td className="px-6 py-4 whitespace-nowrap">{turno.direccion}</td>
+                  <td className="px-6 py-4 whitespace-nowrap">{turno.telefono}</td>
+                  <td className="px-6 py-4 whitespace-nowrap">{turno.selectedPet}</td>
+                  {/*Renderizado del estado Actual*/}
+                  {turno.estadoDelTurno === "confirmado" ?
+                  <td className="px-6 py-4 whitespace-nowrap">Buscar</td>
+                  : turno.estadoDelTurno === "buscado" ? 
+                  <td className='px-6 py-4 whitespace-nowrap'>Buscado</td>
+                  : turno.estadoDelTurno === "veterinaria" ?
+                  <td className='px-6 py-4 whitespace-nowrap'>Esperando</td>
+                  : turno.estadoDelTurno === "proceso" ?
+                  <td className='px-6 py-4 whitespace-nowrap'>esperando</td>
+                  : turno.estadoDelTurno === "devolver" ?
+                  <td className='px-6 py-4 whitespace-nowrap'>retirar</td>
+                  : turno.estadoDelTurno === "devolviendo" ?
+                  <td className='px-6 py-4 whitespace-nowrap'>devolviendo</td>
+                  :null}
+                  <td>
+                    {/* Renderización condicional del botón o span */}
+                    {turno.estadoDelTurno === "confirmado" ?
+                      <button onClick={()=> handleEstadoUpdate(turno.id)} className='bg-blue-500 p-2 m-2 text-white' >Buscado</button>
+                    :turno.estadoDelTurno === "buscado" ?
+                    <button onClick={()=> handleEstadoUpdate(turno.id)} className='bg-cyan-500 p-2 m-2 text-white' >En Veterinaria</button>
+                    :turno.estadoDelTurno === "veterinaria" ?
+                    <p className='bg-ambar-500 p-2 m-2 text-black' >Retirar</p>
+                    :turno.estadoDelTurno === "proceso" ?
+                      <p className='bg-violet-500 p-2 m-2 text-white' >Retirar</p>
+                    :turno.estadoDelTurno === "devolver" ?
+                    <button onClick={()=> handleEstadoUpdate(turno.id)} className='bg-orange-500 p-2 m-2 text-white' >devolviendo</button>
+                    :turno.estadoDelTurno === "devolviendo" ?
+                    <button onClick={()=> handleEstadoUpdate(turno.id)} className='bg-red-500 p-2 m-2 text-white' >Finalizar</button>
+                    :null
+                  }
+                  </td>
+                </tr>
+              )
             ))}
           </tbody>
         </table>

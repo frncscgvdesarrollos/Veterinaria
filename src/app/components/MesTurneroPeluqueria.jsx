@@ -29,8 +29,7 @@ export default function MyCalendarPeluqueria()  {
     info: '',
     selectedDate: new Date(),
     transporte: true,
-    estadoTransporte: 'buscar',
-    estadoPeluqueria: 'esperando',
+    estadoDelTurno: "confirmar"
   });
 
   useEffect(() => {

@@ -1,11 +1,10 @@
 'use client';
 import { useState, useEffect } from 'react';
-import { getTurnosPeluqueria, postNuevoEstadoPeluqueria } from '../../firebase';
+import { getTurnosPeluqueria, avanzarEstadoTurno } from '../../firebase';
 
 export default function Peluqueria() {
     const [turnos, setTurnos] = useState([]);
     const [isLoading, setIsLoading] = useState(true);
-    
 
     useEffect(() => {
         const fetchData = () => {
@@ -24,17 +23,30 @@ export default function Peluqueria() {
         }
     }, [isLoading]);
 
-    // Filtrar los turnos por mañana y tarde
-    const turnosManana = turnos.filter(turno => turno.selectedTurno === 'mañana');
-    const turnosTarde = turnos.filter(turno => turno.selectedTurno === 'tarde');
-    const turnosOrdenados = [...turnosManana, ...turnosTarde];
+    const handleEstadoUpdate = (id, estadoActual) => {
+        let proximoEstado;
 
-    const actualizarEstadoPeluqueria = (id, estadoActual) => {
-        if (estadoActual === "En Peluqueria") {
-            postNuevoEstadoPeluqueria(id)
-                .then(() => setIsLoading(true))
-                .catch(error => console.error('Error al actualizar estado de peluquería:', error));
+        switch (estadoActual) {
+            case 'En Peluqueria':
+                proximoEstado = 'Finalizado';
+                break;
+            default:
+                proximoEstado = '';
         }
+
+        avanzarEstadoTurno(id)
+            .then(() => {
+                setIsLoading(true)
+                setTurnos(turnos.map(turno => {
+                    if (turno.id === id) {
+                        turno.estadoPeluqueria = proximoEstado;
+                    }
+                    return turno;
+                }));
+            })
+            .catch(error => {
+                console.error('Error updating turno:', error);
+            });
     };
 
     return (
@@ -49,23 +61,48 @@ export default function Peluqueria() {
                             <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Corte</th>
                             <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Largo</th>
                             <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Estado</th>
-                            <th className="px-6 py-3"></th> {/* Celda extra para el botón */}
+                            <th className="px-6 py-3">Proximo estado</th> {/* Celda extra para el botón */}
                         </tr>
                     </thead>
                     <tbody className="bg-white divide-y divide-gray-200">
-                        {turnosOrdenados.map(turno => (
+                        {turnos.map(turno => (
                             <tr key={turno.id} className={turno.id % 2 === 0 ? 'bg-violet-100' : 'bg-cyan-100'}>
+                                {turno.estadoDelTurno != "confirmar" &&  turno.estadoDelTurno != "finalizado" ?
+                                <> 
                                 <td className="px-6 py-4 whitespace-nowrap">{turno.id + 1}</td>
                                 <td className="px-6 py-4 whitespace-nowrap">{turno.selectedPet}</td>
                                 <td className="px-6 py-4 whitespace-nowrap">{turno.corte}</td>
                                 <td className="px-6 py-4 whitespace-nowrap">{turno.largo}</td>
-                                <td className="px-6 py-4 whitespace-nowrap">{turno.estadoPeluqueria}</td>
-                                <td className="px-6 py-4 whitespace-nowrap">
-                                    {/* Renderización condicional del botón */}
-                                    {turno.estadoPeluqueria === "En Peluqueria" && (
-                                        <button onClick={() => actualizarEstadoPeluqueria(turno.id, turno.estadoPeluqueria)}>Finalizado</button>
-                                    )}
+                                {/*Renderizado del estado Actual*/}
+                                    {turno.estadoDelTurno === "confirmado" ?
+                                    <td className="px-6 py-4 whitespace-nowrap">Esperando</td>
+                                    : turno.estadoDelTurno === "buscado" ? 
+                                    <td className='px-6 py-4 whitespace-nowrap'>Esperando</td>
+                                    : turno.estadoDelTurno === "veterinaria" ?
+                                    <td className='px-6 py-4 whitespace-nowrap'>En Peluqueria</td>
+                                    : turno.estadoDelTurno === "proceso" ?
+                                    <td className='px-6 py-4 whitespace-nowrap'>En Proceso</td>
+                                    : turno.estadoDelTurno === "devolver" ?
+                                    <td className='px-6 py-4 whitespace-nowrap'>Finalizado</td>
+                                    : turno.estadoDelTurno === "devolviendo" ?
+                                    <td className='px-6 py-4 whitespace-nowrap'>Finalizado</td>
+                                    :null}
+                                
+                                <td>
+                                    {/* Renderización condicional del botón o span */}
+                                    {turno.estadoDelTurno === "confirmado" ?
+                                    <p className='bg-blue-500 p-2 m-2 text-black' >Esperando</p>
+                                    :turno.estadoDelTurno === "buscado" ?
+                                    <p className='bg-blue-500 p-2 m-2 text-black' >Esperando</p>
+                                    :turno.estadoDelTurno === "veterinaria" ?
+                                    <button onClick={()=> handleEstadoUpdate(turno.id)} className='bg-red-500 p-2 m-2 text-white' >En proceso</button>
+                                    :turno.estadoDelTurno === "proceso" ?
+                                    <button onClick={()=> handleEstadoUpdate(turno.id)} className='bg-red-500 p-2 m-2 text-white' >Terminado</button>
+                                    :null
+                                }
                                 </td>
+                                </>
+                                :null}
                             </tr>
                         ))}
                     </tbody>
