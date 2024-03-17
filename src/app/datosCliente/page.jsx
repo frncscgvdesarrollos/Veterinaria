@@ -10,20 +10,20 @@ import { redirect } from 'next/navigation'
 export default function DatosCliente() {
   const { user } = UserAuth();
   console.log(user);
-  const uid = user?.uid;
   
   const [terminos, setTerminos] = useState(false);
-
+  
   function handleTerminosChange() {
     setTerminos(!terminos);
   }
   if(terminos){
     redirect('/HomeCliente');
   }
-
+  
   useEffect(() => {
     const clienteVerificadoPromise = new Promise((resolve, reject) => {
-      if (user) {
+      if (user && user.uid) {
+        const {uid} = user;
         clienteExisteConTerminosTRUE(uid)
           .then((response) => {
             resolve(response);
