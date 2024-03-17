@@ -1,7 +1,7 @@
 'use client'
 import { useState, useEffect } from 'react';
 import { avanzarEstadoTurno, cancelarTurnoPeluqueria, getTurnosPeluqueria } from '../firebase';
-
+import { redirect } from 'next/navigation'; 
 export default function LlamarA() {
     const [turnosAConfirmar, setTurnosAConfirmar] = useState([]);
     const [isLoading, setIsLoading] = useState(true);
@@ -29,12 +29,12 @@ export default function LlamarA() {
     }, [isLoading]);
 
     function handleConfirmar(id) {
-        return new Promise((resolve, reject) => {
+       return new Promise((resolve, reject) => {
             avanzarEstadoTurno(id)
                 .then(() => {
                     // Actualizar la lista de turnos después de la confirmación
                     setTurnosAConfirmar(turnosAConfirmar.filter(turno => turno.id !== id));
-                    resolve();
+                    resolve(setTimeout(() => window.location.reload(), 10000));
                 })
                 .catch(error => {
                     console.error('Error al confirmar el turno:', error);
@@ -59,7 +59,7 @@ export default function LlamarA() {
     }
 
     return (
-        <div className='w-3/4 m-auto p-4 bg-violet-300 rounded-lg'>
+        <div className='w-full m-auto p-4 bg-violet-300 rounded-lg'>
             <h3>Llamar a :</h3>
             {turnosAConfirmar.map((turno) => (
                 <div key={turno.id} className='flex justify-space-around items-center'>

@@ -340,14 +340,14 @@ export async function getLastTurnoPeluqueriaId() {
     const querySnapshot = await getDocs(q);
     if (querySnapshot.empty) {
       // No hay turnos existentes
-      console.log(querySnapshot);
+      console.log('No hay turnos existentes');
       return 0;
     } else {
       // Retorna el ID del primer turno encontrado (el mayor)
       return querySnapshot.docs[0].data().id;
     }
   } catch (error) {
-    console.error('Error getting last turno ID:', error);
+    console.error('Error al obtener el último ID de turno de peluquería:', error);
     throw error;
   }
 }

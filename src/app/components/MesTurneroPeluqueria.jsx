@@ -57,19 +57,19 @@ export default function MyCalendarPeluqueria()  {
     e.preventDefault();
     getLastTurnoPeluqueriaId()
       .then((id) => {
-        const nuevoId = id + 1;
+        const nuevoId = id !== 0 ? id + 1 : 1; // Si el ID es 0, asignamos 1 como nuevo ID
         setFormData((prevData) => ({
           ...prevData,
           id: nuevoId,
         }));
         console.log('ID del nuevo turno:', nuevoId);
-
+  
         const emptyFields = Object.values(formData).filter((value) => value === '').length;
         if (emptyFields > 0) {
           alert('Por favor completa todos los campos.');
           return;
         }
-
+  
         postTurnoPeluqueria(formData);
         sumarTurnoPeluqueria(uid);
         alert('Turno registrado exitosamente');
@@ -79,7 +79,7 @@ export default function MyCalendarPeluqueria()  {
         alert('Hubo un error al registrar el turno. Por favor, inténtalo de nuevo.');
       });
   };
-
+  
   const handleChange = (e) => {
     console.log(formData);
     const { name, value, type, checked } = e.target;
