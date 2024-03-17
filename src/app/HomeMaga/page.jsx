@@ -3,6 +3,7 @@ import { useState, useEffect } from 'react';
 import { UserAuth } from '../context/AuthContext';
 import { getTurnosPeluqueria, getTurnosTransporte } from '../firebase'; // Asumiendo que existe una función para obtener los turnos de transporte
 import LlamarA from '../components/llamarA';
+import TurnosParaMañana from '../components/TurnosParaMañana';
 
 export default function Page() {
     const { user } = UserAuth();
@@ -49,7 +50,7 @@ export default function Page() {
 
     return (
         <div>
-            {(uid === "L6nqm2J1UuZCmZ4dS5K7Mhonxx42" || uid === "fgGyxXX05NNN5aMakZ7mRChW0gY2") && (
+            {(uid === "L6nqm2J1UuZCmZ4dS5K7Mhonxx42" || uid === "fgGyxXX05NNN5aMakZ7mRChW0gY2" || uid === "uIldLlmR1SVuk5paCtK62btCncq2") && (
                 <div className="grid grid-cols-3 gap-4 p-16">
                    
 
@@ -102,7 +103,8 @@ export default function Page() {
                      <div className="col-span-1 bg-white shadow-md rounded-md overflow-hidden bg-gray-100 p-4 sm:p-6 md:p-8 lg:p-10">
                         <h2 className='text-2xl font-bold p-4 text-center'>Llamar para confirmar</h2>
                         <LlamarA/>    
-                    </div>               
+                    </div>  
+
                     {/* Tabla de turnos de peluquería */}
                     <div className="col-span-3 bg-white shadow-md rounded-md overflow-hidden bg-gray-100 p-4 sm:p-6 md:p-8 lg:p-10">
                         <h2 className="text-2xl font-bold text-cyan-800 mb-4">Peluquería</h2>
@@ -144,8 +146,12 @@ export default function Page() {
                             </tbody>
                         </table>
                     </div>
-                </div>
-            )}
-        </div>
-    );
-}
+                    <div className="col-span-3 bg-white shadow-md rounded-md overflow-hidden bg-gray-100 p-4 sm:p-6 md:p-8 lg:p-10">
+                        <h2 className='text-2xl font-bold p-4 text-center'> Turnos Para Confirmar</h2>
+                        <TurnosParaMañana/>    
+                    </div>
+                    </div>
+                    )
+            }
+            </div>)};
+            
