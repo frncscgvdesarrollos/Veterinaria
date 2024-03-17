@@ -7,14 +7,15 @@ function TransporteHome() {
   const [isLoading, setIsLoading] = useState(true);
 
   useEffect(() => {
-    const fetchData = async () => {
-      try {
-        const data = await getTurnosPeluqueriaBuscar();
-        setTurnos(data);
-        setIsLoading(false);
-      } catch (error) {
-        console.error('Error fetching turnos:', error);
-      }
+    const fetchData = () => {
+      getTurnosPeluqueriaBuscar()
+        .then(data => {
+          setTurnos(data);
+          setIsLoading(false);
+        })
+        .catch(error => {
+          console.error('Error fetching turnos:', error);
+        });
     };
 
     if (isLoading) {
@@ -22,20 +23,31 @@ function TransporteHome() {
     }
   }, [isLoading]);
 
-  const handleEstadoUpdate = async (id) => {
-    try {
-      await postNuevoEstadoTransporte(id);
-      // Actualizar el estado local después de la actualización exitosa
-      setTurnos(turnos.map(turno => {
-        if (turno.id === id) {
-          // Cambiar el estado según la lógica requerida
-          turno.estadoTransporte = turno.estadoTransporte === "buscar" ? "buscado" : "En Veterinaria";
-        }
-        return turno;
-      }));
-    } catch (error) {
-      console.error('Error updating turno:', error);
+  const handleEstadoUpdate = (id, estadoActual) => {
+    let proximoEstado;
+
+    if (estadoActual === 'buscar') {
+      proximoEstado = 'buscado';
+    } else if (estadoActual === 'buscado') {
+      proximoEstado = 'En Veterinaria';
+    } else if (estadoActual === 'En Veterinaria') {
+      proximoEstado = 'esperando';
     }
+
+    // Llamar a la función para actualizar el estadoTransporte
+    postNuevoEstadoTransporte(id)
+      .then(() => {
+        // Actualizar el estado local después de la actualización exitosa
+        setTurnos(turnos.map(turno => {
+          if (turno.id === id) {
+            turno.estadoTransporte = proximoEstado;
+          }
+          return turno;
+        }));
+      })
+      .catch(error => {
+        console.error('Error updating turno:', error);
+      });
   };
 
   return (
@@ -52,7 +64,7 @@ function TransporteHome() {
               <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Teléfono</th>
               <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Mascota</th>
               <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Estado</th>
-              <th>Proximo estado</th>
+              <th>Próximo estado</th>
             </tr>
           </thead>
           <tbody className="bg-white divide-y divide-gray-200">
@@ -68,11 +80,14 @@ function TransporteHome() {
                   {turno.estadoTransporte}
                 </td>
                 <td>
-                  {turno.estadoTransporte === 'buscar' || turno.estadoTransporte === 'buscado' || turno.estadoTransporte === 'En Veterinaria' ? (
-                    <button className='btn' onClick={() => handleEstadoUpdate(turno.id)}>
-                      {turno.estadoTransporte === 'buscar' ? 'Buscado' : 'En veterinaria'}
+                  {/* Renderización condicional del botón o span */}
+                  {turno.estadoTransporte !== 'En Veterinaria' ? (
+                    <button className='btn' onClick={() => handleEstadoUpdate(turno.id, turno.estadoTransporte)}>
+                      {turno.estadoTransporte === 'buscar' ? 'buscado' : turno.estadoTransporte === 'buscado' ? 'En Veterinaria' : 'esperando'}
                     </button>
-                  ) : null}
+                  ) : (
+                    <span>esperando</span>
+                  )}
                 </td>
               </tr>
             ))}

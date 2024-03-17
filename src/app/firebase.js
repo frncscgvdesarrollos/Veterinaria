@@ -354,7 +354,8 @@ export async function postNuevoEstadoPeluqueria(id) {
         estadoPeluqueria: nuevoEstadoPeluqueria
       }
       return     await updateDoc(docRef, updateData);
-    }else if (nuevoEstadoTransporte === "buscar") {
+    }
+    if (nuevoEstadoTransporte === "buscar") {
       const updateData = {
         estadoTransporte: nuevoEstadoTransporte,
         estadoPeluqueria : nuevoEstadoPeluqueria
@@ -458,6 +459,17 @@ export async function getTurnosPeluqueriaEsperando(){
   const docs = await getDocs(q);
   docs.forEach(doc => {
     turnos.push(doc.data())
+  })
+  console.log(turnos)
+  return turnos
+}
+
+export async function turnosPeluqueriaPagosYaConfirmar () {
+  const turnos = [];
+  const q = query(collection(db,"turnosPeluqueria") ,where("estadoDelTurno", "==", "confirmar"))
+  const docs = await getDocs(q);
+  docs.forEach(docs => {
+    turnos.push(docs.data())
   })
   console.log(turnos)
   return turnos
