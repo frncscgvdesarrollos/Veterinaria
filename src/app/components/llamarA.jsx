@@ -65,14 +65,14 @@ export default function LlamarA() {
                 {turno.estadoDelTurno != "confirmar" ? null :
                 <>
                 <div className='flex  mr-auto justify-around items-center'>
-                    <span className='w-1/3 mx-2 text-2xl'>{turno.nombre}</span>
-                    <span className='w-1/3 mx-2 text-2xl'>{turno.telefono}</span>
+                    <span className='w-1/3 mx-2 '>{turno.nombre}</span>
+                    <span className='w-1/3 mx-2 '>{turno.telefono}</span>
                 </div>
                     <span className='w-1/3'>
                         {turno.estadoDelTurno === "confirmar" &&
                             <div className='flex mr-auto    justify-around'>
-                                <button onClick={() => handleConfirmar(turno.id)} className='bg-blue-500 text-white rounded-lg p-4 m-2'>Confirmar</button>
-                                <button onClick={() => handleCancelar(turno.id)} className='bg-red-500 text-yellow-300 rounded-lg p-4 m-2'>Cancelar</button>
+                                <button onClick={() => handleConfirmar(turno.id)} className='bg-blue-500 text-white rounded-lg p-2 m-2'>Confirmar</button>
+                                <button onClick={() => handleCancelar(turno.id)} className='bg-red-500 text-yellow-300 rounded-lg p-2 m-2'>Cancelar</button>
                             </div>
                         }
                     </span>
