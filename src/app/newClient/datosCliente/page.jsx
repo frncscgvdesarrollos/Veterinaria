@@ -12,8 +12,8 @@ export default function DatosCliente() {
   const [errorVerificacion, setErrorVerificacion] = useState(null);
 
   useEffect(() => {
-    if (user && user.uid) {
-      clienteExisteConTerminosTRUE(user.uid)
+    if (user && user?.uid) {
+      clienteExisteConTerminosTRUE(user?.uid)
         .then((response) => {
           if (response) {
             setTerminosAceptados(true);
