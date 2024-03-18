@@ -7,13 +7,12 @@ import { redirect } from 'next/navigation';
 
 export default function DatosCliente() {
   const { user } = UserAuth();
-
   const [terminosAceptados, setTerminosAceptados] = useState(false);
   const [errorVerificacion, setErrorVerificacion] = useState(null);
 
   useEffect(() => {
-    if (user && user?.uid) {
-      clienteExisteConTerminosTRUE(user?.uid)
+    if (user) { // Check if user exists before destructuring uid
+      clienteExisteConTerminosTRUE(user.uid) // Use user.uid directly
         .then((response) => {
           if (response) {
             setTerminosAceptados(true);
