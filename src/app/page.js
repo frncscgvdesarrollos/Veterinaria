@@ -1,6 +1,6 @@
 'use client'
 import { useEffect, useState } from "react";
-import { useRouter } from 'next/navigation';
+import { redirect } from 'next/navigation';
 import { UserAuth } from "../app/context/AuthContext";
 import { clienteExiste, clienteExisteConTerminosTRUE } from "../app/firebase";
 
@@ -8,7 +8,6 @@ export default function Home() {
   const { user, googleSignIn } = UserAuth();
   const [isClient, setIsClient] = useState(false);
   const [isClientWithTerms, setIsClientWithTerms] = useState(false);
-  const router = useRouter();
 
   useEffect(() => {
     if (user) {
@@ -21,9 +20,9 @@ export default function Home() {
               .then((clientWithTerms) => {
                 setIsClientWithTerms(clientWithTerms);
                 if (!clientWithTerms) {
-                  router.push('/newClient/datosTerminos');
+                  redirect('/newClient/datosTerminos');
                 } else {
-                  router.push('/HomeCliente');
+                 redirect('/HomeCliente');
                 }
               })
               .catch((error) => {
