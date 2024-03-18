@@ -7,7 +7,6 @@ import { redirect } from 'next/navigation';
 
 export default function DatosCliente() {
   const { user } = UserAuth();
-  const router = useRouter();
 
   const [terminosAceptados, setTerminosAceptados] = useState(false);
   const [errorVerificacion, setErrorVerificacion] = useState(null);
