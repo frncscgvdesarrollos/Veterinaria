@@ -3,46 +3,44 @@ import { useEffect, useState } from 'react';
 import FormCliente from '../../components/FormCliente';
 import { clienteExisteConTerminosTRUE } from '../../firebase';
 import { UserAuth } from '../../context/AuthContext';
-import { redirect } from 'next/navigation';
+import { useRouter } from 'next/router';
 
 export default function DatosCliente() {
   const { user } = UserAuth();
-  console.log(user);
-  const [terminos, setTerminos] = useState(false);
-  
+  const router = useRouter();
+
+  const [terminosAceptados, setTerminosAceptados] = useState(false);
+  const [errorVerificacion, setErrorVerificacion] = useState(null);
+
   useEffect(() => {
-    const fetchData = async () => {
-      if (user === null) {
-        // Espera 5 segundos antes de ejecutar la lógica relacionada con 'user'
-        await new Promise(resolve => setTimeout(resolve, 5000));
-      }
-
-      if (user && user.uid) {
-        clienteExisteConTerminosTRUE(user.uid)
-          .then((response) => {
-            if (response) {
-              setTerminos(true);
-            }
-          })
-          .catch((error) => {
-            console.error("Error verifying client with terms:", error);
-          });
-      }
-    };
-
-    fetchData();
+    if (user && user.uid) {
+      clienteExisteConTerminosTRUE(user.uid)
+        .then((response) => {
+          if (response) {
+            setTerminosAceptados(true);
+          }
+        })
+        .catch((error) => {
+          setErrorVerificacion(error);
+        });
+    }
   }, [user]);
 
   useEffect(() => {
-    if (terminos) {
-      redirect('/HomeCliente');
+    if (terminosAceptados) {
+      router.push('/HomeCliente');
     }
-  }, [terminos]);
-  
+  }, [terminosAceptados]);
+
   return (
     <div className='bg-gray-800 h-auto p-5'>
       <h1 className='text-4xl text-center font-bold mt-5 mb-5 text-red-400 underline'>Informacion personal</h1>
-      <FormCliente/>
+      {errorVerificacion && (
+        <p className='text-red-500 text-center mb-5'>
+          Error al verificar la aceptación de términos: {errorVerificacion.message}
+        </p>
+      )}
+      <FormCliente />
     </div>
   );
 }
