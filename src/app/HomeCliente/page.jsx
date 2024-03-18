@@ -39,7 +39,7 @@ export default function HomeCliente() {
         }
       });
     }
-  }, [uid, user]);
+  }, [uid, user ,clientData ]);
 
   return (
     <div className="p-4 sm:p-6 md:p-8 lg:p-10 HomeCliente ">
