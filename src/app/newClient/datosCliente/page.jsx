@@ -3,7 +3,7 @@ import { useEffect, useState } from 'react';
 import FormCliente from '../../components/FormCliente';
 import { clienteExisteConTerminosTRUE } from '../../firebase';
 import { UserAuth } from '../../context/AuthContext';
-import { useRouter } from 'next/router';
+import { redirect } from 'next/navigation';
 
 export default function DatosCliente() {
   const { user } = UserAuth();
@@ -28,7 +28,7 @@ export default function DatosCliente() {
 
   useEffect(() => {
     if (terminosAceptados) {
-      router.push('/HomeCliente');
+      redirect('/HomeCliente');
     }
   }, [terminosAceptados]);
 
