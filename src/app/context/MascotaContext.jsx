@@ -27,7 +27,7 @@ export const MascotaContextProvider = ({ children , user }) => {
       // console.log(user)
       fetchMascotasDueño();
     }
-  }, [user, fetchMascotasDueño]);
+  }, [user]);
 
   return (
     <MascotaContext.Provider value={{ mascota }}>
