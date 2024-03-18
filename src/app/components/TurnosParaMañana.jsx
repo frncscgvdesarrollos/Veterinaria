@@ -40,7 +40,7 @@ export default function TurnosParaMañana() {
         if (isLoading) {
             getTurnos();
         }
-    }, [isLoading ,getTurnos ]);
+    }, [isLoading]);
 
     return (
         <div className="m-4">
