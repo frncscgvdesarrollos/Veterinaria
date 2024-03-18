@@ -1,6 +1,6 @@
 'use client'
 import { useState, useEffect } from 'react';
-import { getTurnosPeluqueria } from '../../firebase';
+import { getTurnosPeluqueria } from '../firebase';
 
 export default function TurnosParaMañana() {
     const [turnosHoy, setTurnosHoy] = useState([]);
