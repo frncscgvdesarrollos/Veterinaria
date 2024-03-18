@@ -1,5 +1,5 @@
 import React from 'react'
-import FormMascota from '../components/FormMascota'
+import FormMascota from '../../components/FormMascota'
 
 export default function DatosMascota() {
   return (

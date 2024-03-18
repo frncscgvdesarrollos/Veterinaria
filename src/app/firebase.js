@@ -38,7 +38,7 @@ export async function clienteExiste(uid) {
     if (!querySnapshot.empty) {
       // Si hay documentos en el snapshot, devolvemos el primer documento encontrado
       const cliente = querySnapshot.docs[0].data();
-      console.log(cliente); // Imprime los datos del cliente en la consola para depuración
+      // console.log(cliente); // Imprime los datos del cliente en la consola para depuración
       return cliente;
     } else {
       // Si el snapshot está vacío, no se encontró ningún cliente
@@ -186,7 +186,7 @@ export async function getMascotasDueño(uid) {
   querySnapshot.forEach((doc) => {
     mascotas.push(doc.data());
   })
-  console.log(mascotas)
+  // console.log(mascotas)
   return mascotas
 } 
 export async function registrarMascotas(mascotas) {
@@ -197,9 +197,9 @@ export async function registrarMascotas(mascotas) {
     for (const mascota of mascotas) {
       await addDoc(mascotasCollection, mascota);
     }
-    console.log('¡Mascotas registradas exitosamente!');
+    // console.log('¡Mascotas registradas exitosamente!');
   } catch (error) {
-    console.error('Error al registrar las mascotas:', error);
+    // console.error('Error al registrar las mascotas:', error);
     throw error;
   }
 }

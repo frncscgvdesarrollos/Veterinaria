@@ -1,7 +1,7 @@
 'use client';
 import Image from 'next/image';
 import { useEffect, useState } from 'react';
-import { mascotasEnAdopcion, getMascotaFoto } from '../../firebase';
+import { mascotasEnAdopcion } from '../../..//firebase';
 
 export default function Adopcion() {
   const [mascotas, setMascotas] = useState([]);
@@ -17,6 +17,7 @@ export default function Adopcion() {
         const fetchedMascotas = querySnapshot.docs.map((doc) => doc.data());
         setMascotas(fetchedMascotas);
       })
+
       .catch((error) => {
         console.error("Error al obtener las mascotas:", error);
       });

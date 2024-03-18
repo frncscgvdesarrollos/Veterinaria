@@ -5,7 +5,7 @@ import { MascotasContext } from '../context/MascotaContext';
 
 export default function DatosMascotas() {
     const { mascota } = MascotasContext();
-    console.log(mascota)
+    // console.log(mascota)
     const [loading, setLoading] = useState(true);
     const [error, setError] = useState(null);
     const [mascotas, setMascotas] = useState([]);

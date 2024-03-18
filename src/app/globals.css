@@ -15,13 +15,7 @@
     --background-end-rgb: 0, 0, 0;
   }
 }
-.object-contain {
-  object-fit: contain;
-  height: 250px !important;
-  max-height: 250px !important  ;
-  width: auto !important;
-  border-radius: 100%;
-}
+
 body {
   scrollbar-color:  #323ffd #232999;
   scrollbar-width: auto;
@@ -99,8 +93,6 @@ body {
 }
 .HomeCliente{
   background-image: url('/patron2.jpg');
-
-
 }
 @keyframes slide {
   0% {

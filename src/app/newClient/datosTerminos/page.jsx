@@ -1,8 +1,8 @@
 'use client';
 import { useState, useEffect } from "react";
-import { confirmarTerminos } from "../firebase";
+import { confirmarTerminos } from "../../firebase";
 import { redirect } from "next/navigation";
-import { UserAuth } from "../context/AuthContext";
+import { UserAuth } from "../../context/AuthContext";
 
 export default function Terminos() {
   const { user } = UserAuth();
