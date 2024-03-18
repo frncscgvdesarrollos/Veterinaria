@@ -2,39 +2,15 @@
 import { useEffect, useState } from "react";
 import { redirect } from 'next/navigation';
 import { UserAuth } from "../app/context/AuthContext";
-import { clienteExiste, clienteExisteConTerminosTRUE } from "../app/firebase";
 
 export default function Home() {
   const { user, googleSignIn } = UserAuth();
-  const [isClient, setIsClient] = useState(false);
-  const [isClientWithTerms, setIsClientWithTerms] = useState(false);
 
   useEffect(() => {
     if (user) {
-      const { uid } = user;
-      clienteExiste(uid)
-        .then((clientExists) => {
-          setIsClient(clientExists);
-          if (clientExists) {
-            clienteExisteConTerminosTRUE(uid)
-              .then((clientWithTerms) => {
-                setIsClientWithTerms(clientWithTerms);
-                if (!clientWithTerms) {
-                  redirect('/newClient/datosTerminos');
-                } else {
-                 redirect('/HomeCliente');
-                }
-              })
-              .catch((error) => {
-                console.error("Error verifying client with terms:", error);
-              });
-          }
-        })
-        .catch((error) => {
-          console.error("Error verifying client:", error);
-        });
+      redirect("/HomeCliente");
     }
-  }, [user]);
+  }[user]);
 
   const handleSignIn = () => {
     googleSignIn();
