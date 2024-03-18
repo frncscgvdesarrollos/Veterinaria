@@ -38,7 +38,7 @@ export default function TurnosParaMañana() {
 
     useEffect(() => {
             getTurnos();
-    }, [isLoading]);
+    });
 
     return (
         <div className="m-4">
