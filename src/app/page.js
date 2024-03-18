@@ -10,7 +10,7 @@ export default function Home() {
     if (user) {
       redirect("/HomeCliente");
     }
-  }[user]);
+  },[user]);
 
   const handleSignIn = () => {
     googleSignIn();
