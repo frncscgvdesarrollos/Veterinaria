@@ -11,25 +11,23 @@ export default function DatosCliente() {
   const [terminos, setTerminos] = useState(false);
   
   useEffect(() => {
-    const fetchData = () => {
-      return new Promise((resolve, reject) => {
-        if (user !== null && user?.uid)  {
-          const uid = user.uid; // Move uid declaration here
-          clienteExisteConTerminosTRUE(uid)
-            .then((response) => {
-              if (response) {
-                setTerminos(true);
-              }
-              resolve();
-            })
-            .catch((error) => {
-              console.error("Error verifying client with terms:", error);
-              reject(error);
-            });
-        } else {
-          resolve();
-        }
-      });
+    const fetchData = async () => {
+      if (user === null) {
+        // Espera 5 segundos antes de ejecutar la lógica relacionada con 'user'
+        await new Promise(resolve => setTimeout(resolve, 5000));
+      }
+
+      if (user && user.uid) {
+        clienteExisteConTerminosTRUE(user.uid)
+          .then((response) => {
+            if (response) {
+              setTerminos(true);
+            }
+          })
+          .catch((error) => {
+            console.error("Error verifying client with terms:", error);
+          });
+      }
     };
 
     fetchData();
