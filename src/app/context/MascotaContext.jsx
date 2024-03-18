@@ -7,7 +7,8 @@ const MascotaContext = createContext();
 export const MascotaContextProvider = ({ children , user }) => {
   const [mascota, setMascota] = useState(null);
   // console.log(user)
-    const fetchMascotasDueño = () => {
+  function handlefetchMascotasDueño() {
+    return  function fetchMascotasDueño () {
       return new Promise((resolve, reject) => {
         const mascotaDueño = getMascotasDueño(user)
           .then(mascotas => {
@@ -22,12 +23,13 @@ export const MascotaContextProvider = ({ children , user }) => {
       })
     }
   
+    
+  }
   useEffect(() => {
     if (user) {
-      // console.log(user)
-      fetchMascotasDueño();
+      handlefetchMascotasDueño()
     }
-  }, [user]);
+  });
 
   return (
     <MascotaContext.Provider value={{ mascota }}>
