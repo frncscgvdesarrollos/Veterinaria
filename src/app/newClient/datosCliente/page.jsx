@@ -9,29 +9,29 @@ export default function DatosCliente() {
   const { user } = UserAuth();
   console.log(user);
   const [terminos, setTerminos] = useState(false);
+  
   useEffect(() => {
-    if(user === null) {
-      const uid = user?.uid;
-    }
-        const fetchData = () => {
-          return new Promise((resolve, reject) => {
-            if (user && uid)  {
-              clienteExisteConTerminosTRUE(uid)
-                .then((response) => {
-                  if (response) {
-                    setTerminos(true);
-                  }
-                  resolve();
-                })
-                .catch((error) => {
-                  console.error("Error verifying client with terms:", error);
-                  reject(error);
-                });
-            } else {
+    const fetchData = () => {
+      return new Promise((resolve, reject) => {
+        if (user !== null && user?.uid)  {
+          const uid = user.uid; // Move uid declaration here
+          clienteExisteConTerminosTRUE(uid)
+            .then((response) => {
+              if (response) {
+                setTerminos(true);
+              }
               resolve();
-            }
-          });
-      }
+            })
+            .catch((error) => {
+              console.error("Error verifying client with terms:", error);
+              reject(error);
+            });
+        } else {
+          resolve();
+        }
+      });
+    };
+
     fetchData();
   }, [user]);
 
