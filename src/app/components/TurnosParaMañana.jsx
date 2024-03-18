@@ -14,7 +14,7 @@ export default function TurnosParaMañana() {
     const pasadoMañana = new Date(toDay);
     pasadoMañana.setDate(pasadoMañana.getDate() + 2);
 
-    function getTurnos() {
+    const getTurnos = () => {
         getTurnosPeluqueria()
             .then((turnosPeluqueria) => {
                 const hoy = turnosPeluqueria.filter(
@@ -40,7 +40,7 @@ export default function TurnosParaMañana() {
         if (isLoading) {
             getTurnos();
         }
-    }, [isLoading]);
+    }, [isLoading, getTurnos]);
 
     return (
         <div className="m-4">
