@@ -6,7 +6,7 @@ import { UserAuth } from '../context/AuthContext';
 
 export default function FormCliente() {
   const { user } = UserAuth();
-  const {uid }= user;
+  const uid = user?.uid;
   const [yaEsCliente, setYaEsCliente] = useState(false);
   if(yaEsCliente) {
     handleEsCliente();
@@ -44,7 +44,7 @@ export default function FormCliente() {
 
   useEffect(() => {
     if(yaEsCliente){
-      redirect('/datosMascota');
+      redirect('/newClient/datosMascota');
     }
   }, [yaEsCliente]);
 
