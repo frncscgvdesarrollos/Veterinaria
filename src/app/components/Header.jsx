@@ -37,6 +37,7 @@ export default function Header() {
   };
 
   return (
+    <>{uid?  
     <header className="bg-gray-800 flex flex-col sm:flex-col justify-between items-center px-4 sm:px-8 py-4">
       {premium ? (
         <p>Cliente Premium</p>
@@ -107,5 +108,6 @@ Adopción
         )}
       </div>
     </header>
+    : <span>cargando...</span>}</>
   );
 }

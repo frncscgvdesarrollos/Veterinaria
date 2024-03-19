@@ -7,9 +7,6 @@ import { redirect } from 'next/navigation';
 
 export default function DatosCliente() {
   const { user } = UserAuth();
-  console.log("este es el user" +user)
-  console.log("este es el tipo" +typeof(user))
-  console.log("este es el user" + user?.uid)
   const uid = user?.uid;
   const [terminosAceptados, setTerminosAceptados] = useState(false);
   const [errorVerificacion, setErrorVerificacion] = useState(null);

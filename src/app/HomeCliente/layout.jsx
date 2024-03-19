@@ -10,11 +10,13 @@ export default function HomeClientelayout({ children }) {
 
     return (
         <>   
+            {uid ?
             <ClientContextProvider uid={uid}>
                 <MascotaContextProvider uid={uid}>
                     {children}
                 </MascotaContextProvider>
             </ClientContextProvider>
+            : <span>caragando...</span>}
         </>
     );
 }
