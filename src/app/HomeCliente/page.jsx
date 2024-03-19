@@ -2,7 +2,7 @@
 import { useEffect } from 'react';
 import { clienteExisteConTerminosTRUE, clienteExiste } from '../firebase';
 import Veterinaria from '../components/Veterinaria';
-import { redirect } from 'next/navigation'; // Importamos la función redirect
+import { redirect } from 'next/navigation';
 import { UserAuth } from '../context/AuthContext';
 
 export default function HomeCliente() {

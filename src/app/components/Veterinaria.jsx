@@ -13,7 +13,7 @@ export default function Veterinaria() {
             </div>
           </div>
           <div className='flex flex-col sm:flex-row items-center'>
-            <Link href='/HomeCliente/TurneroCheckeo' className='botonVeterinaria bg-[#1E90FF] text-white w-full sm:w-1/3 p-2 border-2 border-cyan-100 mt-4 rounded-lg'>Reservar</Link>
+            <Link href='/HomeCliente/Acciones/TurneroCheckeo' className='botonVeterinaria bg-[#1E90FF] text-white w-full sm:w-1/3 p-2 border-2 border-cyan-100 mt-4 rounded-lg'>Reservar</Link>
             <p className='mt-2 text-base sm:text-lg p-2 w-full sm:w-2/3 md:mr-16'>
               Mantenga a su mascota sana realizando consultas para prevenir enfermedades y garantizar su bienestar. Ofrecemos consultas tanto en nuestras instalaciones como a domicilio para mayor comodidad.
             </p>
@@ -27,7 +27,7 @@ export default function Veterinaria() {
             <h3 className='textoVeterinaria mt-5 border-b-2 border-cyan-100 text-3xl sm:text-4xl text-lime-500 '>Peluquería</h3>
           </div>
           <div className='flex flex-col sm:flex-row items-center'>
-            <Link href='/HomeCliente/turneroPeluqueria' className='botonVeterinaria bg-[#1E90FF] text-white w-full sm:w-1/3 p-2 border-2 border-cyan-100 mt-4 rounded-lg'>Reservar</Link>
+            <Link href='/HomeCliente/Acciones/turneroPeluqueria' className='botonVeterinaria bg-[#1E90FF] text-white w-full sm:w-1/3 p-2 border-2 border-cyan-100 mt-4 rounded-lg'>Reservar</Link>
             <p className='mt-2 text-base sm:text-lg p-2 w-full sm:w-2/3 md:ml-16'>
               Ofrecemos una amplia gama de servicios de peluquería canina, que van desde el baño básico hasta el corte especializado. Todos nuestros servicios incluyen el traslado a domicilio, brindando comodidad y calidad para su mascota.
             </p>

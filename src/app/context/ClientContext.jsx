@@ -1,5 +1,5 @@
-'use client';
-import { createContext, useContext ,useState, useEffect } from "react";
+'use client'
+import { createContext, useContext, useState, useEffect } from "react";
 import { UserAuth } from "./AuthContext";
 import { clienteExiste } from "../firebase";
 
@@ -9,20 +9,23 @@ const ClientContext = createContext({
   error: null,
 });
 
-export const ClientContextProvider = ({ children , uid}) => {
+export const ClientContextProvider = ({ children }) => {
   const [datosCliente, setDatosCliente] = useState({});
-  
+  const {user} = UserAuth();
+  const uid = user?.uid
   useEffect(() => {
     const fetchClientData = () => {
+      if (uid) {
         clienteExiste(uid)
-        .then((clientData) => {
-          setDatosCliente(clientData);
-        })
-        .catch((error) => {
-          console.error("Error al cargar la información del cliente:", error);
-        })
-      };
-      fetchClientData();
+          .then((clientData) => {
+            setDatosCliente(clientData);
+          })
+          .catch((error) => {
+            console.error("Error al cargar la información del cliente:", error);
+          });
+      }
+    };
+    fetchClientData();
   }, [uid]);
 
   return (
@@ -35,4 +38,3 @@ export const ClientContextProvider = ({ children , uid}) => {
 export function UseClient() {
   return useContext(ClientContext);
 }
-

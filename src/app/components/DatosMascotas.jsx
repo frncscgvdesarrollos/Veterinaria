@@ -13,7 +13,6 @@ export default function DatosMascotas() {
         } 
     }, [mascota]);
 
-
     return (
         <div className="container mx-auto px-4">
             <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
@@ -41,9 +40,8 @@ export default function DatosMascotas() {
                             <p className="text-sm text-gray-600">Especie: {mascota.especie}</p>
                             <p className="text-sm text-gray-600">Tamaño: {mascota.tamaño}</p>
                             <p className="text-sm text-gray-600">Raza: {mascota.raza}</p>
-                            {mascota.estadoCivil ? (
-                                <p className="text-sm text-gray-600">Situación: {mascota.estadoCivil}</p>
-                            ) : (
+                            <p className="text-sm text-gray-600">Situación: {mascota.estadoCivil || 'No definida'}</p>
+                            {mascota.estadoCivil ? null : (
                                 <button className="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded mt-4">
                                     Definir Situación
                                 </button>

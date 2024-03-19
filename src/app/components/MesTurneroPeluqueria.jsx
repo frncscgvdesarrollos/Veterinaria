@@ -1,14 +1,12 @@
-'use client';
 import { useEffect, useState } from 'react';
 import Calendar from 'react-calendar';
 import 'react-calendar/dist/Calendar.css';
 import { MascotasContext } from '../context/MascotaContext';
 import { UserAuth } from '../context/AuthContext';
 import { UseClient } from '../context/ClientContext';
-import { postTurnoPeluqueria, sumarTurnoPeluqueria , getLastTurnoPeluqueriaId } from '../firebase';
+import { postTurnoPeluqueria, sumarTurnoPeluqueria, getLastTurnoPeluqueriaId } from '../firebase';
 
-export default function MyCalendarPeluqueria()  {
-
+export default function MyCalendarPeluqueria() {
   const { user } = UserAuth();
   const uid = user?.uid;
   const { datosCliente } = UseClient();
@@ -47,6 +45,12 @@ export default function MyCalendarPeluqueria()  {
   }, [datosCliente]);
 
   const handleDateChange = (newDate) => {
+    const currentDate = new Date();
+    const maxDate = new Date(currentDate.setMonth(currentDate.getMonth() + 1)); // Fecha máxima: 1 mes adelante
+    if (newDate < currentDate || newDate > maxDate) {
+      alert('No puedes seleccionar una fecha anterior a la actual ni una fecha más de un mes adelante.');
+      return;
+    }
     setFormData((prevData) => ({
       ...prevData,
       selectedDate: newDate,
@@ -63,13 +67,13 @@ export default function MyCalendarPeluqueria()  {
           id: nuevoId,
         }));
         console.log('ID del nuevo turno:', nuevoId);
-  
+
         const emptyFields = Object.values(formData).filter((value) => value === '').length;
         if (emptyFields > 0) {
           alert('Por favor completa todos los campos.');
           return;
         }
-  
+
         postTurnoPeluqueria(formData);
         sumarTurnoPeluqueria(uid);
         alert('Turno registrado exitosamente');
@@ -79,7 +83,7 @@ export default function MyCalendarPeluqueria()  {
         alert('Hubo un error al registrar el turno. Por favor, inténtalo de nuevo.');
       });
   };
-  
+
   const handleChange = (e) => {
     console.log(formData);
     const { name, value, type, checked } = e.target;
@@ -91,14 +95,16 @@ export default function MyCalendarPeluqueria()  {
   };
 
   const tileDisabled = ({ date, view }) => {
-    return view === 'month' && (date.getDay() === 0 || date.getDay() === 6);
+    const currentDate = new Date();
+    return view === 'month' && (date.getDay() === 0 || date.getDay() === 6 || date < currentDate);
   };
+  
   return (
     <div className="bg-gray-100 p-4 sm:p-6 md:p-8 lg:p-10">
       <div className="p-4 sm:p-6 md:p-8 lg:p-10">
         <form className="flex flex-col items-center" onSubmit={handleFormSubmit}>
           <div className="w-full mb-4">
-          <label htmlFor="selectedPet">Seleccione la mascota que necesita atención:</label>
+            <label htmlFor="selectedPet">Seleccione la mascota que necesita atención:</label>
             <select
               className="w-full p-2 border border-gray-300 rounded-md focus:outline-none"
               name="selectedPet"
@@ -190,5 +196,4 @@ export default function MyCalendarPeluqueria()  {
       </div>
     </div>
   );
-};
-
+}

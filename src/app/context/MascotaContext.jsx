@@ -1,35 +1,39 @@
 'use client'
-import React, { useContext, createContext, useState, useEffect } from "react";
+import { useContext, createContext, useState, useEffect } from "react";
 import { getMascotasDueño } from "../firebase";
+import { UserAuth } from "./AuthContext";
 
 const MascotaContext = createContext();
 
-export const MascotaContextProvider = ({ children , user }) => {
+export const MascotaContextProvider = ({ children }) => {
   const [mascota, setMascota] = useState(null);
-  console.log("esto es mascotacontext" + user)
-  function handlefetchMascotasDueño() {
-    return  function fetchMascotasDueño () {
-      return new Promise((resolve, reject) => {
-        const mascotaDueño = getMascotasDueño(user)
-          .then(mascotas => {
-            // console.log(mascotas)
-            setMascota(mascotas);
-            resolve(mascotaDueño);
-          })
-          .catch(error => {
-            // console.error("Error al obtener las mascotas del usuario:", error);
-            reject(error);
-          })
-      })
-    }
-  
-    
+  const { user } = UserAuth();
+  let uid = null;
+
+  if (user) {
+    uid = user.uid;
   }
+
   useEffect(() => {
-    if (user) {
-      handlefetchMascotasDueño()
+    const fetchMascotasDueño = async (uid) => {
+      try {
+        const mascotas = await getMascotasDueño(uid);
+        return mascotas;
+      } catch (error) {
+        throw new Error("Error al obtener las mascotas del usuario: " + error);
+      }
+    };
+
+    if (uid) {
+      fetchMascotasDueño(uid)
+        .then((mascotas) => {
+          setMascota(mascotas);
+        })
+        .catch((error) => {
+          console.error(error);
+        });
     }
-  });
+  }, [uid]);
 
   return (
     <MascotaContext.Provider value={{ mascota }}>
@@ -37,6 +41,7 @@ export const MascotaContextProvider = ({ children , user }) => {
     </MascotaContext.Provider>
   );
 };
+
 export function MascotasContext() {
   return useContext(MascotaContext);
 }
