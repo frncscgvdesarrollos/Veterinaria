@@ -5,7 +5,6 @@ import { UserAuth } from "../app/context/AuthContext";
 
 export default function Home() {
   const { user, googleSignIn } = UserAuth();
-
   useEffect(() => {
     if (user) {
       redirect("/HomeCliente");
