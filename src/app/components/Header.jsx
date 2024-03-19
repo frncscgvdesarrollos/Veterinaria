@@ -61,12 +61,12 @@ export default function Header() {
           <Link href="/HomeCliente/Acciones/MisTurnos">
             Turnos
           </Link>
-          <Link href="/HomeCliente/Acciones/MisTraslados">
+          {/* <Link href="/HomeCliente/Acciones/MisTraslados">
             Traslados
           </Link>
           <Link href="/HomeCliente/Acciones/MisGuarderias">
             Guarderia
-          </Link>
+          </Link> */}
           <Link href="/HomeCliente/Acciones/Adopcion">
             Adopción
           </Link>
@@ -95,12 +95,12 @@ export default function Header() {
             <Link href="/HomeCliente/Acciones/MisTurnos">
               Turnos
             </Link>
-            <Link href="/HomeCliente/Acciones/MisTraslados">
+            {/* <Link href="/HomeCliente/Acciones/MisTraslados">
               Traslados
-            </Link>
-            <Link href="/HomeCliente/Acciones/MisGuarderia">
+            </Link> */}
+            {/* <Link href="/HomeCliente/Acciones/MisGuarderia">
     Guarderia
-            </Link>
+            </Link> */}
             <Link href="/HomeCliente/Acciones/Adopcion">
 Adopción
             </Link>
