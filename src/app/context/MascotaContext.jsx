@@ -6,7 +6,7 @@ const MascotaContext = createContext();
 
 export const MascotaContextProvider = ({ children , user }) => {
   const [mascota, setMascota] = useState(null);
-  // console.log(user)
+  console.log("esto es mascotacontext" + user)
   function handlefetchMascotasDueño() {
     return  function fetchMascotasDueño () {
       return new Promise((resolve, reject) => {

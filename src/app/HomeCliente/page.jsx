@@ -1,52 +1,52 @@
-'use client';
+'use client'
+import { useEffect } from 'react';
+import { clienteExisteConTerminosTRUE, clienteExiste } from '../firebase';
 import Veterinaria from '../components/Veterinaria';
+import { redirect } from 'next/navigation'; // Importamos la función redirect
 import { UserAuth } from '../context/AuthContext';
-import { useEffect, useState } from 'react';
-import { clienteExiste } from '../firebase';
-import { redirect } from 'next/navigation';
-
-// Add 'use client' directive at the beginning
 
 export default function HomeCliente() {
   const { user } = UserAuth();
   const uid = user?.uid;
-  const [clientData, setClientData] = useState(null);
-  const [isLoading, setIsLoading] = useState(false);
-  const [error, setError] = useState(null);
 
-  useEffect(() => {
-    const loadClientData = () => {
-      setIsLoading(true);
-      setError(null); // Clear any previous errors
-
-      return clienteExiste(uid)
-        .then((clientData) => {
-          setClientData(clientData);
+  function handleClienteYterminos() {
+    if (user) {
+      // Verificar si el cliente existe
+      clienteExiste(uid)
+        .then((response) => {
+          if (!response) {
+            throw new Error("Cliente no encontrado"); // Lanzamos un error si el cliente no existe
+          }
         })
         .catch((error) => {
-          console.error("Error al cargar la información del cliente:", error);
-          setError(error);
-        })
-        .finally(() => {
-          setIsLoading(false);
+          console.error('Error:', error);
+          redirect('/newClient/datosCliente'); // Redirigir en caso de error
         });
-    };
-
-    if (user && uid) {
-      loadClientData().then(() => {
-        if (!clientData) {
-          redirect('/newClient/datosCliente'); // Redirect if no client data
-        }
-      });
     }
-  }, [uid, user ,clientData ]);
+  }
+
+  // Función para verificar si los términos están aceptados
+  function verificarTerminos(uid) {
+    return clienteExisteConTerminosTRUE(uid)
+      .then((terminos) => {
+        if (!terminos) {
+          redirect('/newClient/datosTerminos'); // Redirigir si los términos no están aceptados
+        }
+      })
+      .catch((error) => {
+        console.error('Error al verificar los términos:', error);
+        redirect('/newClient/datosCliente'); // Redirigir en caso de error
+      });
+  }
+
+  useEffect(() => {
+    handleClienteYterminos();
+    verificarTerminos(uid);
+  }, [user]);
 
   return (
-    <div className="p-4 sm:p-6 md:p-8 lg:p-10 HomeCliente ">
-      {isLoading && <p>Cargando datos del cliente...</p>}
-      {error && <p>Error al cargar datos: {error.message}</p>}
-      {clientData && <Veterinaria clientData={clientData} />}
-      {!user && <p>Por favor inicie sesión para acceder a su perfil.</p>}
+    <div className="p-4 sm:p-6 md:p-8 lg:p-10 HomeCliente">
+      <Veterinaria />
     </div>
   );
 }

@@ -5,29 +5,14 @@ import { MascotasContext } from '../context/MascotaContext';
 
 export default function DatosMascotas() {
     const { mascota } = MascotasContext();
-    // console.log(mascota)
-    const [loading, setLoading] = useState(true);
-    const [error, setError] = useState(null);
     const [mascotas, setMascotas] = useState([]);
 
     useEffect(() => {
         if (mascota && mascota.length > 0) {
             setMascotas(mascota);
-            setLoading(false);
-            setError(null);
-        } else {
-            setLoading(false);
-            setError('No tienes mascotas registradas.');
-        }
+        } 
     }, [mascota]);
 
-    if (loading) {
-        return <div className="text-center">Cargando...</div>;
-    }
-
-    if (error) {
-        return <div className="text-center text-red-600">{error}</div>;
-    }
 
     return (
         <div className="container mx-auto px-4">
