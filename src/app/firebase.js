@@ -4,7 +4,7 @@ import { getFirestore , collection, addDoc , getDocs, getDoc ,setDoc,  deleteDoc
 import { getStorage , ref,  uploadBytes, getDownloadURL, getBytes  } from "firebase/storage";
 
 const firebaseConfig = {
-  apiKey: "AIzaSyANNHOpXXVZBdewtnc4nPHU_U3rJDxSoEs",
+  apiKey: process.env.APIKEY_DB,
   authDomain: "veterinaria-b1ce8.firebaseapp.com",
   projectId: "veterinaria-b1ce8",
   storageBucket: "veterinaria-b1ce8.appspot.com",
