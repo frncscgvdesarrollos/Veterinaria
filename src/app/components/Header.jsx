@@ -86,6 +86,9 @@ export default function Header() {
         </button>
         {mobileMenuOpen && (
           <nav className="flex flex-col items-center justify-center w-full space-y-4 text-white py-4 px-8 text-xl md:text-3xl">
+            <Link href="/HomeCliente">
+      Inicio
+            </Link>
             <Link href="/HomeCliente/Acciones/Perfil">
       Perfil
             </Link>
