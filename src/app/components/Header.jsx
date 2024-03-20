@@ -111,6 +111,6 @@ Adopción
         )}
       </div>
     </header>
-    : <span>cargando...</span>}</>
+    : null}</>
   );
 }

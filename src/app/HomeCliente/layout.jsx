@@ -6,8 +6,6 @@ import { ClientContextProvider } from '../context/ClientContext';
 export default function HomeClientelayout({ children }) {
     const { user } = UserAuth();
     const  uid  = user?.uid
-    console.log("este es el uid " + uid);
-
     return (
         <>   
             {uid ?
