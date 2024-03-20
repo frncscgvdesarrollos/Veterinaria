@@ -3,8 +3,9 @@ import { getAuth  } from "firebase/auth";
 import { getFirestore , collection, addDoc , getDocs, getDoc ,setDoc,  deleteDoc ,query, where, doc , updateDoc, arrayUnion , orderBy, limit } from "firebase/firestore";
 import { getStorage , ref,  uploadBytes, getDownloadURL, getBytes  } from "firebase/storage";
 
+
 const firebaseConfig = {
-  apiKey: process.env.APIKEY_DB,
+  apiKey: "AIzaSyCnY6y3nq7zXbqTq2hNn7VwN7H1qWl6Hv0",
   authDomain: "veterinaria-b1ce8.firebaseapp.com",
   projectId: "veterinaria-b1ce8",
   storageBucket: "veterinaria-b1ce8.appspot.com",
