@@ -90,34 +90,35 @@ export default function Header() {
   };
 
   return (
-    <>
-      {uid ? (
-        <header className="bg-gray-800 flex flex-col  items-center px-4 py-2 md:py-4">
-          <div className="flex flex-row justify-between w-full space-x-4">
-          <div>
-            <Image src="/LOGO.svg" alt="Logo" width={120} height={120} />
-          </div>
-          <div className="flex  items-center space-x-4 w-1/3">
-            {premium ? (
-              <p className="text-white">Cliente Premium</p>
+<>
+  {uid ? (
+    <header className="bg-gray-800 flex flex-col items-center px-4 py-2 md:py-4">
+      <div className="flex justify-between items-center w-full">
+        <div className="w-1/3 md:w-auto">
+          <Image src="/LOGO.svg" alt="Logo" width={200} height={200} />
+        </div>
+        <div className="flex items-center space-x-4">
+          {premium ? (
+            <p className="text-white">Cliente Premium</p>
+          ) : (
+            <button className="btn rounded p-2 text-base text-red-500 bg-yellow-500">¡Promociones!</button>
+          )}
+        </div>
+        <div className="md:hidden">
+          <button onClick={handleMobileMenuToggle} className="text-white focus:outline-none">
+            {mobileMenuOpen ? (
+              <span className="text-3xl">&#10005;</span>
             ) : (
-              <button className="btn rounded p-2 text-xl text-red-500 bg-yellow-500">¡Promociones!</button>
+              <span className="text-3xl">&#9776;</span>
             )}
-            </div>
-            <div className="md:hidden flex flex-row w-[10%]">
-              <button onClick={handleMobileMenuToggle} className="text-white focus:outline-none">
-                {mobileMenuOpen ? (
-                  <span className="text-3xl">&#10005;</span>
-                ) : (
-                  <span className="text-3xl">&#9776;</span>
-                )}
-              </button>
-            </div>
-          </div>
-          {terminos && <NavigationMenu handleLinkClick={handleLinkClick} />}
-          <MobileMenu isOpen={mobileMenuOpen} handleMobileMenuToggle={handleMobileMenuToggle} handleLinkClick={handleLinkClick} />
-        </header>
-      ) : null}
-    </>
+          </button>
+        </div>
+      </div>
+      {terminos && <NavigationMenu handleLinkClick={handleLinkClick} />}
+      <MobileMenu isOpen={mobileMenuOpen} handleMobileMenuToggle={handleMobileMenuToggle} handleLinkClick={handleLinkClick} />
+    </header>
+  ) : null}
+</>
+
   );
 }

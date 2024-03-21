@@ -58,7 +58,7 @@ export default function FormAgregarMascota() {
   };
 
   if (mascotaAgregada) {
-    redirect('/HomeCliente/Mismascotas');
+    redirect('/HomeCliente/Acciones/Mismascotas');
   }
 
   return (

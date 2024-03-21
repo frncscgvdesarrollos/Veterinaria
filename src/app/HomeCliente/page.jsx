@@ -45,10 +45,12 @@ export default function HomeCliente() {
   });
 
   return (
-    <div className="bg-gray-100 min-h-screen bg-violet-200 ">
-      <div className="flex flex-col items-center justify-center p-10">
-        <h1 className="text-3xl sm:text-4xl font-bold text-gray-800 mb-4">Resever sus turnos</h1>
-        <p className="text-lg text-gray-600 mb-6">¡Reserva tus turnos en línea y acumula puntos para obtener consultas gratis!</p>
+    <div className="bg-gray-100 min-h-screen bg-violet-200  HomeCliente">
+      <div className="flex flex-col p-5 sm:flex-row  lg:p-10">
+        <div className='bg-white m- w-full lg:w-1/3 p-5 rounded-lg h-1/4 mt-10 ml-auto '>
+        <h1 className="text-3xl sm:text-4xl font-bold text-gray-800 lg:text-5xl pb-5 ">Reserva tus turnos.</h1>
+        <p className="text-lg text-yellow-400 mb-6 border-b-4 bg-gray-800 p-6 rounded-lg ">¡Reserva tus turnos en línea y acumula puntos!</p>
+        </div>
         <Veterinaria />
       </div>
     </div>

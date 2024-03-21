@@ -91,9 +91,25 @@
   border-top-right-radius: 10%;
   background: linear-gradient(to bottom, transparent, #2d2b51bc); */
 /* }  */
-/* .HomeCliente{
-  background-image: url('/patron2.jpg');
-} */
+.HomeCliente {
+  background-image: url('/patron1.jpg');
+  background-repeat: no-repeat;
+  background-size: cover;
+  background-position: center;
+  animation: circularMove 20s linear infinite alternate;
+}
+
+@keyframes circularMove {
+  0% {
+    background-position: center;
+  }
+  100% {
+    background-position: 100% 100%;
+  }
+}
+
+
+
 /* @keyframes slide {
   0% {
     opacity: 0;
