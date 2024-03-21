@@ -23,7 +23,7 @@ export default function Footer() {
   return (
     <footer className="bg-gray-200 p-6 sm:p-10 flex flex-col sm:flex-row items-center footerContainer">
       <div className="w-full p-4 sm:p-0 mb-6 sm:mb-0">
-        <h3 className="text-3xl font-bold text-center text-cyan-800 mb-8">Donde estamos</h3>
+        <h3 className="text-3xl font-bold text-center text-lime-600 mb-8">Donde estamos</h3>
         <div className="aspect-w-4 aspect-h-3">
           <iframe
             className="w-full h-full sm:w-full sm:h-96"
