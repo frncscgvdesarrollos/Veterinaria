@@ -1,3 +1,4 @@
+'use client'
 import { useEffect, useState } from 'react';
 import Calendar from 'react-calendar';
 import 'react-calendar/dist/Calendar.css';
@@ -100,100 +101,101 @@ export default function MyCalendarPeluqueria() {
   };
   
   return (
-    <div className="bg-gray-100 p-4 sm:p-6 md:p-8 lg:p-10">
-      <div className="p-4 sm:p-6 md:p-8 lg:p-10">
-        <form className="flex flex-col items-center" onSubmit={handleFormSubmit}>
-          <div className="w-full mb-4">
-            <label htmlFor="selectedPet">Seleccione la mascota que necesita atención:</label>
-            <select
-              className="w-full p-2 border border-gray-300 rounded-md focus:outline-none"
-              name="selectedPet"
-              id="selectedPet"
-              onChange={handleChange}
-              value={formData.selectedPet}
-            >
-              <option value={''}>Selecciona tu mascota</option>
-              {mascota &&
-                mascota.length > 0 &&
-                mascota.map((mascotaItem, index) => (
-                  <option key={index} value={mascotaItem.nombre}>
-                    {mascotaItem.nombre}
-                  </option>
-                ))}
-            </select>
-          </div>
-          <div className="w-full mb-4">
-            <label htmlFor="selectedTurno">Seleccione el turno:</label>
-            <select
-              className="w-full p-2 border border-gray-300 rounded-md focus:outline-none"
-              name="selectedTurno"
-              id="selectedTurno"
-              onChange={handleChange}
-              value={formData.selectedTurno}
-            >
-              <option value="mañana">Mañana</option>
-              <option value="tarde">Tarde</option>
-            </select>
-          </div>
-          <div className="w-full mb-4">
-            <label htmlFor="corte">Seleccione el tipo de corte:</label>
-            <select
-              className="w-full p-2 border border-gray-300 rounded-md focus:outline-none"
-              name="corte"
-              id="corte"
-              onChange={handleChange}
-              value={formData.corte}
-            >
-              <option value="">Selecciona el tipo de corte</option>
-              <option value="corte higienico">Corte Higiénico</option>
-              <option value="de la raza">De la Raza</option>
-              <option value="todo rapado">Todo Rapado</option>
-            </select>
-          </div>
-          <div className="w-full mb-4">
-            <label htmlFor="largo">Seleccione el largo del corte (en cm):</label>
-            <select
-              className="w-full p-2 border border-gray-300 rounded-md focus:outline-none"
-              name="largo"
-              id="largo"
-              onChange={handleChange}
-              value={formData.largo}
-            >
-              <option value="">Selecciona el largo del corte</option>
-              <option value="Solo Baño">Solo Baño</option>
-              <option value="0">0 cm</option>
-              <option value="1">1 cm</option>
-              <option value="4">4 cm</option>
-            </select>
-          </div>
-          <div className="w-full mb-4">
-            <label htmlFor="info">Información adicional:</label>
-            <textarea
-              className="w-full p-2 border border-gray-300 rounded-md focus:outline-none"
-              name="info"
-              id="info"
-              onChange={handleChange}
-              value={formData.info}
-              rows="4"
-            ></textarea>
-          </div>
-          <div className="w-full">
-            <Calendar
-              className="mx-auto border border-gray-300 rounded-md"
-              locale="es"
-              onChange={handleDateChange}
-              value={formData.selectedDate}
-              tileDisabled={tileDisabled}
-            />
-          </div>
-          <button
-            type="submit"
-            className="bg-blue-500 hover:bg-blue-700 text-white py-2 px-4 mt-4 rounded-md"
-          >
-            Verificar Turno
-          </button>
-        </form>
+<div className="container mx-auto p-4 sm:p-6 md:p-8 lg:p-10">
+  <div className="max-w-xl mx-auto bg-gray-100 rounded-md p-6">
+    <form className="space-y-4" onSubmit={handleFormSubmit}>
+      <div>
+        <label htmlFor="selectedPet" className="block font-semibold">Seleccione la mascota que necesita atención:</label>
+        <select
+          className="w-full p-2 border border-gray-300 rounded-md focus:outline-none"
+          name="selectedPet"
+          id="selectedPet"
+          onChange={handleChange}
+          value={formData.selectedPet}
+        >
+          <option value={''}>Selecciona tu mascota</option>
+          {mascota &&
+            mascota.length > 0 &&
+            mascota.map((mascotaItem, index) => (
+              <option key={index} value={mascotaItem.nombre}>
+                {mascotaItem.nombre}
+              </option>
+            ))}
+        </select>
       </div>
-    </div>
+      <div>
+        <label htmlFor="selectedTurno" className="block font-semibold">Seleccione el turno:</label>
+        <select
+          className="w-full p-2 border border-gray-300 rounded-md focus:outline-none"
+          name="selectedTurno"
+          id="selectedTurno"
+          onChange={handleChange}
+          value={formData.selectedTurno}
+        >
+          <option value="mañana">Mañana</option>
+          <option value="tarde">Tarde</option>
+        </select>
+      </div>
+      <div>
+        <label htmlFor="corte" className="block font-semibold">Seleccione el tipo de corte:</label>
+        <select
+          className="w-full p-2 border border-gray-300 rounded-md focus:outline-none"
+          name="corte"
+          id="corte"
+          onChange={handleChange}
+          value={formData.corte}
+        >
+          <option value="">Selecciona el tipo de corte</option>
+          <option value="corte higienico">Corte Higiénico</option>
+          <option value="de la raza">De la Raza</option>
+          <option value="todo rapado">Todo Rapado</option>
+        </select>
+      </div>
+      <div>
+        <label htmlFor="largo" className="block font-semibold">Seleccione el largo del corte (en cm):</label>
+        <select
+          className="w-full p-2 border border-gray-300 rounded-md focus:outline-none"
+          name="largo"
+          id="largo"
+          onChange={handleChange}
+          value={formData.largo}
+        >
+          <option value="">Selecciona el largo del corte</option>
+          <option value="Solo Baño">Solo Baño</option>
+          <option value="0">0 cm</option>
+          <option value="1">1 cm</option>
+          <option value="4">4 cm</option>
+        </select>
+      </div>
+      <div>
+        <label htmlFor="info" className="block font-semibold">Información adicional:</label>
+        <textarea
+          className="w-full p-2 border border-gray-300 rounded-md focus:outline-none"
+          name="info"
+          id="info"
+          onChange={handleChange}
+          value={formData.info}
+          rows="4"
+        ></textarea>
+      </div>
+      <div>
+        <Calendar
+          className="mx-auto border border-gray-300 rounded-md"
+          locale="es"
+          onChange={handleDateChange}
+          value={formData.selectedDate}
+          tileDisabled={tileDisabled}
+        />
+      </div>
+      <button
+        type="submit"
+        className="w-full bg-blue-500 hover:bg-blue-700 text-white py-2 px-4 mt-4 rounded-md"
+      >
+        Verificar Turno
+      </button>
+    </form>
+  </div>
+</div>
+
   );
 }

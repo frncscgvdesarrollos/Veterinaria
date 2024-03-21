@@ -45,8 +45,12 @@ export default function HomeCliente() {
   });
 
   return (
-    <div className="p-4 sm:p-6 md:p-8 lg:p-10 HomeCliente">
-      <Veterinaria />
+    <div className="bg-gray-100 min-h-screen bg-violet-200 ">
+      <div className="flex flex-col items-center justify-center p-10">
+        <h1 className="text-3xl sm:text-4xl font-bold text-gray-800 mb-4">Resever sus turnos</h1>
+        <p className="text-lg text-gray-600 mb-6">¡Reserva tus turnos en línea y acumula puntos para obtener consultas gratis!</p>
+        <Veterinaria />
+      </div>
     </div>
   );
 }

@@ -26,11 +26,12 @@ export async function mascotasEnAdopcion() {
   const querySnapshot = await getDocs(q);
   return querySnapshot
 }
-export async function registrarCliente(datosCliente) {
-  console.log("estos son los datos del cliente" + datosCliente)
+export async function registrarCliente({ datosCliente }) { // Modificación aquí
+  console.log("estos son los datos del cliente", datosCliente);
   const docRef = await addDoc(collection(db, "clientes"), datosCliente);
-  return docRef
+  return docRef;
 }
+
 export async function clienteExiste(uid) {
   try {
     const q = query(collection(db, "clientes"), where("datosCliente.usuarioId", "==", uid));
