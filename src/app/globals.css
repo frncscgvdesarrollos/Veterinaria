@@ -92,6 +92,7 @@
   background: linear-gradient(to bottom, transparent, #2d2b51bc); */
 /* }  */
 .HomeCliente {
+  overflow: hidden;
   background-image: url('/patron1.jpg');
   background-repeat: no-repeat;
   background-size: cover;
@@ -131,3 +132,90 @@
   background-position: center;
   
 }
+.imagenModal {
+  margin: auto;
+  width: 400px;
+  height: 400px;
+  box-shadow: -100px -50px 500px #162975;
+  border-radius: 50%; /* Se establece el radio de la esfera */
+  /* border: 1px solid #faa005; */
+  animation: fadeIn 10s ease-in infinite; /* Se aplica la animación fadeIn */
+  transform: rotate(0deg);
+}
+
+@keyframes fadeIn {
+  0% {
+    box-shadow: -100px -50px 500px #162975;
+    opacity: 0;
+  }
+  50% {
+    box-shadow: -100px 50px 500px #d3538a;
+    opacity: 0.5;
+  }
+  85% {
+    box-shadow: -100px 50px 500px #f6e144;
+    opacity: 1;
+    transform: rotate(360deg); /* Se realiza una rotación completa de 360 grados */
+  }
+  100% {
+    box-shadow: -100px 50px 500px #f6e144;
+    opacity: 1;
+    transform: rotate(360deg); /* Se mantiene la rotación de 360 grados */
+  }
+}
+.modalBackground {
+  overflow-y: hidden;
+  position: absolute;
+  top: 0;
+  left: 0;
+  border-radius: 50%; /* Se establece el radio de la esfera */
+  animation: backgroundAnimation 10s ease-in infinite alternate; /* Se aplica la animación al fondo */
+}
+
+@keyframes backgroundAnimation {
+  0% {
+    background: linear-gradient(90deg, #162975, #d3538a); /* Color de fondo inicial (opuesto a la sombra) */
+  }
+  50% {
+    background: linear-gradient(90deg, #d3538a, #f6e144); /* Color de fondo intermedio (opuesto a la sombra) */
+  }
+  100% {
+    background: linear-gradient(90deg, #f6e144, #162975); /* Color de fondo final (opuesto a la sombra) */
+  }
+}
+
+.imagenModal {
+  position: relative;
+  margin: auto;
+  width: 400px;
+  height: 400px;
+  box-shadow: -100px -50px 500px #162975;
+  border-radius: 50%; /* Se establece el radio de la esfera */
+  /* border: 1px solid #faa005; */
+  animation: fadeIn 10s ease-in infinite; /* Se aplica la animación fadeIn */
+  transform: rotate(0deg);
+}
+
+@keyframes fadeIn {
+  0% {
+    box-shadow: -100px -50px 500px #162975;
+    opacity: 0;
+  }
+  50% {
+    box-shadow: -100px 50px 500px #d3538a;
+    opacity: 0.5;
+  }
+  85% {
+    box-shadow: -100px 50px 500px #f6e144;
+    opacity: 1;
+    transform: rotate(360deg); /* Se realiza una rotación completa de 360 grados */
+  }
+  100% {
+    box-shadow: -100px 50px 500px #f6e144;
+    opacity: 1;
+    transform: rotate(360deg); /* Se mantiene la rotación de 360 grados */
+  }
+}
+
+
+

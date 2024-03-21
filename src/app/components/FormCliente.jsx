@@ -6,11 +6,9 @@ import { UserAuth } from '../context/AuthContext';
 
 export default function FormCliente() {
   const { user } = UserAuth();
-  const uid = user?.uid;
   const [yaEsCliente, setYaEsCliente] = useState(false);
-  if(yaEsCliente) {
-    handleEsCliente();
-  }
+  const uid = user?.uid;
+  if(yaEsCliente) {handleEsCliente()};
 
   const [datosForm, setDatosForm] = useState({
     nombre: '',
@@ -135,7 +133,5 @@ export default function FormCliente() {
     Enviar
   </button>
 </form>
-
-
   )
 }
