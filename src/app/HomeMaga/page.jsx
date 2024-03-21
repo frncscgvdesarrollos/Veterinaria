@@ -58,7 +58,6 @@ export default function Page() {
                 <thead className="bg-gray-50">
                     <tr>
                         <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Nombre</th>
-                        <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Apellido</th>
                         <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Dirección</th>
                         <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Teléfono</th>
                         <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Mascota</th>
@@ -70,7 +69,6 @@ export default function Page() {
                         (turno.estadoDelTurno !== 'confirmar' && turno.estadoDelTurno !== 'finalizado' && turno.estadoDelTurno !== 'cancelado') && (
                             <tr key={turno.id} className={turno.id % 2 === 0 ? 'bg-violet-100' : 'bg-cyan-100'}>
                                 <td className="px-6 py-4 whitespace-nowrap">{turno.nombre}</td>
-                                <td className="px-6 py-4 whitespace-nowrap">{turno.apellido}</td>
                                 <td className="px-6 py-4 whitespace-nowrap">{turno.direccion}</td>
                                 <td className="px-6 py-4 whitespace-nowrap">{turno.telefono}</td>
                                 <td className="px-6 py-4 whitespace-nowrap">{turno.selectedPet}</td>
@@ -95,7 +93,7 @@ export default function Page() {
             </table>
         </div>
     </div>
-    <div className="col-span-1 bg-white shadow-md rounded-md overflow-hidden bg-gray-100 p-4 sm:p-6 md:p-8 lg:p-10">
+    <div className="col-span-2 lg:col-span-1 bg-white shadow-md rounded-md overflow-hidden bg-gray-100 p-4 sm:p-6 md:p-8 lg:p-10">
         <h2 className="text-2xl font-bold text-cyan-800 mb-4">Llamar para confirmar</h2>
         <LlamarA />
     </div>
