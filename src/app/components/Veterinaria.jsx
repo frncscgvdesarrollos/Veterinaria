@@ -8,7 +8,7 @@ export default function Veterinaria() {
         <div className='flex flex-col items-center w-full sm:w-1/2 md:w-1/3 p-5 sm:p-10 border border-cyan-100 rounded-lg bg-cyan-100'>
           <h3 className='textoVeterinaria text-xl sm:text-3xl font-bold mt-5 mb-4'>Chequeos</h3>
           <div className='w-32 sm:w-40 md:w-auto mb-4 rounded-full overflow-hidden'>
-            <Image src="/hd8.jpg" alt="veterinaria" width={100} height={100} className='imagenVeterinaria scale-100' />
+            <Image src="/hd8.jpg" alt="veterinaria" width={100} height={100} className='imagenVeterinaria scale-100 rounded-full m-auto'  />
           </div>
           <div className='flex flex-col items-center'>
             <p className='text-base sm:text-lg text-gray-700 mb-4 mt-2'>
@@ -21,7 +21,7 @@ export default function Veterinaria() {
         <div className='flex flex-col items-center p-5 sm:p-10 border w-full sm:w-1/2 md:w-1/3 border-cyan-100 rounded-lg bg-violet-400'>
           <h3 className='textoVeterinaria text-xl sm:text-3xl font-bold text-amber-600 mt-5 mb-4'>Peluquería</h3>
           <div className='w-32 sm:w-40 md:w-auto mb-4 rounded-full overflow-hidden'>
-            <Image src="/hd6.jpg" alt="veterinaria" width={100} height={100} className='imagenVeterinaria scale-100 rounded-full' />
+            <Image src="/hd6.jpg" alt="veterinaria" width={100} height={100} className='imagenVeterinaria scale-100 rounded-full m-auto' />
           </div>
           <div className='flex flex-col items-center'>
             <p className='text-base sm:text-lg text-gray-700 mb-4'>
