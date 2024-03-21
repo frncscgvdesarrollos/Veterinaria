@@ -21,9 +21,9 @@ export default function Footer() {
   }
 
   return (
-    <footer className="bg-gray-200 p-6 sm:p-10 flex flex-col sm:flex-row items-center footerContainer">
-      <div className="w-full p-4 sm:p-0 mb-6 sm:mb-0">
-        <h3 className="text-3xl font-bold text-center text-orange-400 mb-8 uppercase">Donde estamos</h3>
+    <footer className="bg-violet-200 p-6 sm:p-10 flex flex-col sm:flex-row items-center footerContainer">
+      <div className="w-full p-10 sm:p-5 rounded-lg mb-6 sm:mb-0 bg-violet-400 ">
+        <h3 className="text-3xl font-bold text-center text-yellow-300 bg-gray-700 rounded-lg  p-2 mb-8">Donde estamos</h3>
         <div className="aspect-w-4 aspect-h-3">
           <iframe
             className="w-full h-full sm:w-full sm:h-96"
@@ -34,12 +34,12 @@ export default function Footer() {
             tabIndex="0"
           />
         </div>
-        <marquee className="text-base text-center text-yellow-300 bg-red-500 font-bold">
+        <marquee className="text-base text-center text-yellow-300 bg-red-500 font-bold p-2 text-xl">
           ¡Recuerde que la veterinaria solo trabaja con turnos previos!
         </marquee>
       </div>
       <div className="w-full p-4 flex flex-col items-center justify-center">
-        <div className="mb-8">
+        <div className="mb-8 bg-yellow-400  rounded-lg p-4">
           <p className="text-3xl font-bold text-center text-red-500 uppercase">
             Urgencias - Sabados y Domingos
           </p>
