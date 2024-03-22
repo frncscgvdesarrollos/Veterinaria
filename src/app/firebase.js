@@ -44,19 +44,20 @@ export async function clienteExiste(uid) {
       return cliente;
     } else {
       // Si el snapshot está vacío, no se encontró ningún cliente
-      console.log("No se encontró ningún cliente con el UID proporcionado.");
+      console.log("No se encontró ningún cliente con el UID proporcionado:", uid);
       return null;
     }
   } catch (error) {
-    console.error("Error al consultar el cliente:", error);
+    console.error("Error al consultar el cliente:", error.message);
     throw error;
   }
 }
 export async function clienteExisteConTerminosTRUE(uid) {
   try {
     // Construye la consulta para buscar un cliente con el UID proporcionado y que tenga "terminos" en true
-    const clientesQuery = query(collection(db, "clientes"), 
-      where("datosCliente.usuarioId", "==", uid), 
+    const clientesQuery = query(
+      collection(db, "clientes"), 
+      where("datosCliente.usuarioId", "==", uid),
       where("datosCliente.terminos", "==", true)
     );
     
@@ -76,6 +77,7 @@ export async function clienteExisteConTerminosTRUE(uid) {
     throw error;
   }
 }
+
 export async function clienteEsPremium(uid) {
   try {
     // Construye la consulta para buscar un cliente con el UID proporcionado y que tenga "esPremium" en true
