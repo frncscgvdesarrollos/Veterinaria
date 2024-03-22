@@ -23,12 +23,12 @@ export default function Adopcion() {
 
   return (
 <div className="container mx-auto px-4">
-  <h2 className="text-3xl font-semibold text-center mb-8 text-gray-800">Mascotas en Adopción</h2>
   <p className="text-lg mb-8 bg-gray-500 text-white p-4 rounded-md text-gray-900">
+  <h2 className="text-3xl font-bold ml-auto mb-8 text-yellow-200">Mascotas en Adopción</h2>
     En esta sección puedes ver las mascotas que están en proceso de adopción. <br />
     Queremos recordarte la importancia de la adopción y la responsabilidad de tener una mascota.
   </p>
-  <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-8 bg-violet-400 p-4 rounded-lg">
+  <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-8 bg-violet-200  p-4 rounded-lg">
     {mascotas.map((mascota, index) => (
       <div key={index} className="bg-white shadow-md rounded-md overflow-hidden">
         <div className="relative overflow-hidden">
