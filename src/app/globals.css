@@ -49,6 +49,7 @@
   
 }
 .modalBackground {
+  background: linear-gradient(90deg, #162975, #d3538a); /* Color de fondo inicial (opuesto a la sombra) */
   position: absolute;
   top: 0;
   left: 0;
@@ -60,7 +61,7 @@
   margin: auto;
   width: 400px;
   height: 400px;
-  box-shadow: -100px -50px 500px #162975;
+  box-shadow: -100px -50px 200px #162975;
   border-radius: 50%; 
   animation: fadeIn 10s ease-in;
   transform: rotate(0deg);
@@ -68,20 +69,20 @@
 
 @keyframes fadeIn {
   0% {
-    box-shadow: -100px -50px 500px #162975;
+    box-shadow: -100px -50px 200px #162975;
     opacity: 0;
   }
   50% {
-    box-shadow: -100px 50px 500px #d3538a;
+    box-shadow: -100px 50px 200px #d3538a;
     opacity: 0.5;
   }
   85% {
-    box-shadow: -100px 50px 500px #f6e144;
+    box-shadow: -100px 50px 200px #f6e144;
     opacity: 1;
     transform: rotate(360deg); 
   }
   100% {
-    box-shadow: -100px 50px 500px #f6e144;
+    box-shadow: -100px 50px 200px #f6e144;
     opacity: 1;
     transform: rotate(360deg); 
   }
