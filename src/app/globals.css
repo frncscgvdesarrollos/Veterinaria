@@ -61,7 +61,7 @@
   margin: auto;
   width: 400px;
   height: 400px;
-  box-shadow: -100px -50px 200px #162975;
+  box-shadow: -100px 50px 200px #f6e144;
   border-radius: 50%; 
   animation: fadeIn 10s ease-in;
   transform: rotate(0deg);
