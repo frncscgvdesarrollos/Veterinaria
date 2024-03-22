@@ -1,4 +1,4 @@
-'use client';
+'use client'
 import { useEffect, useState } from 'react';
 import Calendar from 'react-calendar';
 import 'react-calendar/dist/Calendar.css';
@@ -8,9 +8,8 @@ import { postTurnoChekeo } from '../firebase';
 
 const MyCalendar = () => {
   const { user } = UserAuth();
-  const {mascota} = MascotasContext();
+  const { mascota } = MascotasContext();
   const userId = user?.uid;
-  console.log(mascota);
 
   const [formData, setFormData] = useState({
     selectedPet: '',
@@ -27,12 +26,11 @@ const MyCalendar = () => {
       if (userPets && userPets.mascotas && userPets.mascotas.length > 0) {
         setFormData(prevData => ({
           ...prevData,
-          selectedPet: userPets.mascotas[0].nombre // Considerando que cada usuario puede tener múltiples mascotas
+          selectedPet: userPets.mascotas[0].nombre
         }));
       }
     }
   }, [mascota, userId]);
-  
 
   const handleDateChange = newDate => {
     setFormData(prevData => ({
@@ -45,7 +43,6 @@ const MyCalendar = () => {
     e.preventDefault();
     console.log('Datos del formulario:', formData);
     postTurnoChekeo(formData);
-    // Puedes realizar acciones adicionales con los datos aquí
   };
 
   const handleChange = e => {
@@ -58,16 +55,15 @@ const MyCalendar = () => {
   };
 
   const tileDisabled = ({ date, view }) => {
-    if (view === 'month') {
-      return date.getDay() === 0 || date.getDay() === 6;
-    }
+    const currentDate = new Date();
+    return view === 'month' && (date.getDay() === 0 || date.getDay() === 6 || date < currentDate);
   };
+  
 
   return (
-    <div className="bg-gray-100 p-4 sm:p-6 md:p-8 lg:p-10">
-      <div className='p-4 sm:p-6 md:p-8 lg:p-10'>
-      <form className="flex flex-col items-center" onSubmit={handleFormSubmit}>
-        <div className="w-full mb-4">
+    <div className="container mx-auto p-4 lg:p-10 bg-gray-100">
+      <form onSubmit={handleFormSubmit}>
+        <div className="mb-4">
           <label htmlFor="selectedPet">Seleccione la mascota que necesita atención:</label>
           <select
             className="w-full p-2 border border-gray-300 rounded-md focus:outline-none"
@@ -76,19 +72,19 @@ const MyCalendar = () => {
             onChange={handleChange}
             value={formData.selectedPet}
           >
-      {mascota && mascota.length > 0 && mascota.map((mascotaItem, index) => (
-        <option key={mascotaItem.id} value={mascotaItem.nombre}>
-          {mascotaItem.nombre}
-        </option>
-      ))}
+            {mascota && mascota.length > 0 && mascota.map((mascotaItem, index) => (
+              <option key={mascotaItem.id} value={mascotaItem.nombre}>
+                {mascotaItem.nombre}
+              </option>
+            ))}
           </select>
         </div>
-        <div className="w-full flex flex-col sm:flex-row justify-between mb-4">
-          <p className="w-full sm:w-2/3 text-center sm:text-left mb-2">
+        <div className="flex flex-col sm:flex-row justify-between mb-4">
+          <p className="mb-2 sm:mb-0">
             Recuerde que el horario que está solicitando es estipulativo y sujeto a confirmación.
           </p>
           <select
-            className="w-full sm:w-1/3 p-2 border border-gray-300 rounded-md mb-2 sm:mb-0"
+            className="w-full sm:w-1/4 p-2 border border-gray-300 rounded-md mb-2 sm:mb-0"
             name="selectedTime"
             onChange={handleChange}
             value={formData.selectedTime}
@@ -100,7 +96,7 @@ const MyCalendar = () => {
             ))}
           </select>
         </div>
-        <div className="w-full mb-4">
+        <div className="mb-4">
           <p>
             Puede recibir su consulta:
           </p>
@@ -115,10 +111,9 @@ const MyCalendar = () => {
           </select>
         </div>
         {formData.selectedLocation === 'veterinaria' && (
-          <div className="w-full mb-4 flex flex-row justify-between">
-            <label className="w-full text-center" htmlFor="needPickup">¿Necesita que la busquen y la devuelvan?</label>
+          <div className="flex flex-row justify-between mb-4">
+            <label htmlFor="needPickup">¿Necesita que la busquen y la devuelvan?</label>
             <input
-              className="w-full scale-50 p-2 border border-gray-700 rounded-md focus:outline-none"
               type="checkbox"
               id="needPickup"
               name="needPickup"
@@ -127,7 +122,7 @@ const MyCalendar = () => {
             />
           </div>
         )}
-        <div className="w-full">
+        <div className="mb-4">
           <Calendar
             className="mx-auto border border-gray-300 rounded-md"
             locale="es"
@@ -138,12 +133,11 @@ const MyCalendar = () => {
         </div>
         <button
           type="submit"
-          className="bg-blue-500 hover:bg-blue-700 text-white py-2 px-4 mt-4 rounded-md"
+          className="bg-blue-500 hover:bg-blue-700 text-white py-2 px-4 rounded-md w-full"
         >
-          Verificar turno.
+          Verificar turno
         </button>
       </form>
-      </div>
     </div>
   );
 }
