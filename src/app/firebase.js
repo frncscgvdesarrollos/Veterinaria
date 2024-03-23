@@ -19,7 +19,15 @@ export  const auth = getAuth(app);
 export const db = getFirestore(app);
 export const storage = getStorage(app)
 
-
+export async function getMisTurnos(uid) {
+  const turnos = [];
+  const q = query(collection(db, "turnosPeluqueria"), where("usuarioid", "==", uid));
+  const querySnapshot = await getDocs(q);
+  querySnapshot.forEach((doc) => {
+    turnos.push(doc.data());
+  })
+  return turnos
+}
 //funciones de firebase para la base de datos
 export async function mascotasEnAdopcion() {
   const q = query(collection(db, "mascotas"), where("estadoCivil", "==", "En adopción"));

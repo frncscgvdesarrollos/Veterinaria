@@ -4,8 +4,8 @@ import Link from 'next/link';
 export default function Veterinaria() {
   return (
     <div className='w-full flex flex-col sm:flex-row sm:items-center m-auto p-10 contenedorVeterinaria'>
-      <div className='flex flex-wrap justify-center gap-8'>
-        <div className='flex flex-col items-center w-full sm:w-1/2 md:w-1/3 p-5 sm:p-10 border border-cyan-100 rounded-lg bg-cyan-600'>
+      <div className='flex flex-wrap justify-center gap-8 '>
+        <div className='flex flex-col items-center w-full sm:w-1/2 md:w-2/3 p-5 sm:p-10 border border-cyan-100 rounded-lg bg-cyan-600'>
           <div className='w-32 sm:w-40 md:w-auto mb-4 rounded-full overflow-hidden'>
             <Image src="/hd8.jpg" alt="veterinaria" width={100} height={100} className='imagenVeterinaria scale-100 rounded-full m-auto'  />
           </div>
@@ -18,7 +18,7 @@ export default function Veterinaria() {
           </div>
         </div>
 
-        <div className='flex flex-col items-center p-5 sm:p-10 border w-full sm:w-1/2 md:w-1/3 border-cyan-100 rounded-lg bg-violet-400'>
+        <div className='flex flex-col items-center p-5 sm:p-10 border w-full sm:w-1/2 md:w-2/3 border-cyan-100 rounded-lg bg-violet-400'>
           <div className='w-32 sm:w-40 md:w-auto mb-4 rounded-full overflow-hidden'>
             <Image src="/hd6.jpg" alt="veterinaria" width={100} height={100} className='imagenVeterinaria scale-100 rounded-full m-auto' />
           </div>

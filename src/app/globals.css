@@ -16,8 +16,9 @@
   }
 }
 
-
-
+.gradient-bg {
+  background: linear-gradient(0deg, #2e9ef4, #09cef5);
+}
 .textoVeterinaria {
   font-weight: bolder;
   letter-spacing: 5px;
@@ -57,6 +58,7 @@
   animation: backgroundAnimation 10s ease-in infinite alternate; /* Se aplica la animación al fondo */
 }
 .imagenModal {
+  margin-top: 10% !important;
   position: relative;
   margin: auto;
   width: 300px;
@@ -77,7 +79,7 @@
     opacity: 0.5;
   }
   85% {
-    box-shadow: -100px 50px 200px #f6e144;
+    box-shadow: -100px 50px 200px #3ea4da;
     opacity: 1;
     transform: rotate(360deg); 
   }
