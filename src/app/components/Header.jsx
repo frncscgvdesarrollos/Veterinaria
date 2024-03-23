@@ -95,13 +95,13 @@ export default function Header() {
     <header className="bg-gray-800 flex flex-col items-center px-4 py-2 md:py-4">
       <div className="flex justify-between items-center w-full">
         <div className="w-1/3 md:w-auto">
-          <Image src="/LOGO.svg" alt="Logo" width={200} height={200} />
+          <Image src="/LOGO.svg" alt="Logo" width={200} height={200} className="lg:ml-20 lg:mt-5" />
         </div>
         <div className="flex items-center space-x-4">
           {premium ? (
             <p className="text-white">Cliente Premium</p>
           ) : (
-            <button className="btn rounded p-2 text-base text-red-500 bg-yellow-500">¡Promociones!</button>
+            <button className="btn rounded p-2 text-base text-red-500 bg-yellow-500 lg:text-3xl lg:mr-20">¡Promociones!</button>
           )}
         </div>
         <div className="md:hidden">
