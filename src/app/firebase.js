@@ -42,7 +42,7 @@ export async function registrarCliente({ datosCliente }) { // Modificación aqu�
 
 export async function clienteExiste(uid) {
   try {
-    const q = query(collection(db, "clientes"), where("datosCliente.usuarioId", "==", uid));
+    const q = query(collection(db, "clientes"), where("usuarioid", "==", uid));
     const querySnapshot = await getDocs(q);
 
     if (!querySnapshot.empty) {
@@ -65,8 +65,8 @@ export async function clienteExisteConTerminosTRUE(uid) {
     // Construye la consulta para buscar un cliente con el UID proporcionado y que tenga "terminos" en true
     const clientesQuery = query(
       collection(db, "clientes"), 
-      where("datosCliente.usuarioId", "==", uid),
-      where("datosCliente.terminos", "==", true)
+      where("usuarioId", "==", uid),
+      where("terminos", "==", true)
     );
     
     // Obtiene los documentos que cumplen con la consulta
@@ -91,8 +91,8 @@ export async function clienteEsPremium(uid) {
     // Construye la consulta para buscar un cliente con el UID proporcionado y que tenga "esPremium" en true
     const clientesQuery = query(
       collection(db, "clientes"),
-      where("datosCliente.usuarioId", "==", uid),
-      where("datosCliente.esPremium", "==", true)
+      where("usuarioid", "==", uid),
+      where("esPremium", "==", true)
     );
 
     // Obtiene los documentos que cumplen con la consulta
@@ -108,7 +108,7 @@ export async function clienteEsPremium(uid) {
 export async function confirmarTerminos(uid) {
   try {
     // Obtener la referencia del documento que cumple con la condición
-    const q = query(collection(db, 'clientes'), where("datosCliente.usuarioId", "==", uid));
+    const q = query(collection(db, 'clientes'), where("datosCliente.usuarioid", "==", uid));
     const querySnapshot = await getDocs(q);
     
     // Verificar si se encontró un documento que cumpla con la condición
@@ -133,12 +133,12 @@ export async function confirmarTerminos(uid) {
 export async function sumarTurnoPeluqueria(uid) {
   console.log(uid)
   try {
-    const q = query(collection(db, 'clientes'), where("datosCliente.usuarioId", "==", uid));
+    const q = query(collection(db, 'clientes'), where("usuarioid", "==", uid));
     const querySnapshot = await getDocs(q);
     querySnapshot.forEach(async (doc) => {
-      const suma = doc.data().datosCliente.cortesTotales + 1;
+      const suma = doc.data().cortesTotales + 1;
       await updateDoc(doc.ref, {
-        'datosCliente.cortesTotales': suma
+        'cortesTotales': suma
       });
     });
   } catch (error) {
@@ -183,7 +183,7 @@ export async function registerTurno(registro) {
 } 
 export async function getNextTurn(uid) {
   const turnos = [];
-  const q = await query(collection(db, "turnosCheckeo"), where("usuarioId", "==", uid));
+  const q = await query(collection(db, "turnosCheckeo"), where("usuarioid", "==", uid));
   const querySnapshot = await getDocs(q);
   querySnapshot.forEach((doc) => {
     turnos.push(doc.data());
@@ -335,17 +335,7 @@ export  async function deleteProduct(id) {
     console.error("Error deleting document: ", error);
   }
 }
-//REVISAR HOY 
-// export async function getTurnosPeluqueriaEsperando(){
-//   const turnos = [];
-//   const q = query(collection(db,"turnosPeluqueria") , where("estadoPeluqueria","==","esperando"))
-//   const docs = await getDocs(q);
-//   docs.forEach(doc => {
-//     turnos.push(doc.data())
-//   })
-//   console.log(turnos)
-//   return turnos
-// }
+
 export async function getLastTurnoPeluqueriaId() {
   try {
     const q = query(collection(db, 'turnosPeluqueria'), orderBy('id', 'desc'), limit(1));
@@ -364,58 +354,64 @@ export async function getLastTurnoPeluqueriaId() {
   }
 }
 
-// export async function turnosPeluqueriaPagosYaConfirmar () {
-//   const turnos = [];
-//   const q = query(collection(db,"turnosPeluqueria") ,where("estadoDelTurno", "==", "confirmar"))
-//   const docs = await getDocs(q);
-//   docs.forEach(docs => {
-//     turnos.push(docs.data())
-//   })
-//   console.log(turnos)
-//   return turnos
-// }
-// export async function avanzarEstadoTurno(id) {
-//   try {
-//     const turnoRef = doc(db, "turnosPeluqueria", id);
-//     const turnoSnapshot = await getDoc(turnoRef);
 
-//     if (!turnoSnapshot.exists()) {
-//       throw new Error("No se encontró ningún documento con el ID especificado");
-//     }
+export async function verificarCapacidadTurno(selectedDate, selectedTurno) {
+  try {
+    const q = query(
+      collection(db, "turnosPeluqueria"),
+      where("selectedDate", "==", selectedDate),
+      where("selectedTurno", "==", selectedTurno)
+    );
 
-//     const estadoActual = turnoSnapshot.data().estadoDelTurno;
-//     let nuevoEstado;
+    const querySnapshot = await getDocs(q);
+    let capacidadTurno = {
+      muyGrande: 0,
+      grande: 0,
+      mediano: 0,
+      toy: 0
+    };
 
-    // switch (estadoActual) {
-    //   case "confirmar": // aparecer en llamarA Y CONFIRMA O CANCELA
-    //     nuevoEstado = "confirmado";
-    //     break;
-    //   case "confirmado": // aparecer en transporte como buscar y en peluqueria como esperando
-    //     nuevoEstado = "buscado";
-    //     break;
-    //   case "buscado": // aparecer en transporte como buscado en peluequeria como esperando 
-    //     nuevoEstado = "Veterinaria";
-    //     break;
-    //   case "Veterinaria": // aparecer en trasnporte como esperando y en peluqueria como En peluqueria
-    //     nuevoEstado = "Proceso";
-    //   case "Proceso":// proceso en trasporte esperando y peluqueria En Proceso
-    //     nuevoEstado = "devolver";
-    //   case "devolver":// transporte retirar y pelqueuria finalizado 
-    //     nuevoEstado = "devolviendo";
-    //   case "devolviendo":// transporte devoviendo peluqueria finalizando 
-    //     nuevoEstado = "Finalizado";
-    //     break;
-    //   default:
-    //     throw new Error("El estado actual del turno no puede avanzar.");
-    // }
-//     await updateDoc(turnoRef, { estadoDelTurno: nuevoEstado });
+    querySnapshot.forEach((doc) => {
+      const data = doc.data();
+      capacidadTurno[data.tamaño]++; // Aumenta el contador de perros según su tamaño
+    });
 
-//     return { id: turnoSnapshot.id, ...turnoSnapshot.data(), estadoDelTurno: nuevoEstado };
-//   } catch (error) {
-//     console.error("Error avanzando estado del turno:", error);
-//     throw error;
-//   }
-// }
+    // Verificar restricciones
+    if (selectedTurno === "mañana") {
+      if (
+        capacidadTurno.muyGrande <= 1 &&
+        capacidadTurno.grande <= 2 &&
+        capacidadTurno.mediano <= 3 &&
+        capacidadTurno.toy <= 6 &&
+        Object.values(capacidadTurno).reduce((acc, cur) => acc + cur, 0) <= 6 // No más de 6 perros por turno
+      ) {
+        return true; // Capacidad suficiente
+      } else {
+        return false; // Capacidad excedida
+      }
+    } else if (selectedTurno === "tarde") {
+      if (
+        capacidadTurno.muyGrande <= 1 &&
+        capacidadTurno.grande <= 2 &&
+        capacidadTurno.mediano <= 3 &&
+        capacidadTurno.toy <= 6 &&
+        Object.values(capacidadTurno).reduce((acc, cur) => acc + cur, 0) <= 6 // No más de 6 perros por turno
+      ) {
+        return true; // Capacidad suficiente
+      } else {
+        return false; // Capacidad excedida
+      }
+    } else {
+      return false; // Turno no válido
+    }
+  } catch (error) {
+    console.error("Error al verificar capacidad del turno:", error);
+    return false; // Error al verificar la capacidad
+  }
+}
+
+
+
 export async function avanzarEstadoTurno(id) {
   try {
     const q = query(collection(db, "turnosPeluqueria"), where("id", "==", id));

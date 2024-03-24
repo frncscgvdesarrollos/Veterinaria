@@ -64,7 +64,7 @@ export default function Header() {
     if (uid) {
       clienteExisteConTerminosTRUE(uid)
         .then((result) => {
-          setTerminos(!!result);
+          setTerminos(!result);
         })
         .catch((error) => {
           console.error("Error verificando términos:", error);
