@@ -6,7 +6,7 @@ import { getFirestore, collection, addDoc } from "firebase/firestore";
 const app = initializeApp(firebaseConfig);
 const db = getFirestore(app);
 
-const mercadopago = new MercadoPagoConfig.configure({
+const mercadopago = new MercadoPagoConfig({
  accessToken: 'TEST-655293c8-3ec9-4fe9-948f-5b48ba9d2488',
 });
 
