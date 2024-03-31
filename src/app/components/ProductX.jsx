@@ -21,7 +21,7 @@ export default async function ProductX( formData ) {
           pending: "https://magalimartinveterinaria.vercel.app/HomeCliente/Acciones/turneroPeluqueria/pagoError",
         },
         auto_return: "approved",
-        notification_url: "https://xrdb6q32-3000.brs.devtunnels.ms/api/payments",
+        notification_url: "https://magalimartinveterinaria.vercel.app/api/payments",
       }
     })
     redirect(preference.init_point);
