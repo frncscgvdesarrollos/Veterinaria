@@ -1,7 +1,9 @@
 'use client';
 import { useEffect, useState } from 'react';
-import { getMisTurnos } from '../../../firebase';
+import { getMisTurnos } from '@/app/firebase';
 import { UserAuth } from '@/app/context/AuthContext';
+import { useSearchParams } from 'next/navigation';
+import { confirmarPagos } from '@/app/firebase';
 
 // Función para agrupar los turnos por fecha
 function groupTurnosByDate(turnos) {
@@ -22,7 +24,7 @@ function convertirTimestampAFechaHora(timestamp) {
   return date.toLocaleString(); // Puedes ajustar el formato según tus preferencias
 }
 
-// Componente para mostrar los turnos de una fecha en una tabla// Componente para mostrar los turnos de una fecha en una tabla
+// Componente para mostrar los turnos de una fecha en una tabla
 function TurnosPorFecha({ turnos }) {
   return (
     <div className="mb-8">
@@ -44,11 +46,7 @@ function TurnosPorFecha({ turnos }) {
               <td className="px-4 py-2">{turno.transporte ? 'Con transporte' : 'Sin transporte'}</td>
               <td className="px-4 py-2">{turno.direccion ? turno.direccion : '-'}</td>
               <td className={`px-4 py-2 ${turno.estadoDelTurno === 'confirmar' ? 'bg-red-500' : turno.estadoDelTurno === 'buscado' ? 'bg-blue-500' : 'bg-green-500'}`}>
-                {turno.estadoDelTurno === 'confirmar' ?
-                  'Confirmar - Recibirá un llamado de la veterinaria.'
-                  : turno.estadoDelTurno === 'buscado' ?
-                  'En la Peluquería'
-                  : 'Confirmado - El servicio se realizará sin problemas.'}
+                {turno.estadoDelTurno === 'confirmar' ? 'Confirmar - Recibirá un llamado de la veterinaria.' : turno.estadoDelTurno === 'buscado' ? 'En la Peluquería' : 'Confirmado - El servicio se realizará sin problemas.'}
               </td>
             </tr>
           ))}
@@ -63,13 +61,18 @@ export default function MisTurnos() {
   const { user } = UserAuth();
   const uid = user?.uid;
   const [turnosCliente, setTurnosCliente] = useState([]);
+  const searchParams = useSearchParams();
+  const payment_id = searchParams.get('payment_id');
+  const status = searchParams.get('collection_status');
+  console.log(status);
+  const preference_id = searchParams.get('preference_id');
 
   function getTurnos() {
     return new Promise((resolve, reject) => {
       getMisTurnos(uid)
         .then(result => {
           setTurnosCliente(result);
-          if(!result) {
+          if (!result) {
             reject(new Error('No se encontraron turnos'));
           }
         })
@@ -83,8 +86,14 @@ export default function MisTurnos() {
   useEffect(() => {
     if (uid) {
       getTurnos();
+      setTimeout(() => {
+        getTurnos();
+      }, 3000);
     }
-  }, [uid]);
+    if (status === 'approved') {
+      confirmarPagos(uid); // Confirmar el pago en Firebase
+    }
+  }, [uid, payment_id, status, preference_id]);
 
   // Agrupar los turnos por fecha
   const turnosPorFecha = groupTurnosByDate(turnosCliente);
@@ -103,4 +112,3 @@ export default function MisTurnos() {
     </div>
   );
 }
-
