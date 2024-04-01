@@ -1,21 +1,19 @@
 'use client';
-import { useEffect, useState } from 'react';
-import { getMisTurnos } from '@/app/firebase';
+import React, { useState, useEffect, useMemo, memo } from 'react';
+import { getMisTurnos, registroVenta, confirmarPagos } from '@/app/firebase';
 import { UserAuth } from '@/app/context/AuthContext';
 import { useSearchParams } from 'next/navigation';
-import { confirmarPagos } from '@/app/firebase';
 
 // Función para agrupar los turnos por fecha
 function groupTurnosByDate(turnos) {
-  const turnosPorFecha = {};
-  turnos.forEach(turno => {
+  return turnos.reduce((turnosPorFecha, turno) => {
     const fecha = turno.selectedDate.toDate().toLocaleDateString();
     if (!turnosPorFecha[fecha]) {
       turnosPorFecha[fecha] = [];
     }
     turnosPorFecha[fecha].push(turno);
-  });
-  return turnosPorFecha;
+    return turnosPorFecha;
+  }, {});
 }
 
 // Función para convertir un objeto Timestamp a una cadena de fecha y hora legible
@@ -25,7 +23,7 @@ function convertirTimestampAFechaHora(timestamp) {
 }
 
 // Componente para mostrar los turnos de una fecha en una tabla
-function TurnosPorFecha({ turnos }) {
+const TurnosPorFecha = memo(({ turnos }) => {
   return (
     <div className="mb-8">
       <table className="table-auto w-full">
@@ -54,49 +52,61 @@ function TurnosPorFecha({ turnos }) {
       </table>
     </div>
   );
-}
+});
 
 // Componente principal MisTurnos
 export default function MisTurnos() {
   const { user } = UserAuth();
   const uid = user?.uid;
   const [turnosCliente, setTurnosCliente] = useState([]);
+  const [isLoading, setIsLoading] = useState(true);
+  const [error, setError] = useState(null);
   const searchParams = useSearchParams();
   const payment_id = searchParams.get('payment_id');
   const status = searchParams.get('collection_status');
-  console.log(status);
   const preference_id = searchParams.get('preference_id');
 
-  function getTurnos() {
-    return new Promise((resolve, reject) => {
-      getMisTurnos(uid)
-        .then(result => {
-          setTurnosCliente(result);
-          if (!result) {
-            reject(new Error('No se encontraron turnos'));
-          }
-        })
-        .catch(error => {
-          console.error('Error fetching turnos:', error);
-          reject(error);
-        });
-    });
-  }
+  const turnosPorFecha = useMemo(() => groupTurnosByDate(turnosCliente), [turnosCliente]);
+
+  const getTurnos = async () => {
+    setIsLoading(true);
+    try {
+      const turnos = await getMisTurnos(uid);
+      setTurnosCliente(turnos);
+    } catch (error) {
+      setError('Error al obtener los turnos');
+      console.error('Error fetching turnos:', error);
+    } finally {
+      setIsLoading(false);
+    }
+  };
+
+  const handlePaymentConfirmation = async () => {
+    try {
+      await confirmarPagos(uid);
+      await registroVenta(uid);
+    } catch (error) {
+      setError('Error al confirmar el pago');
+      console.error('Error confirming payment:', error);
+    }
+  };
 
   useEffect(() => {
     if (uid) {
       getTurnos();
-      setTimeout(() => {
-        getTurnos();
-      }, 3000);
     }
     if (status === 'approved') {
-      confirmarPagos(uid); // Confirmar el pago en Firebase
+      handlePaymentConfirmation();
     }
-  }, [uid, payment_id, status, preference_id]);
+  }, [uid, status]);
 
-  // Agrupar los turnos por fecha
-  const turnosPorFecha = groupTurnosByDate(turnosCliente);
+  if (isLoading) {
+    return <div>Cargando...</div>;
+  }
+
+  if (error) {
+    return <div>Error: {error}</div>;
+  }
 
   return (
     <div className="p-8">

@@ -260,7 +260,10 @@ export async function confirmarPagos(uid) {
   
   return turnosPagados;
 }
-
+export async function registroVenta(venta) {
+  const docRef = await addDoc(collection(db, "ventas"), venta);
+  return docRef
+}
 //----------------------------------------------------------------------
 //-------------------------------------------------------
 //_------------------------------------
