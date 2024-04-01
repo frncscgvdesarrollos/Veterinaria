@@ -1,4 +1,4 @@
-'use client'
+'use client';
 import { useState, useEffect, useMemo, memo } from 'react';
 import { getMisTurnos, registroVenta, confirmarPagos } from '@/app/firebase';
 import { UserAuth } from '@/app/context/AuthContext';
@@ -16,6 +16,8 @@ function groupTurnosByDate(turnos) {
 
 // Componente para mostrar los turnos de una fecha en una tabla
 const TurnosPorFecha = memo(({ turnos }) => {
+  TurnosPorFecha.displayName = 'TurnosPorFecha'; // Agregar nombre de visualización
+
   return (
     <div className="mb-8">
       <table className="table-auto w-full">
@@ -82,12 +84,16 @@ export default function MisTurnos() {
   };
 
   useEffect(() => {
-    if (uid) {
-      fetchTurnos();
-    }
-    if (status === 'approved') {
-      handlePaymentConfirmation();
-    }
+    const fetchData = async () => {
+      if (uid) {
+        await fetchTurnos();
+      }
+      if (status === 'approved') {
+        await handlePaymentConfirmation();
+      }
+    };
+
+    fetchData();
   }, [uid, status]);
 
   if (isLoading) {
