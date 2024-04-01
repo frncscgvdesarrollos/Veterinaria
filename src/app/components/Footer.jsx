@@ -1,6 +1,7 @@
-'use client'
+'use client';
 import { useEffect, useState } from 'react';
 import { UserAuth } from '../context/AuthContext';
+import Image from 'next/image'; // Importar Image desde next/image
 
 export default function Footer() {
   const { user } = UserAuth();
@@ -10,10 +11,13 @@ export default function Footer() {
     return (
       <footer className="bg-gray-200 p-6 sm:p-10 flex flex-col sm:flex-row items-center">
         <div className="w-full p-4 sm:p-0 mb-6 sm:mb-0 flex justify-center items-center">
-          <img
+          {/* Reemplazar <img> con <Image /> */}
+          <Image
             src="/LOGO3.svg"
             alt="logo"
             className="w-[300px] h-[300px] sm:w-40 sm:h-40"
+            width={300}
+            height={300}
           />
         </div>
       </footer>
@@ -46,10 +50,13 @@ export default function Footer() {
             Tel: 2954-456-456
           </p>
         </div>
-        <img
+        {/* Reemplazar <img> con <Image /> */}
+        <Image
           src="/LOGO3.svg"
           alt="logo"
           className="w-32 h-32 sm:w-48 sm:h-48"
+          width={48}
+          height={48}
         />
       </div>
     </footer>
