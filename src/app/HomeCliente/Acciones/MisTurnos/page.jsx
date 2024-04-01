@@ -93,7 +93,11 @@ export default function MisTurnos() {
       }
     };
 
-    fetchData();
+    const fetchDataWrapper = () => {
+      fetchData();
+    };
+
+    fetchDataWrapper();
   }, [uid, status]);
 
   if (isLoading) {
