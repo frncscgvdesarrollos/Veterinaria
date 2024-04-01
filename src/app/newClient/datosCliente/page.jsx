@@ -3,14 +3,13 @@ import { useEffect, useState } from 'react';
 import FormCliente from '../../components/FormCliente';
 import { clienteExisteConTerminosTRUE } from '../../firebase';
 import { UserAuth } from '../../context/AuthContext';
-import { useRouter } from 'next/navigation';
+import { redirect } from 'next/navigation';
 
 export default function DatosCliente() {
   const { user } = UserAuth();
   const uid = user?.uid;
   const [terminosAceptados, setTerminosAceptados] = useState(false);
   const [errorVerificacion, setErrorVerificacion] = useState(null);
-  const { redirect } = useRouter();
   useEffect(() => {
     if (user) {
       clienteExisteConTerminosTRUE(uid)
