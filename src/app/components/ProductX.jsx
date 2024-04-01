@@ -2,7 +2,7 @@
 import {MercadoPagoConfig, Preference} from "mercadopago";
 import {redirect} from "next/navigation";
 
-const client = new MercadoPagoConfig({accessToken: 'TEST-2354491765614534-033010-27ac3d7283d65defc4fc83b43b7e6ec4-1748147159'});
+const client = new MercadoPagoConfig({accessToken: process.env.NEXT_PUBLIC_ACCESSTOKEN});
 export default async function ProductX( formData ) {
  
     const preference = await new Preference(client).create({
@@ -31,3 +31,4 @@ export default async function ProductX( formData ) {
     </>
   );
 }
+//TEST-2354491765614534-033010-27ac3d7283d65defc4fc83b43b7e6ec4-1748147159

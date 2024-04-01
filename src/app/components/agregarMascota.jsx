@@ -1,5 +1,5 @@
 'use client'
-import React, { useState } from 'react';
+import { useState } from 'react';
 import { redirect } from 'next/navigation';
 import { UserAuth } from '../context/AuthContext';
 import { registrarMascotas, subirFotoMascota } from '../firebase';

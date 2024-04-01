@@ -1,6 +1,6 @@
 import {MercadoPagoConfig , Payment} from "mercadopago";
 const mercadopago = new MercadoPagoConfig({
- accessToken: 'TEST-655293c8-3ec9-4fe9-948f-5b48ba9d2488',
+ accessToken: NEXT_PUBLIC_ACCESSTOKEN,
 });
 
 export async function POST(request) {
