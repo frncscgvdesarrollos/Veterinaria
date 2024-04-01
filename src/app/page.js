@@ -1,7 +1,7 @@
-'use client'
 import { useEffect, useState } from "react";
 import { redirect } from 'next/navigation';
 import { UserAuth } from "../app/context/AuthContext";
+import Image from 'next/image'; // Importar Image desde next/image
 
 export default function Home() {
   const { user, googleSignIn } = UserAuth();
@@ -30,10 +30,12 @@ export default function Home() {
       {showModal && (
         <div className="fixed backgroundModal top-0 left-0 w-full h-full flex justify-center items-center bg-black bg-opacity-50 z-50">
         <div className="bg-white p-8 rounded shadow-lg h-full w-full animate-opacity">
-          <img
+          <Image
             src="/LOGO3.svg"
             alt="logo"
             className="imagenModal"
+            width={200}
+            height={200}
           />
         </div>
         </div>
