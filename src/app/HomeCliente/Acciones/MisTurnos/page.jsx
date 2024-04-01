@@ -1,5 +1,5 @@
-'use client';
-import React, { useState, useEffect, useMemo, memo } from 'react';
+'use client'
+import { useState, useEffect, useMemo, memo } from 'react';
 import { getMisTurnos, registroVenta, confirmarPagos } from '@/app/firebase';
 import { UserAuth } from '@/app/context/AuthContext';
 import { useSearchParams } from 'next/navigation';
@@ -7,19 +7,11 @@ import { useSearchParams } from 'next/navigation';
 // Función para agrupar los turnos por fecha
 function groupTurnosByDate(turnos) {
   return turnos.reduce((turnosPorFecha, turno) => {
-    const fecha = turno.selectedDate.toDate().toLocaleDateString();
-    if (!turnosPorFecha[fecha]) {
-      turnosPorFecha[fecha] = [];
-    }
+    const fecha = new Date(turno.selectedDate.seconds * 1000).toLocaleDateString();
+    turnosPorFecha[fecha] = turnosPorFecha[fecha] || [];
     turnosPorFecha[fecha].push(turno);
     return turnosPorFecha;
   }, {});
-}
-
-// Función para convertir un objeto Timestamp a una cadena de fecha y hora legible
-function convertirTimestampAFechaHora(timestamp) {
-  const date = new Date(timestamp.seconds * 1000 + timestamp.nanoseconds / 1000000);
-  return date.toLocaleString(); // Puedes ajustar el formato según tus preferencias
 }
 
 // Componente para mostrar los turnos de una fecha en una tabla
@@ -42,7 +34,7 @@ const TurnosPorFecha = memo(({ turnos }) => {
               <td className="px-4 py-2">{turno.selectedPet}</td>
               <td className="px-4 py-2">{turno.pago ? 'Pagado' : 'No pagado'}</td>
               <td className="px-4 py-2">{turno.transporte ? 'Con transporte' : 'Sin transporte'}</td>
-              <td className="px-4 py-2">{turno.direccion ? turno.direccion : '-'}</td>
+              <td className="px-4 py-2">{turno.direccion || '-'}</td>
               <td className={`px-4 py-2 ${turno.estadoDelTurno === 'confirmar' ? 'bg-red-500' : turno.estadoDelTurno === 'buscado' ? 'bg-blue-500' : 'bg-green-500'}`}>
                 {turno.estadoDelTurno === 'confirmar' ? 'Confirmar - Recibirá un llamado de la veterinaria.' : turno.estadoDelTurno === 'buscado' ? 'En la Peluquería' : 'Confirmado - El servicio se realizará sin problemas.'}
               </td>
@@ -62,13 +54,11 @@ export default function MisTurnos() {
   const [isLoading, setIsLoading] = useState(true);
   const [error, setError] = useState(null);
   const searchParams = useSearchParams();
-  const payment_id = searchParams.get('payment_id');
   const status = searchParams.get('collection_status');
-  const preference_id = searchParams.get('preference_id');
 
   const turnosPorFecha = useMemo(() => groupTurnosByDate(turnosCliente), [turnosCliente]);
 
-  const getTurnos = async () => {
+  const fetchTurnos = async () => {
     setIsLoading(true);
     try {
       const turnos = await getMisTurnos(uid);
@@ -93,7 +83,7 @@ export default function MisTurnos() {
 
   useEffect(() => {
     if (uid) {
-      getTurnos();
+      fetchTurnos();
     }
     if (status === 'approved') {
       handlePaymentConfirmation();
