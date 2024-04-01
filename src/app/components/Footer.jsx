@@ -11,8 +11,7 @@ export default function Footer() {
     return (
       <footer className="bg-gray-200 p-6 sm:p-10 flex flex-col sm:flex-row items-center">
         <div className="w-full p-4 sm:p-0 mb-6 sm:mb-0 flex justify-center items-center">
-          {/* Reemplazar <img> con <Image /> */}
-          <Image
+           <Image
             src="/LOGO3.svg"
             alt="logo"
             className="w-[300px] h-[300px] sm:w-40 sm:h-40"

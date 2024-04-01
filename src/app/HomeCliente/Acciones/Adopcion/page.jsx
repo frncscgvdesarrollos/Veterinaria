@@ -1,6 +1,7 @@
 'use client'
 import { useEffect, useState } from 'react';
 import { mascotasEnAdopcion } from '../../../firebase';
+import Image from 'next/image'; // Importar Image desde next/image
 
 export default function Adopcion() {
   const [mascotas, setMascotas] = useState([]);
@@ -33,10 +34,12 @@ export default function Adopcion() {
       <div key={index} className="bg-white shadow-md rounded-md overflow-hidden">
         <div className="relative overflow-hidden">
           {mascota.foto ? (
-            <img
+            <Image // Reemplazar <img> con <Image />
               className="object-cover w-full h-48 sm:h-56 md:h-64"
               src={mascota.foto}
               alt={`Foto de ${mascota.nombre}`}
+              width={300}
+              height={300}
             />
           ) : (
             <div className="bg-gray-300 w-full h-48 sm:h-56 md:h-64 flex items-center justify-center">
