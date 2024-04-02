@@ -18,7 +18,7 @@ export default function TurnosParaMañana() {
         getTurnosPeluqueria()
             .then((turnosPeluqueria) => {
                 const hoy = turnosPeluqueria.filter(
-                    (turno) => turno.selectedDate.toDate().toDateString() === toDay.toDateString()
+                    (turno) => turno.selectedDate.toDate().toDateString() === toDay.toDateString() && turno.estadoDelTurno !== 'finalizado'
                 );
                 const mañana = turnosPeluqueria.filter(
                     (turno) => turno.selectedDate.toDate().toDateString() === tomorrow.toDateString()
@@ -37,8 +37,8 @@ export default function TurnosParaMañana() {
     }
 
     useEffect(() => {
-            getTurnos();
-    });
+        getTurnos();
+    }, []);
 
     return (
         <div className="m-4">
@@ -124,4 +124,3 @@ export default function TurnosParaMañana() {
         </div>
     );
 }
-

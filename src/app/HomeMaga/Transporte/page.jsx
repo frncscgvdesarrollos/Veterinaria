@@ -42,10 +42,10 @@ function TransporteHome() {
 
     avanzarEstadoTurno(id)
       .then(() => {
-        setIsLoading(true)
-        setTurnos(turnos.map(turno => {
+        setIsLoading(true);
+        setTurnos(prevTurnos => prevTurnos.map(turno => {
           if (turno.id === id) {
-            turno.estadoDelTurno = proximoEstado;
+            return { ...turno, estadoDelTurno: proximoEstado };
           }
           return turno;
         }));
@@ -54,7 +54,6 @@ function TransporteHome() {
         console.error('Error updating turno:', error);
       });
   };
-
   return (
     <div className="bg-gray-100 p-4 sm:p-6 md:p-8 lg:p-10">
       <h1 className="text-3xl font-bold underline text-center mb-6">Transporte</h1>
