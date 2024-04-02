@@ -1,14 +1,14 @@
-'use client';
-import { useEffect, useState } from 'react';
+'use client'
+import React, { useEffect, useState } from 'react';
 import Image from 'next/image';
 import Link from 'next/link';
 import { UserAuth } from '../context/AuthContext';
 import { clienteExisteConTerminosTRUE, clienteEsPremium } from '../firebase';
 
-// Componente para el menú de navegación
+// Componente para el menú de navegación de clientes regulares
 function NavigationMenu({ handleLinkClick }) {
   return (
-    <nav className="hidden md:flex  items-center space-x-4 text-white text-xl md:text-3xl">
+    <nav className="hidden md:flex items-center space-x-4 text-white text-xl md:text-3xl">
       <Link href="/HomeCliente">
         Inicio
       </Link>
@@ -28,10 +28,10 @@ function NavigationMenu({ handleLinkClick }) {
   );
 }
 
-// Componente para el menú móvil
+// Componente para el menú móvil de clientes regulares
 function MobileMenu({ isOpen, handleMobileMenuToggle, handleLinkClick }) {
   return (
-    <div className={` md:hidden ${isOpen ? 'block' : 'hidden'}`}>
+    <div className={`md:hidden ${isOpen ? 'block' : 'hidden'}`}>
       <nav className="flex flex-col items-center space-y-4 text-white text-xl">
         <Link href="/HomeCliente" onClick={handleLinkClick}>
           Inicio
@@ -53,18 +53,140 @@ function MobileMenu({ isOpen, handleMobileMenuToggle, handleLinkClick }) {
   );
 }
 
+// Componente para el menú de navegación de la empresa
+function EmpresaMenu() {
+  return (
+    <nav className="hidden md:flex items-center space-x-10 text-white">
+      <Link href="/HomeMaga" className='text-xl'>
+        Inicio
+      </Link>
+      <Link href="/HomeMaga" className='text-xl'>
+        Caja
+      </Link>
+      <Link href="/HomeMaga/Clientes">
+        Clientes
+      </Link>
+      <Link href="/HomeMaga/Clientes">
+        Mascotas
+      </Link>
+      <Link href="/HomeMaga/Clientes">
+        Adopciones
+      </Link>
+      <div className='flex flex-col'>
+        <span className="text-cyan-500">Productos</span>
+        <div className="flex space-x-4">
+          <Link href="/HomeMaga/Promociones">
+            Promociones
+          </Link>
+          <Link href="/HomeMaga/Productos">
+            Productos
+          </Link>
+        </div>
+      </div>
+      <div className='flex flex-col'>
+        <span className="text-cyan-500">Turnos</span>
+        <div className="flex space-x-4">
+          <Link href="/HomeMaga/turnosPeluqueria">
+            Turnos Veterinaria
+          </Link>
+          <Link href="/HomeMaga/turnosPeluqueria">
+            Turnos Peluquería
+          </Link>
+        </div>
+      </div>
+      <div className='flex flex-col'>
+        <span className="text-cyan-500">Empleados</span>
+        <div className="flex space-x-4">
+          <Link href="/HomeMaga/Peluqueria">
+            Peluquería
+          </Link>
+          <Link href="/HomeMaga/Transporte">
+            Transporte
+          </Link>
+        </div>
+      </div>
+    </nav>
+  );
+}
+
+// Componente para el menú móvil de la empresa
+function EmpresaMobileMenu({ isOpen, handleMobileMenuToggle }) {
+  const { user } = UserAuth();
+  const uid = user?.uid;
+
+  const isAdminOrEmployee = uid === process.env.NEXT_PUBLIC_UIDADM || uid === process.env.NEXT_PUBLIC_UIDTRANSPORTE || uid === process.env.NEXT_PUBLIC_UIDPELUQUERIA || uid === process.env.NEXT_PUBLIC_UIDDEV;
+
+  const handleLinkClick = () => {
+    // Cerrar el menú móvil al hacer clic en un enlace
+    handleMobileMenuToggle();
+  };
+
+  return (
+    <div className={`md:hidden ${isOpen && isAdminOrEmployee ? 'block' : 'hidden'}`}>
+      <nav className="flex flex-col mr-28  space-y-4 text-white text-xl">
+        <Link href="/HomeMaga" className='text-xl'>
+          Inicio
+        </Link>
+        <Link href="/HomeMaga" className='text-xl'>
+          Caja
+        </Link>
+        <Link href="/HomeMaga/Clientes">
+          Clientes
+        </Link>
+        <Link href="/HomeMaga/Clientes">
+          Mascotas
+        </Link>
+        <Link href="/HomeMaga/Clientes">
+          Adopciones
+        </Link>
+        <div className='flex flex-col'>
+          <span className="text-cyan-500">Productos</span>
+          <div className="flex space-x-4">
+            <Link href="/HomeMaga/Promociones">
+              Promociones
+            </Link>
+            <Link href="/HomeMaga/Productos">
+              Productos
+            </Link>
+          </div>
+        </div>
+        <div className='flex flex-col'>
+          <span className="text-cyan-500">Turnos</span>
+          <div className="flex space-x-4">
+            <Link href="/HomeMaga/turnosPeluqueria">
+              Turnos Veterinaria
+            </Link>
+            <Link href="/HomeMaga/turnosPeluqueria">
+              Turnos Peluquería
+            </Link>
+          </div>
+        </div>
+        <div className='flex flex-col'>
+          <span className="text-cyan-500">Empleados</span>
+          <div className="flex space-x-4">
+            <Link href="/HomeMaga/Peluqueria">
+              Peluquería
+            </Link>
+            <Link href="/HomeMaga/Transporte">
+              Transporte
+            </Link>
+          </div>
+        </div>
+      </nav>
+    </div>
+  );
+}
+
 export default function Header() {
   const { user } = UserAuth();
   const uid = user?.uid;
-  const [terminos, setTerminos] = useState(false);
-  const [premium, setPremium] = useState(false);
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
 
   useEffect(() => {
     if (uid) {
       clienteExisteConTerminosTRUE(uid)
         .then((result) => {
-          setTerminos(!result);
+          // Do something with result
         })
         .catch((error) => {
           console.error("Error verificando términos:", error);
@@ -72,7 +194,7 @@ export default function Header() {
 
       clienteEsPremium(uid)
         .then((result) => {
-          setPremium(!!result);
+          // Do something with result
         })
         .catch((error) => {
           console.error("Error verificando premium:", error);
@@ -90,35 +212,36 @@ export default function Header() {
   };
 
   return (
-<>
-  {uid ? (
-    <header className="bg-gray-800 flex flex-col items-center px-4 py-2 md:py-4">
-      <div className="flex justify-between items-center w-full">
-        <div className="w-1/3 md:w-auto">
-          <Image src="/LOGO.svg" alt="Logo" width={200} height={200} className="lg:ml-20 lg:mt-5" />
-        </div>
-        <div className="flex items-center space-x-4">
-          {premium ? (
-            <p className="text-white">Cliente Premium</p>
-          ) : (
-            <button className="btn rounded p-2 text-base text-red-500 bg-yellow-500 lg:text-3xl lg:mr-20">¡Promociones!</button>
-          )}
-        </div>
-        <div className="md:hidden">
-          <button onClick={handleMobileMenuToggle} className="text-white focus:outline-none">
-            {mobileMenuOpen ? (
-              <span className="text-3xl">&#10005;</span>
-            ) : (
-              <span className="text-3xl">&#9776;</span>
-            )}
-          </button>
-        </div>
-      </div>
-      {terminos && <NavigationMenu handleLinkClick={handleLinkClick} />}
-      <MobileMenu isOpen={mobileMenuOpen} handleMobileMenuToggle={handleMobileMenuToggle} handleLinkClick={handleLinkClick} />
-    </header>
-  ) : null}
-</>
+    <>
+      {uid ? (
+        <header className="bg-gray-800 flex flex-col items-center px-4 py-2 md:py-4">
+          <div className="flex justify-between items-center w-full">
+            <div className="w-1/3 md:w-auto">
+              <Image src="/LOGO.svg" alt="Logo" width={200} height={200} className="lg:ml-20 lg:mt-5" />
+            </div>
+            {uid === process.env.NEXT_PUBLIC_UIDADM || uid === process.env.NEXT_PUBLIC_UIDTRANSPORTE || uid === process.env.NEXT_PUBLIC_UIDPELUQUERIA || uid === process.env.NEXT_PUBLIC_UIDDEV ? null : (
+              <div className="flex items-center space-x-4">
 
+              </div>
+            )}
+            <div className="md:hidden">
+              <button onClick={handleMobileMenuToggle} className="text-white focus:outline-none">
+                {mobileMenuOpen ? (
+                  <span className="text-3xl">&#10005;</span>
+                ) : (
+                  <span className="text-3xl">&#9776;</span>
+                )}
+              </button>
+            </div>
+          </div>
+          {uid === process.env.NEXT_PUBLIC_UIDADM || uid === process.env.NEXT_PUBLIC_UIDTRANSPORTE || uid === process.env.NEXT_PUBLIC_UIDPELUQUERIA || uid === process.env.NEXT_PUBLIC_UIDDEV ? (
+            <EmpresaMenu />
+          ) : (
+            <NavigationMenu handleLinkClick={handleLinkClick} />
+          )}
+          <EmpresaMobileMenu isOpen={mobileMenuOpen} handleMobileMenuToggle={handleMobileMenuToggle} />
+        </header>
+      ) : null}
+    </>
   );
 }

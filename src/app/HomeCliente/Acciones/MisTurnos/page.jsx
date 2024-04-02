@@ -96,7 +96,6 @@ export default function MisTurnos() {
     const fetchDataWrapper = () => {
       fetchData();
     };
-
     fetchDataWrapper();
   }, [uid, status]);
 
