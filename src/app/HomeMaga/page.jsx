@@ -2,7 +2,7 @@
 import { useState, useEffect } from 'react';
 import { UserAuth } from '../context/AuthContext';
 import { getTurnosPeluqueria} from '../firebase'; // Asumiendo que existe una función para obtener los turnos de transporte
-import LlamarA from '../components/LlamarA';
+import LlamarA from '@/components/LlamarA';
 import TurnosParaMañana from '../components/TurnosParaMañana';
 
 export default function Page() {
