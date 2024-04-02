@@ -221,7 +221,7 @@ export default function Header() {
             </div>
             {uid === process.env.NEXT_PUBLIC_UIDADM || uid === process.env.NEXT_PUBLIC_UIDTRANSPORTE || uid === process.env.NEXT_PUBLIC_UIDPELUQUERIA || uid === process.env.NEXT_PUBLIC_UIDDEV ? null : (
               <div className="flex items-center space-x-4">
-
+                  <span>Hola! {user?.displayName}</span>
               </div>
             )}
             <div className="md:hidden">
