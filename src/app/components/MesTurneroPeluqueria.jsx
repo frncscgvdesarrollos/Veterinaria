@@ -25,14 +25,14 @@ export default function MyCalendarPeluqueria() {
     direccion: '',
     telefono: '',
     selectedDate: new Date(),
-    selectedTurno: 'mañana',
+    selectedTurno: '',
     selectedPet: '',
     selectedServicio: '',
     tamaño: '',
     transporte: true,
     pago: false,
     precio: 0,
-    info: '',
+    info: 'Agrega cualquier informacion que quieras dejar aclarada',
     canilPeluqueria: 0,
   });
 
@@ -188,6 +188,7 @@ export default function MyCalendarPeluqueria() {
               onChange={handleChange}
               value={formData.selectedTurno}
             >
+              <option value="0">Selecciona tu turno</option>
               <option value="mañana">Mañana</option>
               <option value="tarde">Tarde</option>
             </select>
@@ -201,6 +202,7 @@ export default function MyCalendarPeluqueria() {
               onChange={handleChange}
               value={formData.selectedServicio}
             >
+              <option value="0">Selecciona tu tipo de corte</option>
               <option value="BañoCorteHigienico">Baño/corte higiénico</option>
               <option value="BañoCorteHigienicoPelar">Baño/corte higiénico/pelar</option>
               <option value="BañoCorteHigienicoCepillado">Baño/corte higiénico/cepillado</option>
@@ -216,6 +218,7 @@ export default function MyCalendarPeluqueria() {
               onChange={handleChange}
               value={formData.info}
               rows="4"
+              placeholder="Aqui puedes agregar cualquier cosa que quieras dejar en claro"
             ></textarea>
           </div>
           <div>
