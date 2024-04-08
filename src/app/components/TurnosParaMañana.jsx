@@ -7,6 +7,7 @@ export default function TurnosParaMañana() {
     const [turnosMañana, setTurnosMañana] = useState([]);
     const [turnosPasado, setTurnosPasado] = useState([]);
     const [isLoading, setIsLoading] = useState(true);
+    const [verMasTurnos, setVerMasTurnos] = useState(false);
 
     const toDay = new Date();
     const tomorrow = new Date(toDay);
@@ -18,13 +19,22 @@ export default function TurnosParaMañana() {
         getTurnosPeluqueria()
             .then((turnosPeluqueria) => {
                 const hoy = turnosPeluqueria.filter(
-                    (turno) => turno.selectedDate.toDate().toDateString() === toDay.toDateString() && turno.estadoDelTurno !== 'finalizado'
+                    (turno) => {
+                        const selectedDate = turno.selectedDate.toDate ? turno.selectedDate.toDate() : new Date(turno.selectedDate);
+                        return selectedDate.toDateString() === toDay.toDateString() && turno.estadoDelTurno === 'confirmar';
+                    }
                 );
                 const mañana = turnosPeluqueria.filter(
-                    (turno) => turno.selectedDate.toDate().toDateString() === tomorrow.toDateString()
+                    (turno) => {
+                        const selectedDate = turno.selectedDate.toDate ? turno.selectedDate.toDate() : new Date(turno.selectedDate);
+                        return selectedDate.toDateString() === tomorrow.toDateString() && turno.estadoDelTurno === 'confirmar';
+                    }
                 );
                 const pasado = turnosPeluqueria.filter(
-                    (turno) => turno.selectedDate.toDate().toDateString() === pasadoMañana.toDateString()
+                    (turno) => {
+                        const selectedDate = turno.selectedDate.toDate ? turno.selectedDate.toDate() : new Date(turno.selectedDate);
+                        return selectedDate.toDateString() === pasadoMañana.toDateString() && turno.estadoDelTurno === 'confirmar';
+                    }
                 );
                 setTurnosHoy(hoy);
                 setTurnosMañana(mañana);
@@ -41,86 +51,94 @@ export default function TurnosParaMañana() {
     }, []);
 
     return (
-        <div className="m-4">
-            {isLoading && <p>Cargando turnos...</p>}
+        <div className="m-4 container mx-auto bg-violet-100 p-4 rounded-lg">
+            {isLoading && <p className="text-center">Cargando turnos...</p>}
             {!isLoading && (
-                <div>
-                    <h2>Turnos para hoy:</h2>
-                    <table className="w-full table-fixed bg-blue-100 rounded-lg">
-                        <thead>
-                            <tr>
-                                <th className="w-1/5 text-center p-2">Cliente</th>
-                                <th className="w-1/5 text-center p-2">Telefono</th>
-                                <th className="w-1/5 text-center p-2">Mascota</th>
-                                <th className="w-1/5 text-center p-2">Turno</th>
-                                <th className="w-1/5 text-center p-2">Transporte</th>
-                            </tr>
-                        </thead>
-                        <tbody>
-                            {turnosHoy.map((turno) => (
-                                <tr key={turno.id}>
-                                    <td className="text-center p-2">{turno.nombre}</td>
-                                    <td className="text-center p-2">{turno.telefono}</td>
-                                    <td className="text-center p-2">{turno.selectedPet}</td>
-                                    <td className="text-center p-2">{turno.selectedTurno}</td>
-                                    <td className="text-center p-2">{turno.transporte ? <span>si</span> : <span>no</span>}</td>
-                                </tr>
-                            ))}
-                            {turnosHoy.length === 0 && <tr><td colSpan="5" className="text-center p-2">No Hay Turnos</td></tr>}
-                        </tbody>
-                    </table>
-
-                    <h2>Turnos para mañana:</h2>
-                    <table className="w-full table-fixed bg-green-100 rounded-lg">
-                        <thead>
-                            <tr>
-                                <th className="w-1/5 text-center p-2">Cliente</th>
-                                <th className="w-1/5 text-center p-2">Telefono</th>
-                                <th className="w-1/5 text-center p-2">Mascota</th>
-                                <th className="w-1/5 text-center p-2">Turno</th>
-                                <th className="w-1/5 text-center p-2">Transporte</th>
-                            </tr>
-                        </thead>
-                        <tbody>
-                            {turnosMañana.map((turno) => (
-                                <tr key={turno.id}>
-                                    <td className="text-center p-2">{turno.nombre}</td>
-                                    <td className="text-center p-2">{turno.telefono}</td>
-                                    <td className="text-center p-2">{turno.selectedPet}</td>
-                                    <td className="text-center p-2">{turno.selectedTurno}</td>
-                                    <td className="text-center p-2">{turno.transporte ? <span>si</span> : <span>no</span>}</td>
-                                </tr>
-                            ))}
-                            {turnosMañana.length === 0 && <tr><td colSpan="5" className="text-center p-2">No Hay Turnos</td></tr>}
-                        </tbody>
-                    </table>
-
-                    <h2>Turnos para pasado mañana:</h2>
-                    <table className="w-full table-fixed bg-yellow-100 rounded-lg">
-                        <thead>
-                            <tr>
-                                <th className="w-1/5 text-center p-2">Cliente</th>
-                                <th className="w-1/5 text-center p-2">Telefono</th>
-                                <th className="w-1/5 text-center p-2">Mascota</th>
-                                <th className="w-1/5 text-center p-2">Turno</th>
-                                <th className="w-1/5 text-center p-2">Transporte</th>
-                            </tr>
-                        </thead>
-                        <tbody>
-                            {turnosPasado.map((turno) => (
-                                <tr key={turno.id}>
-                                    <td className="text-center p-2">{turno.nombre}</td>
-                                    <td className="text-center p-2">{turno.telefono}</td>
-                                    <td className="text-center p-2">{turno.selectedPet}</td>
-                                    <td className="text-center p-2">{turno.selectedTurno}</td>
-                                    <td className="text-center p-2">{turno.transporte ? <span>si</span> : <span>no</span>}</td>
-                                </tr>
-                            ))}
-                            {turnosPasado.length === 0 && <tr><td colSpan="5" className="text-center p-2">No Hay Turnos</td></tr>}
-                        </tbody>
-                    </table>
+                <div className="prose mx-auto">
+                    <h2 className="text-lg font-bold mb-2">Turnos para hoy: {turnosHoy.length ? <>{turnosHoy.length}</> : '0'}</h2>
+                    <ul className=" p-4 rounded-md mb-4 grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-4">
+                        {turnosHoy.map((turno) => {
+                            return turno.estadoDelTurno === 'confirmar' && (
+                                <li key={turno.id} className="mb-2 p-4 bg-white rounded-md shadow">
+                                    <p><span className="font-semibold">Cliente:</span> {turno.nombre}</p>
+                                    <p><span className="font-semibold">Teléfono:</span> {turno.telefono}</p>
+                                    <p><span className="font-semibold">Mascota:</span> {turno.selectedPet}</p>
+                                    <p><span className="font-semibold">Turno:</span> {turno.selectedTurno}</p>
+                                    <p><span className="font-semibold">Transporte:</span> {turno.transporte ? 'Sí' : 'No'}</p>
+                                    <p className={`font-semibold p-2 rounded-lg border-2 ${turno.estadoDelTurno === 'confirmar' ? 'text-cyan-900 bg-blue-200' : 'text-green-500 bg-green-100'}`}><span className="font-semibold text-black">Estado:</span> {turno.estadoDelTurno}</p>
+                                </li>
+                            )
+                        })}
+                        {turnosHoy.length === 0 && <p className="text-center">No hay turnos para hoy</p>}
+                    </ul>
+    
+                    <h2 className="text-lg font-bold mb-2">Turnos para mañana: {turnosMañana.length ? <>{turnosMañana.length}</> : '0'}</h2>
+                    <ul className="bg-violet-200 p-4 rounded-md mb-4 grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-4">
+                        {turnosMañana.map((turno) => (
+                            <li key={turno.id} className="mb-2 p-4 bg-white rounded-md shadow">
+                                <p><span className="font-semibold">Cliente:</span> {turno.nombre}</p>
+                                <p><span className="font-semibold">Teléfono:</span> {turno.telefono}</p>
+                                <p><span className="font-semibold">Mascota:</span> {turno.selectedPet}</p>
+                                <p><span className="font-semibold">Turno:</span> {turno.selectedTurno}</p>
+                                <p><span className="font-semibold">Transporte:</span> {turno.transporte ? 'Sí' : 'No'}</p>
+                                <p className={`font-semibold p-2 rounded-lg border-2 ${turno.estadoDelTurno === 'confirmar' ? 'text-cyan-900 bg-blue-200' : 'text-green-500 bg-green-100'}`}><span className="font-semibold text-black">Estado:</span> {turno.estadoDelTurno}</p>
+                            </li>
+                        ))}
+                        {turnosMañana.length === 0 && <p className="text-center">No hay turnos para mañana</p>}
+                    </ul>
+    
+                    <h2 className="text-lg font-bold mb-2">Turnos para pasado mañana: {turnosPasado.length ? <>{turnosPasado.length}</> : '0'}</h2>
+                    <ul className="bg-violet-300 p-4 rounded-md grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-4">
+                        {turnosPasado.map((turno) => (
+                            <li key={turno.id} className="mb-2 p-4 bg-white rounded-md shadow">
+                                <p><span className="font-semibold">Cliente:</span> {turno.nombre}</p>
+                                <p><span className="font-semibold">Teléfono:</span> {turno.telefono}</p>
+                                <p><span className="font-semibold">Mascota:</span> {turno.selectedPet}</p>
+                                <p><span className="font-semibold">Turno:</span> {turno.selectedTurno}</p>
+                                <p><span className="font-semibold">Transporte:</span> {turno.transporte ? 'Sí' : 'No'}</p>
+                                <p className={`font-semibold p-2 rounded-lg border-2 ${turno.estadoDelTurno === 'confirmar' ? 'text-cyan-900 bg-blue-200' : 'text-green-500 bg-green-100'}`}><span className="font-semibold text-black">Estado:</span> {turno.estadoDelTurno}</p>
+                            </li>
+                        ))}
+                        {turnosPasado.length === 0 && <p className="text-center">No hay turnos para pasado mañana</p>}
+                    </ul>
                 </div>
             )}
-        </div>
+            <div className="bg-violet-600 mt-4 flex justify-end p-2 rounded-lg">
+                {verMasTurnos ? 
+                    <div className="m-auto max-w-screen-lg bg-white rounded-lg shadow-md p-6">
+    <table className="w-full border border-gray-200 rounded-lg">
+        <thead className="bg-gray-100">
+            <tr>
+                <th className="px-4 py-2 border-b border-gray-200">Cliente</th>
+                <th className="px-4 py-2 border-b border-gray-200">Teléfono</th>
+                <th className="px-4 py-2 border-b border-gray-200">Mascota</th>
+                <th className="px-4 py-2 border-b border-gray-200">Turno</th>
+                <th className="px-4 py-2 border-b border-gray-200">Transporte</th>
+                <th className="px-4 py-2 border-b border-gray-200">Estado</th>
+            </tr>
+        </thead>
+        <tbody>
+            {turnosHoy.map((turno) => (
+                <tr key={turno.id}>
+                    <td className="px-4 py-2 border-b border-gray-200">{turno.nombre}</td>
+                    <td className="px-4 py-2 border-b border-gray-200">{turno.telefono}</td>
+                    <td className="px-4 py-2 border-b border-gray-200">{turno.selectedPet}</td>
+                    <td className="px-4 py-2 border-b border-gray-200">{turno.selectedTurno}</td>
+                    <td className="px-4 py-2 border-b border-gray-200">{turno.transporte ? 'Si' : 'No'}</td>
+                    <td className={`px-4 py-2 border-b border-gray-200 ${turno.estadoDelTurno === 'confirmar' ? 'text-cyan-900 bg-blue-200' : 'text-green-500 bg-green-100'} rounded-lg`}>{turno.estadoDelTurno}</td>
+                </tr>
+            ))}
+        </tbody>
+    </table>
+    <button className="block mx-auto mt-4 bg-violet-300 hover:bg-violet-400 text-white font-bold py-2 px-4 rounded" onClick={() => setVerMasTurnos(!verMasTurnos)}>
+        {verMasTurnos ? 'Ocultar turnos' : 'Ver más turnos'}
+    </button>
+</div>
+
+                                : <button className='mr-32 bg-violet-300 hover:bg-violet-400 text-white font-bold py-2 px-4 rounded' onClick={()=> setVerMasTurnos(!verMasTurnos)}>ver mas turnos</button>}
+
+
+                    </div>
+            </div>
     );
 }

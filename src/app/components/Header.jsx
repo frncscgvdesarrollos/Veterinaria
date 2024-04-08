@@ -6,6 +6,7 @@ import { UserAuth } from '../context/AuthContext';
 import { clienteExisteConTerminosTRUE, clienteEsPremium } from '../firebase';
 
 // Componente para el menú de navegación de clientes regulares
+
 function NavigationMenu({ handleLinkClick }) {
   return (
     <nav className="hidden md:flex items-center space-x-4 text-white text-xl md:text-3xl">
@@ -57,21 +58,32 @@ function MobileMenu({ isOpen, handleMobileMenuToggle, handleLinkClick }) {
 function EmpresaMenu() {
   return (
     <nav className="hidden md:flex items-center space-x-10 text-white">
-      <Link href="/HomeMaga" className='text-xl'>
-        Inicio
-      </Link>
-      <Link href="/HomeMaga" className='text-xl'>
-        Caja
-      </Link>
-      <Link href="/HomeMaga/Clientes">
-        Clientes
-      </Link>
-      <Link href="/HomeMaga/Clientes">
-        Mascotas
-      </Link>
-      <Link href="/HomeMaga/Clientes">
-        Adopciones
-      </Link>
+          <div className='flex flex-col'>
+          <span className="text-cyan-500">Oficina</span>
+          <div className="flex space-x-4">
+            <Link href="/HomeMaga" className='text-xl'>
+              Inicio
+            </Link>
+            <Link href="/HomeMaga" className='text-xl'>
+              Caja
+            </Link>
+          </div>
+          </div>
+      
+      <div className='flex flex-col'>
+          <span className="text-cyan-500">Informacion</span>
+          <div className="flex space-x-4">
+            <Link href="/HomeMaga/Clientes">
+              Clientes
+            </Link>
+            <Link href="/HomeMaga/Clientes">
+              Mascotas
+            </Link>
+            <Link href="/HomeMaga/Clientes">
+              Adopciones
+            </Link>
+          </div>
+        </div>
       <div className='flex flex-col'>
         <span className="text-cyan-500">Productos</span>
         <div className="flex space-x-4">
@@ -123,22 +135,32 @@ function EmpresaMobileMenu({ isOpen, handleMobileMenuToggle }) {
 
   return (
     <div className={`md:hidden ${isOpen && isAdminOrEmployee ? 'block' : 'hidden'}`}>
-      <nav className="flex flex-col mr-28  space-y-4 text-white text-xl">
-        <Link href="/HomeMaga" className='text-xl'>
-          Inicio
-        </Link>
-        <Link href="/HomeMaga" className='text-xl'>
-          Caja
-        </Link>
-        <Link href="/HomeMaga/Clientes">
-          Clientes
-        </Link>
-        <Link href="/HomeMaga/Clientes">
-          Mascotas
-        </Link>
-        <Link href="/HomeMaga/Clientes">
-          Adopciones
-        </Link>
+      <nav className="flex flex-col mr-32  space-y-4 text-white text-left text-xl">
+      <div className='flex flex-col'>
+          <span className="text-cyan-500">Oficina</span>
+          <div className="flex space-x-4">
+            <Link href="/HomeMaga" className='text-xl'>
+              Inicio
+            </Link>
+            <Link href="/HomeMaga" className='text-xl'>
+              Caja
+            </Link>
+          </div>
+          </div>
+        <div className='flex flex-col'>
+          <span className="text-cyan-500">Informacion</span>
+          <div className="flex space-x-4">
+            <Link href="/HomeMaga/Clientes">
+              Clientes
+            </Link>
+            <Link href="/HomeMaga/Clientes">
+              Mascotas
+            </Link>
+            <Link href="/HomeMaga/Clientes">
+              Adopciones
+            </Link>
+          </div>
+        </div>
         <div className='flex flex-col'>
           <span className="text-cyan-500">Productos</span>
           <div className="flex space-x-4">
@@ -219,17 +241,12 @@ export default function Header() {
             <div className="w-1/3 md:w-auto">
               <Image src="/LOGO.svg" alt="Logo" width={200} height={200} className="lg:ml-20 lg:mt-5" />
             </div>
-            {uid === process.env.NEXT_PUBLIC_UIDADM || uid === process.env.NEXT_PUBLIC_UIDTRANSPORTE || uid === process.env.NEXT_PUBLIC_UIDPELUQUERIA || uid === process.env.NEXT_PUBLIC_UIDDEV ? null : (
-              <div className="flex items-center space-x-4">
-                  <span>Hola! {user?.displayName}</span>
-              </div>
-            )}
             <div className="md:hidden">
               <button onClick={handleMobileMenuToggle} className="text-white focus:outline-none">
                 {mobileMenuOpen ? (
                   <span className="text-3xl">&#10005;</span>
-                ) : (
-                  <span className="text-3xl">&#9776;</span>
+                  ) : (
+                    <span className="text-3xl">&#9776;</span>
                 )}
               </button>
             </div>

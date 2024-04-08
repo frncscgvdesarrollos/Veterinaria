@@ -12,7 +12,7 @@ export default async function ProductX( formData ) {
             id: 0,
             title: "peluqueria canina",
             quantity: 1,
-            unit_price: 1000,
+            unit_price: 100,
           },
         ],
         back_urls: {

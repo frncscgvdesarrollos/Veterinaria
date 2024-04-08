@@ -12,7 +12,8 @@ export default function LlamarA() {
      const yesterdayAt6pm = new Date(yesterday.setHours(18, 0, 0, 0)); // Establecer la hora a las 18:00 del día anterior
 
      const turnosParaHoy = turnos.filter(turno => {
-       const turnoDate = new Date(turno.selectedDate.toDate());
+       // Verifica si `selectedDate` es un objeto Timestamp y conviértelo a Date si es necesario
+       const turnoDate = turno.selectedDate.toDate ? turno.selectedDate.toDate() : new Date(turno.selectedDate);
        return turnoDate >= yesterdayAt6pm && turnoDate < yesterdayAt6pm.setDate(yesterdayAt6pm.getDate() + 1);
      });
 
