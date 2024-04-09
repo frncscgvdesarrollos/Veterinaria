@@ -33,7 +33,7 @@ export default function MyCalendarPeluqueria() {
     pago: false,
     precio: 0,
     info: 'Agrega cualquier informacion que quieras dejar aclarada',
-    canilPeluqueria: 0,
+    canilPeluqueria: "0",
   });
 
   useEffect(() => {

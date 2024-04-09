@@ -168,15 +168,23 @@ export async function mascotasEnAdopcion() {
 }
 export async function getClientes() {
   const clientes = [];
-  const q = await query(collection(db, "clientes"));
+  const q =  query(collection(db, "clientes"));
   const querySnapshot = await getDocs(q);
   querySnapshot.forEach((doc) => {
     clientes.push(doc.data());
   })
   console.log(clientes)
   return clientes
-  
 }
+export async function getMascotas(uid){
+  let mascotas = [];
+  const q = query(collection(db, "mascotas"), where("uid" , "===" , uid))
+  const doc = await getDocs(q);
+  doc.forEach(doc => {
+    mascotas.push(doc);
+  })
+  return mascotas
+} 
 
 //------------------------------------------------------------------
 //------------------------------------------------------------------
@@ -524,6 +532,24 @@ export async function getLastTurnoPeluqueriaId() {
 }
 
 
+
+export async function updateCanil(id, canil) {
+  try {
+    const q = query(collection(db, "turnosPeluqueria"), where("id", "==", id));
+    const querySnapshot = await getDocs(q);
+
+    if (!querySnapshot.empty) {
+      const docRef = doc(db, "turnosPeluqueria", querySnapshot.docs[0].id);
+      await updateDoc(docRef, { canilPeluqueria: canil });
+      console.log('Canil actualizado correctamente.');
+    } else {
+      console.log('No se encontró el documento con el id proporcionado.');
+    }
+  } catch (error) {
+    console.error('Error actualizando el canil:', error);
+    throw error;
+  }
+}
 
 //-------------------------------------------------------
 //---------------------------------------------------
