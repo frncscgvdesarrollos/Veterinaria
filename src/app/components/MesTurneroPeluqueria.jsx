@@ -23,12 +23,14 @@ export default function MyCalendarPeluqueria() {
     nombre: '',
     apellido: '',
     direccion: '',
+    esquina: '',
     telefono: '',
     selectedDate: new Date(),
     selectedTurno: '',
     selectedPet: '',
     selectedServicio: '',
     tamaño: '',
+    foto: '',
     transporte: true,
     pago: false,
     precio: 0,
@@ -38,12 +40,13 @@ export default function MyCalendarPeluqueria() {
 
   useEffect(() => {
     if (datosCliente) {
-      const { nombre, apellido, direccion, telefono } = datosCliente;
+      const { nombre, apellido, direccion, telefono , esquina } = datosCliente;
       setFormData((prevData) => ({
         ...prevData,
         nombre: nombre || '',
         apellido: apellido || '',
         direccion: direccion || '',
+        esquina: esquina || '',
         telefono: telefono || '',
       }));
     }
@@ -118,6 +121,7 @@ export default function MyCalendarPeluqueria() {
         const selectedPet = mascota.find((pet) => pet.nombre === value);
         if (selectedPet) {
           updatedFormData.tamaño = selectedPet.tamaño;
+          updatedFormData.foto = selectedPet.foto;
         }
       }
   

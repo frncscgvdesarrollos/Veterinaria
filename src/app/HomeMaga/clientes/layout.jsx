@@ -1,8 +1,8 @@
-import React from 'react'
+
 
 export default function layout({ children }) {
   return (
-    <div>layout
+    <div>
         {children}
     </div>
   )

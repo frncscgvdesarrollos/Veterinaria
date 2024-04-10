@@ -1,6 +1,7 @@
 'use client';
 import { useState, useEffect } from 'react';
 import { avanzarEstadoTurno, getTurnosPeluqueria } from '../../firebase';
+import Image from 'next/image';
 
 function TransporteHome() {
   const [turnos, setTurnos] = useState([]);
@@ -65,8 +66,12 @@ function TransporteHome() {
               <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Nombre</th>
               <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Apellido</th>
               <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Dirección</th>
+              <th className='px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider'>Esquina</th>
               <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Teléfono</th>
               <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Mascota</th>
+              <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Foto</th>
+              <th className='px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider'>Canil</th>
+              <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Pago</th>
               <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Estado</th>
               <th>Próximo estado</th>
             </tr>
@@ -78,8 +83,12 @@ function TransporteHome() {
                   <td className="px-6 py-4 whitespace-nowrap">{turno.nombre}</td>
                   <td className="px-6 py-4 whitespace-nowrap">{turno.apellido}</td>
                   <td className="px-6 py-4 whitespace-nowrap">{turno.direccion}</td>
+                  <td className="px-6 py-4 whitespace-nowrap">{turno.esquina}</td>
                   <td className="px-6 py-4 whitespace-nowrap">{turno.telefono}</td>
                   <td className="px-6 py-4 whitespace-nowrap">{turno.selectedPet}</td>
+                  <td className="px-6 py-4 whitespace-nowrap"><Image src={turno.foto} alt="canil" width={50} height={50} className='rounded-full' /></td>
+                  <td className="px-6 py-4 whitespace-nowrap">{turno.canilPeluqueria}</td>
+                  <td className="px-6 py-4 whitespace-nowrap">{turno.pago ? "Si" : "Cobrar"} : {turno.precio}</td>
                   {/*Renderizado del estado Actual*/}
                   {turno.estadoDelTurno === "confirmado" ?
                   <td className="px-6 py-4 whitespace-nowrap">Buscar</td>

@@ -1,30 +1,26 @@
-'use client';
-import CargarTurnoPmanual from '@/app/components/CargarTurnoPmanual';
-import { getTurnosPeluqueria } from '@/app/firebase';
-import PrecioPeluqueria from '@/app/components/PrecioPeluqueria';
+'use client'
 import React, { useState, useEffect } from 'react';
+import { getTurnosPeluqueria } from '@/app/firebase';
+import CargarTurnoPmanual from '@/app/components/CargarTurnoPmanual';
+import PrecioPeluqueria from '@/app/components/PrecioPeluqueria';
 
 export default function VistaTurnosPeluqueriaVeterinaria() {
     const [turnos, setTurnos] = useState([]);
-    const [turnosCargados, setTurnosCargados] = useState(false);
 
-    const cargarTurnosPeluqueria = () => {
-        getTurnosPeluqueria()
-            .then(turnosPeluqueria => {
-                setTurnos(turnosPeluqueria);
-            })
-            .catch(error => {
-                console.log("No se pudo obtener los turnos de la peluqueria", error);
-            });
-    };
-        
     useEffect(() => {
-        if (!turnosCargados) {
-            cargarTurnosPeluqueria();
-            setTurnosCargados(true);
-        }
-    }, [turnosCargados]);
+        const cargarTurnosPeluqueria = async () => {
+            try {
+                const turnosPeluqueria = await getTurnosPeluqueria();
+                setTurnos(turnosPeluqueria);
+            } catch (error) {
+                console.log("No se pudieron obtener los turnos de la peluquería", error);
+            }
+        };
 
+        cargarTurnosPeluqueria();
+    }, []); // Este efecto se ejecutará solo una vez al montar el componente
+
+    // Filtrado de turnos
     const turnosHoy = turnos.filter(turno => new Date(turno.fecha).toDateString() === new Date().toDateString() && turno.estadoDelTurno !== "finalizado" && turno.estadoDelTurno !== "cancelado");
     const turnosFinalizados = turnos.filter(turno => new Date(turno.fecha).toDateString() === new Date().toDateString() && turno.estadoDelTurno === "finalizado");
     const turnosCancelados = turnos.filter(turno => new Date(turno.fecha).toDateString() === new Date().toDateString() && turno.estadoDelTurno === "cancelado");

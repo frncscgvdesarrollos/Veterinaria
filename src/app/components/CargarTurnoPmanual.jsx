@@ -1,8 +1,7 @@
 import React, { useState, useEffect } from 'react';
-import { postTurnoPeluqueria, getClientes as obtenerClientesDeLaBaseDeDatos } from '../firebase';
+import { postTurnoPeluqueria, getClientes, getMascotas } from '../firebase';
 import { redirect } from 'next/navigation';
 
-// Función que representa tu componente
 export default function CargarTurnoPmanual() {
   const [formData, setFormData] = useState({
     id: "turno admin",
@@ -24,16 +23,18 @@ export default function CargarTurnoPmanual() {
   });
 
   const [clientes, setClientes] = useState([]);
+  const [mascotas, setMascotas] = useState([]);
   const [searchQuery, setSearchQuery] = useState('');
-  const [isExistingClient, setIsExistingClient] = useState(false); // Nuevo estado para indicar si es un cliente existente
+  const [isExistingClient, setIsExistingClient] = useState(false);
 
   useEffect(() => {
-    const fetchClientes = async () => {
-      const listaClientes = await obtenerClientesDeLaBaseDeDatos(); // Obtener datos de clientes desde Firebase
-      setClientes(listaClientes);
-    };
-
-    fetchClientes();
+    getClientes()
+      .then((listaClientes) => {
+        setClientes(listaClientes);
+      })
+      .catch((error) => {
+        console.error('Error al obtener clientes:', error);
+      });
   }, []);
 
   const handleChange = (e) => {
@@ -51,22 +52,34 @@ export default function CargarTurnoPmanual() {
     redirect('/HomeMaga/turnosPeluqueria');
   };
 
-  const handleClientSelection = (clientId) => {
-    // Precargar los datos del cliente seleccionado en el formulario
-    const selectedClient = clientes.find(cliente => cliente.id === clientId);
-    setFormData({
-      ...formData,
-      nombre: selectedClient.nombre,
-      apellido: selectedClient.apellido,
-      direccion: selectedClient.direccion,
-      telefono: selectedClient.telefono,
-    });
-    setIsExistingClient(true); // Establecer que es un cliente existente
+  const handleClientSelection = (nombre) => {
+    const selectedClient = clientes.find(cliente => `${cliente.nombre} ${cliente.apellido}` === nombre);
+    
+    const uid = selectedClient?.usuarioid;
+    console.log(uid)
+    if (uid) {
+      getMascotas(uid)
+        .then((clientMascotas) => {
+          console.log(clientMascotas)
+          setMascotas(clientMascotas);
+          setFormData({
+            ...formData,
+            nombre: selectedClient.nombre,
+            apellido: selectedClient.apellido,
+            direccion: selectedClient.direccion,
+            telefono: selectedClient.telefono,
+          });
+          setIsExistingClient(true);
+        })
+        .catch((error) => {
+          console.error('Error al obtener mascotas:', error);
+        });
+    }
   };
-
+  
+  
   const handlePetSelection = (petId) => {
-    // Precargar los datos de la mascota seleccionada en el formulario
-    const selectedPet = clientes.flatMap(cliente => cliente.mascotas).find(mascota => mascota.id === petId);
+    const selectedPet = mascotas.find(mascota => mascota.id === petId);
     setFormData({
       ...formData,
       selectedPet: selectedPet.nombre,
@@ -74,7 +87,6 @@ export default function CargarTurnoPmanual() {
     });
   };
 
-  // Filtrar clientes basados en la búsqueda
   const filteredClientes = clientes.filter(cliente =>
     cliente.nombre.toLowerCase().includes(searchQuery.toLowerCase()) ||
     cliente.apellido.toLowerCase().includes(searchQuery.toLowerCase())
@@ -83,84 +95,75 @@ export default function CargarTurnoPmanual() {
   return (
     <div className="max-w-md mx-auto p-6 mt-20 bg-gray-100 rounded-lg shadow-md">
       <h1 className="text-2xl font-bold mb-4">Cargar Turno</h1>
-      <form onSubmit={handleSubmit}>
-        {!isExistingClient && ( // Renderizar formulario manual si no es un cliente existente
-          <>
-            <div className="mb-4">
-              <label htmlFor="nombre" className="block text-sm font-medium text-gray-700">Nombre</label>
-              <input type="text" id="nombre" name="nombre" value={formData.nombre} onChange={handleChange} className="mt-1 p-2 block w-full rounded-md border-gray-300 focus:border-indigo-500 focus:ring focus:ring-indigo-200 focus:ring-opacity-50" />
-            </div>
-            <div className="mb-4">
-              <label htmlFor="apellido" className="block text-sm font-medium text-gray-700">Apellido</label>
-              <input type="text" id="apellido" name="apellido" value={formData.apellido} onChange={handleChange} className="mt-1 p-2 block w-full rounded-md border-gray-300 focus:border-indigo-500 focus:ring focus:ring-indigo-200 focus:ring-opacity-50" />
-            </div>
-            <div className="mb-4">
-              <label htmlFor="direccion" className="block text-sm font-medium text-gray-700">Dirección</label>
-              <input type="text" id="direccion" name="direccion" value={formData.direccion} onChange={handleChange} className="mt-1 p-2 block w-full rounded-md border-gray-300 focus:border-indigo-500 focus:ring focus:ring-indigo-200 focus:ring-opacity-50" />
-            </div>
-            <div className="mb-4">
-              <label htmlFor="telefono" className="block text-sm font-medium text-gray-700">Teléfono</label>
-              <input type="tel" id="telefono" name="telefono" value={formData.telefono} onChange={handleChange} className="mt-1 p-2 block w-full rounded-md border-gray-300 focus:border-indigo-500 focus:ring focus:ring-indigo-200 focus:ring-opacity-50" />
-            </div>
-          </>
-        )}
-
-        {isExistingClient && ( // Renderizar campos precargados si es un cliente existente
-          <>
-            <div className="mb-4">
-              <label htmlFor="selectedPet" className="block text-sm font-medium text-gray-700">Mascota</label>
-              <select id="selectedPet" name="selectedPet" value={formData.selectedPet} onChange={handleChange} className="mt-1 p-2 block w-full rounded-md border-gray-300 focus:border-indigo-500 focus:ring focus:ring-indigo-200 focus:ring-opacity-50">
-                <option value="">Seleccionar Mascota</option>
-                {clientes.flatMap(cliente => cliente.mascotas).map(mascota => (
-                  <option key={mascota.id} value={mascota.id} onClick={() => handlePetSelection(mascota.id)}>{mascota.nombre}</option>
-                ))}
-              </select>
-            </div>
-            <div className="mb-4">
-              <label htmlFor="selectedServicio" className="block text-sm font-medium text-gray-700">Servicio</label>
-              <select id="selectedServicio" name="selectedServicio" value={formData.selectedServicio} onChange={handleChange} className="mt-1 p-2 block w-full rounded-md border-gray-300 focus:border-indigo-500 focus:ring focus:ring-indigo-200 focus:ring-opacity-50">
-                <option value="">Seleccionar Servicio</option>
-                <option value="baño corte higienico">Baño corte higienico</option>
-                <option value="baño corte higienico cepillado">Baño corte higienico cepillado</option>
-                <option value="baño corte higienico pelar">Baño corte higienico pelar</option>
-              </select>
-            </div>
-            <div className="mb-4">
-              <label htmlFor="tamaño" className="block text-sm font-medium text-gray-700">Tamaño</label>
-              <select id="tamaño" name="tamaño" value={formData.tamaño} onChange={handleChange} className="mt-1 p-2 block w-full rounded-md border-gray-300 focus:border-indigo-500 focus:ring focus:ring-indigo-200 focus:ring-opacity-50">
-                <option value="">Seleccionar Tamaño</option>
-                <option value="toy">Toy</option>
-                <option value="mediano">Mediano</option>
-                <option value="grande">Grande</option>
-                <option value="gigante">Gigante</option>
-              </select>
-            </div>
-          </>
-        )}
-
-        <div className="mb-4">
-          <label htmlFor="selectedDate" className="block text-sm font-medium text-gray-700">Fecha del Turno</label>
-          <input type="date" id="selectedDate" name="selectedDate" min={new Date().toISOString().split('T')[0]} max={new Date(new Date().getTime() + 20 * 24 * 60 * 60 * 1000).toISOString().split('T')[0]} value={formData.selectedDate} onChange={handleChange} className="mt-1 p-2 block w-full rounded-md border-gray-300 focus:border-indigo-500 focus:ring focus:ring-indigo-200 focus:ring-opacity-50" />
+      {!isExistingClient && (
+        <div className='p-2'>
+          <h2 className='text-center p-2 my-2 text-lg font-bold'>¿Está registrado como cliente?</h2>
+          <div className='flex justify-around'>
+          <button className="bg-blue-500 w-1/2 text-white p-2 mx-2 rounded-lg"onClick={() => setIsExistingClient(true)}>Sí</button>
+          <button className="bg-red-500 w-1/2 text-white p-2 mx-2 rounded-lg"onClick={() => setIsExistingClient(false)}>No</button>
+          </div>
         </div>
+      )}
 
-        <div className="mb-4">
-          <label htmlFor="transporte" className="block text-sm font-medium text-gray-700">Transporte</label>
-          <input type="checkbox" id="transporte" name="transporte" checked={formData.transporte} onChange={handleChange} className="mt-1 p-2 block w-full rounded-md border-gray-300 focus:border-indigo-500 focus:ring focus:ring-indigo-200 focus:ring-opacity-50" />
-        </div>
+      {isExistingClient && (
+        <form onSubmit={handleSubmit}>
+          <div className="mb-4">
+            <label htmlFor="selectedClient" className="block text-sm font-medium text-gray-700">Cliente</label>
+            <select id="selectedClient" name="selectedClient" onChange={(e) => handleClientSelection(e.target.value)} className="mt-1 p-2 block w-full rounded-md border-gray-300 focus:border-indigo-500 focus:ring focus:ring-indigo-200 focus:ring-opacity-50">
+              <option value="">Seleccionar Cliente</option>
+              {filteredClientes.map((cliente,index) => (
+                <option key={index} value={`${cliente.nombre} ${cliente.apellido}`}>{cliente.nombre} {cliente.apellido}</option>
+              ))}
+            </select>
+          </div>
 
-        <div className="mb-4">
-          <label htmlFor="pago" className="block text-sm font-medium text-gray-700">Pago</label>
-          <input type="checkbox" id="pago" name="pago" checked={formData.pago} onChange={handleChange} className="mt-1 p-2 block w-full rounded-md border-gray-300 focus:border-indigo-500 focus:ring focus:ring-indigo-200 focus:ring-opacity-50" />
-        </div>
+          <div className="mb-4">
+            <label htmlFor="selectedPet" className="block text-sm font-medium text-gray-700">Mascota</label>
+            <select id="selectedPet" name="selectedPet" value={formData.selectedPet} onChange={handleChange} className="mt-1 p-2 block w-full rounded-md border-gray-300 focus:border-indigo-500 focus:ring focus:ring-indigo-200 focus:ring-opacity-50">
+              <option value="">Seleccionar Mascota</option>
+              {mascotas.map((mascota, index) => (
+                <option key={index} value={mascota.id} onClick={() => handlePetSelection(mascota.id)}>{mascota.nombre}</option>
+              ))}
+            </select>
+          </div>
 
-        <div className="mb-4">
-          <label htmlFor="info" className="block text-sm font-medium text-gray-700">Información Adicional</label>
-          <textarea id="info" name="info" value={formData.info} onChange={handleChange} rows="3" className="mt-1 p-2 block w-full rounded-md border-gray-300 focus:border-indigo-500 focus:ring focus:ring-indigo-200 focus:ring-opacity-50"></textarea>
-        </div>
+          {/* Agregar campos de turno y día para clientes existentes */}
+          <div className="mb-4">
+            <label htmlFor="selectedTurno" className="block text-sm font-medium text-gray-700">Turno</label>
+            <input
+              type="text"
+              id="selectedTurno"
+              name="selectedTurno"
+              value={formData.selectedTurno}
+              onChange={handleChange}
+              className="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-indigo-500 focus:ring focus:ring-indigo-200 focus:ring-opacity-50"
+            />
+          </div>
 
-        <button type="submit" className="bg-indigo-500 text-white px-4 py-2 rounded-md hover:bg-indigo-600 transition duration-300">Guardar Turno</button>
-      </form>
+          <div className="mb-4">
+            <label htmlFor="selectedDate" className="block text-sm font-medium text-gray-700">Fecha del Turno</label>
+            <input
+              type="date"
+              id="selectedDate"
+              name="selectedDate"
+              min={new Date().toISOString().split('T')[0]}
+              max={new Date(new Date().getTime() + 20 * 24 * 60 * 60 * 1000).toISOString().split('T')[0]}
+              value={formData.selectedDate}
+              onChange={handleChange}
+              className="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-indigo-500 focus:ring focus:ring-indigo-200 focus:ring-opacity-50"
+            />
+          </div>
+
+          <button type="submit" className="bg-indigo-500 text-white px-4 py-2 rounded-md hover:bg-indigo-600 transition duration-300">Guardar Turno</button>
+        </form>
+      )}
+
+      {!isExistingClient && (
+        <form onSubmit={handleSubmit}>
+          {/* Formulario para clientes no registrados */}
+          {/* (tu código existente para clientes no registrados) */}
+        </form>
+      )}
     </div>
   );
-
 }

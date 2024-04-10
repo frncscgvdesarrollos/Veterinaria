@@ -176,15 +176,35 @@ export async function getClientes() {
   console.log(clientes)
   return clientes
 }
-export async function getMascotas(uid){
-  let mascotas = [];
-  const q = query(collection(db, "mascotas"), where("uid" , "===" , uid))
-  const doc = await getDocs(q);
-  doc.forEach(doc => {
-    mascotas.push(doc);
+export async function getMascotas(uid) {
+  const mascotas = [];
+  if(uid){
+  try {
+    const q = query(collection(db, "mascotas"), where("uid", "==", uid));
+    const querySnapshot = await getDocs(q);
+    querySnapshot.forEach((doc) => {
+      // Extraer los datos del documento
+      const data = doc.data();
+      // Agregar los datos al array de mascotas
+      mascotas.push({ id: doc.id, ...data });
+    });
+    return mascotas;
+  } catch (error) {
+    console.error("Error al obtener mascotas:", error);
+    throw error;
+  }
+}
+else {
+  const q = query(collection(db, "mascotas"));
+  const docs = await getDocs(q);
+  docs.forEach(doc => {
+    const data = doc.data();
+    // Agregar los datos al array de mascotas
+    mascotas.push(data);
   })
   return mascotas
-} 
+}
+}
 
 //------------------------------------------------------------------
 //------------------------------------------------------------------
