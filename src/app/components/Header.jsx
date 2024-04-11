@@ -6,23 +6,41 @@ import { UserAuth } from '../context/AuthContext';
 import { clienteExisteConTerminosTRUE, clienteEsPremium } from '../firebase';
 
 // Componente para el menú de navegación de clientes regulares
-
 function NavigationMenu({ handleLinkClick }) {
   return (
-    <nav className="hidden md:flex items-center space-x-4 text-white text-xl md:text-3xl">
-      <Link href="/HomeCliente">
-        Inicio
+    <nav className="hidden md:flex items-center space-x-4 text-white text-xl md:text-1xl">
+      <Link href="/HomeCliente" className=' flex'>
+        <span className='ml-2 text-cyan-500 absolute left-40'>Inicio</span>
       </Link>
-      <Link href="/HomeCliente/Acciones/Perfil">
-        Perfil
-      </Link>
-      <Link href="/HomeCliente/Acciones/Mismascotas">
-        Mascotas
-      </Link>
-      <Link href="/HomeCliente/Acciones/MisTurnos">
-        Turnos
-      </Link>
-      <Link href="/HomeCliente/Acciones/Adopcion">
+      <div className='flex px-4 items-center border-2 border-cyan-500 rounded-full bg-gray-500 m-4'>
+      <div className="flex flex-col space-x-6" >
+        <span className="text-cyan-500 text-sm  px-8">Mi información</span>
+        <div className='flex gap-4 p-2'>
+          <Link href="/HomeCliente/Acciones/Perfil">
+            Perfil
+          </Link>
+          <Link href="/HomeCliente/Acciones/Mismascotas">
+            Mascotas
+          </Link>
+          <Link href="/HomeCliente/Acciones/MisTurnos">
+            Turnos
+          </Link>
+        </div>
+      </div>
+      <hr className='h-10 border-2 border-cyan-500' />
+      <div className="flex flex-col space-x-4">
+        <span className="text-cyan-500 text-sm px-6">Compras y seguimientos!</span>
+        <div className='flex gap-4 p-2'>
+          <Link href="/HomeCliente/Acciones/productos">
+            Productos
+          </Link>
+          <Link href="/HomeCliente/Acciones/Miscompras">
+            Mis compras
+          </Link>
+        </div>
+      </div>
+      </div>
+      <Link href="/HomeCliente/Acciones/Adopcion" className='absolute right-40 text-yellow-200 px-4 mt-6'>
         Adopción
       </Link>
     </nav>
@@ -49,6 +67,9 @@ function MobileMenu({ isOpen, handleMobileMenuToggle, handleLinkClick }) {
         <Link href="/HomeCliente/Acciones/Adopcion" onClick={handleLinkClick}>
           Adopción
         </Link>
+        <Link href="/HomeCliente/Acciones/productos" onClick={handleLinkClick}>
+          Productos
+        </Link>
       </nav>
     </div>
   );
@@ -58,32 +79,32 @@ function MobileMenu({ isOpen, handleMobileMenuToggle, handleLinkClick }) {
 function EmpresaMenu() {
   return (
     <nav className="hidden md:flex items-center space-x-10 text-white">
-          <div className='flex flex-col'>
-          <span className="text-cyan-500">Oficina</span>
-          <div className="flex space-x-4">
-            <Link href="/HomeMaga" className='text-xl'>
-              Inicio
-            </Link>
-            <Link href="/HomeMaga" className='text-xl'>
-              Caja
-            </Link>
-          </div>
-          </div>
-      
       <div className='flex flex-col'>
-          <span className="text-cyan-500">Informacion</span>
-          <div className="flex space-x-4">
-            <Link href="/HomeMaga/clientes">
-              Clientes
-            </Link>
-            <Link href="/HomeMaga/mascotas">
-              Mascotas
-            </Link>
-            <Link href="/HomeMaga/Clientes">
-              Adopciones
-            </Link>
-          </div>
+        <span className="text-cyan-500">Oficina</span>
+        <div className="flex space-x-4">
+          <Link href="/HomeMaga" className='text-xl'>
+            Inicio
+          </Link>
+          <Link href="/HomeMaga" className='text-xl'>
+            Caja
+          </Link>
         </div>
+      </div>
+
+      <div className='flex flex-col'>
+        <span className="text-cyan-500">Información</span>
+        <div className="flex space-x-4">
+          <Link href="/HomeMaga/clientes">
+            Clientes
+          </Link>
+          <Link href="/HomeMaga/mascotas">
+            Mascotas
+          </Link>
+          <Link href="/HomeMaga/Clientes">
+            Adopciones
+          </Link>
+        </div>
+      </div>
       <div className='flex flex-col'>
         <span className="text-cyan-500">Productos</span>
         <div className="flex space-x-4">
@@ -123,20 +144,10 @@ function EmpresaMenu() {
 
 // Componente para el menú móvil de la empresa
 function EmpresaMobileMenu({ isOpen, handleMobileMenuToggle }) {
-  const { user } = UserAuth();
-  const uid = user?.uid;
-
-  const isAdminOrEmployee = uid === process.env.NEXT_PUBLIC_UIDADM || uid === process.env.NEXT_PUBLIC_UIDTRANSPORTE || uid === process.env.NEXT_PUBLIC_UIDPELUQUERIA || uid === process.env.NEXT_PUBLIC_UIDDEV;
-
-  const handleLinkClick = () => {
-    // Cerrar el menú móvil al hacer clic en un enlace
-    handleMobileMenuToggle();
-  };
-
   return (
-    <div className={`md:hidden ${isOpen && isAdminOrEmployee ? 'block' : 'hidden'}`}>
+    <div className={`md:hidden ${isOpen ? 'block' : 'hidden'}`}>
       <nav className="flex flex-col mr-32  space-y-4 text-white text-left text-xl">
-      <div className='flex flex-col'>
+        <div className='flex flex-col'>
           <span className="text-cyan-500">Oficina</span>
           <div className="flex space-x-4">
             <Link href="/HomeMaga" className='text-xl'>
@@ -146,9 +157,9 @@ function EmpresaMobileMenu({ isOpen, handleMobileMenuToggle }) {
               Caja
             </Link>
           </div>
-          </div>
+        </div>
         <div className='flex flex-col'>
-          <span className="text-cyan-500">Informacion</span>
+          <span className="text-cyan-500">Información</span>
           <div className="flex space-x-4">
             <Link href="/HomeMaga/clientes">
               Clientes
@@ -251,10 +262,16 @@ export default function Header() {
               </button>
             </div>
           </div>
-          {uid === process.env.NEXT_PUBLIC_UIDADM || uid === process.env.NEXT_PUBLIC_UIDTRANSPORTE || uid === process.env.NEXT_PUBLIC_UIDPELUQUERIA || uid === process.env.NEXT_PUBLIC_UIDDEV ? (
-            <EmpresaMenu />
+          {(uid === process.env.NEXT_PUBLIC_UIDADM || uid === process.env.NEXT_PUBLIC_UIDTRANSPORTE || uid === process.env.NEXT_PUBLIC_UIDPELUQUERIA || uid === process.env.NEXT_PUBLIC_UIDDEV) ? (
+            <>
+              <EmpresaMenu />
+              <NavigationMenu handleLinkClick={handleLinkClick} />
+            </>
           ) : (
-            <NavigationMenu handleLinkClick={handleLinkClick} />
+            <>
+              <NavigationMenu handleLinkClick={handleLinkClick} />
+              <MobileMenu isOpen={mobileMenuOpen} handleMobileMenuToggle={handleMobileMenuToggle} handleLinkClick={handleLinkClick} />
+            </>
           )}
           <EmpresaMobileMenu isOpen={mobileMenuOpen} handleMobileMenuToggle={handleMobileMenuToggle} />
         </header>

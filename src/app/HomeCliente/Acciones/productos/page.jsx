@@ -1,13 +1,15 @@
-'use client'
+'use client';
 import { useState, useEffect } from 'react';
 import { getProducts } from '@/app/firebase';
 import ProductosMP from '@/app/components/ProductosMp';
+
 
 export default function Page() {
     const [productos, setProductos] = useState([]);
     const [filtro, setFiltro] = useState('');
     const [carrito, setCarrito] = useState([]);
     const [mostrarCarrito, setMostrarCarrito] = useState(false);
+    const [comprar, setComprar] = useState(false);
 
     useEffect(() => {
         // Obtener los productos de Firebase
@@ -67,7 +69,7 @@ export default function Page() {
                 </div>
                 {/* Icono del carrito */}
                 <div className="relative">
-                    <p className="text-3xl cursor-pointer" onClick={() => setMostrarCarrito(!mostrarCarrito)} > 🛒</p>
+                    <p className="text-3xl cursor-pointer" onClick={() => setMostrarCarrito(!mostrarCarrito)}> 🛒</p>
                     {/* Contador de elementos en el carrito */}
                     {carrito.length > 0 && (
                         <div className="absolute top-0 right-0 bg-red-500 text-white rounded-full w-6 h-6 flex items-center justify-center">
@@ -104,11 +106,13 @@ export default function Page() {
                         </div>
                         <div className="flex justify-between items-center w-full">
                             <p className="text-gray-600">Total: ${calcularPrecioTotal()}</p>
-                            <button  className="bg-lime-700 hover:bg-lime-300 text-white hover:text-black font-semibold py-2 px-4 rounded focus:outline-none">Comprar</button>
+                            <button onClick={() => setComprar(true)} className="bg-lime-700 hover:bg-lime-300 text-white hover:text-black font-semibold py-2 px-4 rounded focus:outline-none">Comprar</button>
                         </div>
                         {comprar ?
-                        <ProductosMP carrito={calcularPrecioTotal()} />
-                            : null    
+                            new Promise((resolve, reject) => {
+                                resolve(<ProductosMP carrito={calcularPrecioTotal()} />);
+                            }).then((component) => component)
+                            : null
                         }
                     </div>
                 </div>
