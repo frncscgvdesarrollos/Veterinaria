@@ -1,6 +1,7 @@
 'use client'
 import { useState, useEffect } from 'react';
 import { getProducts } from '@/app/firebase';
+import ProductosMP from '@/app/components/ProductosMp';
 
 export default function Page() {
     const [productos, setProductos] = useState([]);
@@ -103,8 +104,12 @@ export default function Page() {
                         </div>
                         <div className="flex justify-between items-center w-full">
                             <p className="text-gray-600">Total: ${calcularPrecioTotal()}</p>
-                            <button className="bg-lime-700 hover:bg-lime-300 text-white hover:text-black font-semibold py-2 px-4 rounded focus:outline-none">Comprar</button>
+                            <button  className="bg-lime-700 hover:bg-lime-300 text-white hover:text-black font-semibold py-2 px-4 rounded focus:outline-none">Comprar</button>
                         </div>
+                        {comprar ?
+                        <ProductosMP carrito={calcularPrecioTotal()} />
+                            : null    
+                        }
                     </div>
                 </div>
             )}
