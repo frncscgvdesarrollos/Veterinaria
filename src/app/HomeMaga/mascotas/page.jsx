@@ -46,19 +46,19 @@ export default function Mascotas() {
   };
 
   return (
-    <div className="p-8 bg-purple-100 rounded-lg">
-      <div className="flex justify-between items-center mb-6">
-        <h1 className="text-3xl">Lista de mascotas registradas</h1>
-        <div className='flex w-2/3'>
+    <div className="p-4 md:p-8 bg-purple-100 rounded-lg">
+      <div className="mb-4 md:mb-6">
+        <h1 className="text-2xl md:text-3xl">Lista de mascotas registradas</h1>
+        <div className='flex flex-col md:flex-row items-center'>
           <input
             type="text"
-            className="px-4 py-2 border rounded-lg w-2/3 mr-4 ml-10"
+            className="px-4 py-2 border rounded-lg mb-4 md:mb-0 md:mr-4 w-full md:w-2/3"
             placeholder='Nombre de la mascota'
             value={nombreBuscar}
             onChange={handleNombreChange}
           />
           <button
-            className='bg-blue-500 text-white px-4 py-2 rounded-lg w-1/3'
+            className='bg-blue-500 text-white px-4 py-2 rounded-lg w-full md:w-1/3'
             onClick={handleBuscarClick}
           >
             Buscar
@@ -70,51 +70,55 @@ export default function Mascotas() {
       ) : (
         <>
           {mascotaEncontrada ? (
-            <div className="bg-blue-200 p-4 mb-4 rounded-lg text-center flex gap-4">
+            <div className="bg-blue-200 p-4 mb-4 rounded-lg text-center flex flex-col md:flex-row gap-4">
               <h3 className="text-lg font-semibold mb-2">Mascota Encontrada:</h3>
-              <p>Nombre: {mascotaEncontrada.nombre}</p>
-              <p>Raza: {mascotaEncontrada.raza}</p>
-              <p>Tamaño : {mascotaEncontrada.tamaño}</p>
-              <p>Cumpleaños : {mascotaEncontrada.cumpleaños}</p>
-              <p>Cliente : {mascotaEncontrada.uid}</p>
-              <Image src={mascotaEncontrada.foto} alt="fotomascota" width={150} height={100} className='mr-auto ml-auto rounded-full'/>
-              {/* Agregar el resto de la información de la mascota */}
+              <div className="flex flex-col items-center md:items-start">
+                <p>Nombre: {mascotaEncontrada.nombre}</p>
+                <p>Raza: {mascotaEncontrada.raza}</p>
+                <p>Tamaño: {mascotaEncontrada.tamaño}</p>
+                <p>Cumpleaños: {mascotaEncontrada.cumpleaños}</p>
+                <p>Cliente: {mascotaEncontrada.uid}</p>
+                <Image src={mascotaEncontrada.foto} alt="fotomascota" width={150} height={100} className='rounded-full'/>
+              </div>
             </div>
           ) : null}
-          <table className="w-2/3 m-auto text-center bg-green-100 rounded-lg">
-            <thead className="text-xl">
-              <tr>
-                <th className="px-4 py-2">Nombre</th>
-                <th className="px-4 py-2">Raza</th>
-                <th className="px-4 py-2">Tamaño</th>
-                <th className="px-4 py-2">Cumpleaños</th>
-                <th className="px-4 py-2">Cliente</th>
-                <th className="px-4 py-2">Foto</th>
-              </tr>
-            </thead>
-            <tbody>
-              {mascotas.map((mascota, index) => (
-                <tr key={index}>
-                  <td className="px-4 py-2">{mascota.nombre}</td>
-                  <td className="px-4 py-2">{mascota.raza}</td>
-                  <td className="px-4 py-2">{mascota.tamaño}</td>
-                  <td className="px-4 py-2">{mascota.cumpleaños}</td>
-                  <td className="px-4 py-2">{mascota.uid}</td>
-                  <td className="px-4 py-2">
-                    <Image
-                      src={mascota.foto}
-                      alt={mascota.nombre}
-                      width={50}
-                      height={50}
-                      className="m-auto rounded-full"
-                    />
-                  </td>
+          <div className="overflow-x-auto">
+            <table className="w-full md:w-2/3 mx-auto text-center bg-green-100 rounded-lg">
+              <thead className="text-xl">
+                <tr>
+                  <th className="px-4 py-2">Nombre</th>
+                  <th className="px-4 py-2">Raza</th>
+                  <th className="px-4 py-2">Tamaño</th>
+                  <th className="px-4 py-2">Cumpleaños</th>
+                  <th className="px-4 py-2">Cliente</th>
+                  <th className="px-4 py-2">Foto</th>
                 </tr>
-              ))}
-            </tbody>
-          </table>
+              </thead>
+              <tbody>
+                {mascotas.map((mascota, index) => (
+                  <tr key={index}>
+                    <td className="px-4 py-2">{mascota.nombre}</td>
+                    <td className="px-4 py-2">{mascota.raza}</td>
+                    <td className="px-4 py-2">{mascota.tamaño}</td>
+                    <td className="px-4 py-2">{mascota.cumpleaños}</td>
+                    <td className="px-4 py-2">{mascota.uid}</td>
+                    <td className="px-4 py-2">
+                      <Image
+                        src={mascota.foto}
+                        alt={mascota.nombre}
+                        width={50}
+                        height={50}
+                        className="rounded-full"
+                      />
+                    </td>
+                  </tr>
+                ))}
+              </tbody>
+            </table>
+          </div>
         </>
       )}
     </div>
   );
+  
 }
