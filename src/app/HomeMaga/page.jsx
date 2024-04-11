@@ -116,8 +116,8 @@ export default function Page() {
                     <thead className="bg-gray-50">
                         <tr>
                             <th className="px-6 py-3 text-left text-xs sm:text-sm font-medium text-gray-500 uppercase tracking-wider">ID</th>
-                            <th className="px-6 py-3 text-left text-xs sm:text-sm font-medium text-gray-500 uppercase tracking-wider">Turno</th>
                             <th className="px-6 py-3 text-left text-xs sm:text-sm font-medium text-gray-500 uppercase tracking-wider">Mascota</th>
+                            <th className="px-6 py-3 text-left text-xs sm:text-sm font-medium text-gray-500 uppercase tracking-wider">Turno</th>
                             <th className="px-6 py-3 text-left text-xs sm:text-sm font-medium text-gray-500 uppercase tracking-wider">Corte</th>
                             <th className="px-6 py-3 text-left text-xs sm:text-sm font-medium text-gray-500 uppercase tracking-wider">Info</th>
                             <th className="px-6 py-3 text-left text-xs sm:text-sm font-medium text-gray-500 uppercase tracking-wider">Transporte</th>
@@ -137,8 +137,8 @@ export default function Page() {
                                         : <>
                                             <td className="px-6 py-4 whitespace-nowrap">{turno.id}</td>
                                             <td className="px-6 py-4 whitespace-nowrap">{turno.selectedPet}</td>
-                                            <td className="px-6 py-4 whitespace-nowrap">{turno.corte}</td>
-                                            <td className="px-6 py-4 whitespace-nowrap">{turno.largo}</td>
+                                            <td className="px-6 py-4 whitespace-nowrap">{turno.selectedTurno}</td>
+                                            <td className="px-6 py-4 whitespace-nowrap">{turno.selectedServicio}</td>
                                             {turno.estadoDelTurno === "confirmado" ?
                                                 <td className="px-6 py-4 whitespace-nowrap">Esperando</td>
                                                 : turno.estadoDelTurno === "buscado" ?
