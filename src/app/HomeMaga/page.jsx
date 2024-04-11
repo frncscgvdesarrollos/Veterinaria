@@ -78,7 +78,7 @@ export default function Page() {
                                 </tr>
                             ) : (
                                 turnosPeluqueria.map(turno => (
-                                    (turno.estadoDelTurno !== 'confirmar' && turno.estadoDelTurno !== 'finalizado' && turno.estadoDelTurno !== 'cancelado' && !turno.transporte) && (
+                                    (turno.estadoDelTurno !== 'confirmar' && turno.estadoDelTurno !== 'finalizado' && turno.estadoDelTurno !== 'cancelado' && turno.transporte) && (
                                         <tr key={turno.id} className={turno.id % 2 === 0 ? 'bg-violet-100' : 'bg-cyan-100'}>
                                             <td className="px-6 py-4 whitespace-nowrap">{turno.id}</td>
                                             <td className="px-6 py-4 whitespace-nowrap">{turno.nombre}</td>
