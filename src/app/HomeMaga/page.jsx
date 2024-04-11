@@ -139,6 +139,8 @@ export default function Page() {
                                             <td className="px-6 py-4 whitespace-nowrap">{turno.selectedPet}</td>
                                             <td className="px-6 py-4 whitespace-nowrap">{turno.selectedTurno}</td>
                                             <td className="px-6 py-4 whitespace-nowrap">{turno.selectedServicio}</td>
+                                            <td className="px-6 py-4 whitespace-nowrap">{turno.info}</td>
+                                            <td className="px-6 py-4 whitespace-nowrap">{turno.transporte ? "Si" : "No"}</td>
                                             {turno.estadoDelTurno === "confirmado" ?
                                                 <td className="px-6 py-4 whitespace-nowrap">Esperando</td>
                                                 : turno.estadoDelTurno === "buscado" ?
