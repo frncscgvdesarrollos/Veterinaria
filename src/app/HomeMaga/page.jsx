@@ -50,15 +50,24 @@ export default function Page() {
 
     return (
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4 p-4 sm:p-6 md:p-8 lg:p-10">
+              <div className="col-span-2 lg:col-span-2 bg-white shadow-md rounded-md overflow-hidden bg-gray-100 p-4 sm:p-6 md:p-8 lg:p-10">
+            <h2 className="text-2xl sm:text-lg font-bold text-cyan-800 mb-4">Llamar para confirmar</h2>
+            <LlamarA />
+        </div>
+        <div className="col-span-1 bg-white shadow-md rounded-md overflow-hidden bg-gray-100 p-4 sm:p-6 md:p-8 lg:p-10">
+            Caja
+        </div>
         {/* Tabla de turnos de transporte */}
-        <div className="col-span-2 bg-white shadow-md rounded-md overflow-hidden bg-gray-100 p-4 sm:p-6 md:p-8 lg:p-10">
+        <div className="col-span-3 bg-white shadow-md rounded-md overflow-hidden bg-gray-100 p-4 sm:p-6 md:p-8 lg:p-10">
             <h1 className="text-2xl sm:text-lg font-bold text-cyan-800 mb-4">Transporte</h1>
-            <div className="overflow-x-auto">
+            <div className="">
                 <table className="min-w-full divide-y divide-gray-200">
                     <thead className="bg-gray-50">
                         <tr>
+                            <th className="px-6 py-3 text-left text-xs sm:text-sm font-medium text-gray-500 uppercase tracking-wider">ID</th>
                             <th className="px-6 py-3 text-left text-xs sm:text-sm font-medium text-gray-500 uppercase tracking-wider">Nombre</th>
                             <th className="px-6 py-3 text-left text-xs sm:text-sm font-medium text-gray-500 uppercase tracking-wider">Dirección</th>
+                            <th className="px-6 py-3 text-left text-xs sm:text-sm font-medium text-gray-500 uppercase tracking-wider">Esquina</th>
                             <th className="px-6 py-3 text-left text-xs sm:text-sm font-medium text-gray-500 uppercase tracking-wider">Teléfono</th>
                             <th className="px-6 py-3 text-left text-xs sm:text-sm font-medium text-gray-500 uppercase tracking-wider">Mascota</th>
                             <th className="px-6 py-3 text-left text-xs sm:text-sm font-medium text-gray-500 uppercase tracking-wider">Estado</th>
@@ -66,10 +75,11 @@ export default function Page() {
                     </thead>
                     <tbody className="bg-white divide-y divide-gray-200">
                         {turnosTransporte.map(turno => (
-                            (turno.estadoDelTurno !== 'confirmar' && turno.estadoDelTurno !== 'finalizado' && turno.estadoDelTurno !== 'cancelado') && (
+                            (turno.estadoDelTurno !== 'confirmar' && turno.estadoDelTurno !== 'finalizado' && turno.estadoDelTurno !== 'cancelado' && turno.transporte === false) && (
                                 <tr key={turno.id} className={turno.id % 2 === 0 ? 'bg-violet-100' : 'bg-cyan-100'}>
                                     <td className="px-6 py-4 whitespace-nowrap">{turno.nombre}</td>
                                     <td className="px-6 py-4 whitespace-nowrap">{turno.direccion}</td>
+                                    <td className="px-6 py-4 whitespace-nowrap">{turno.esquina}</td>
                                     <td className="px-6 py-4 whitespace-nowrap">{turno.telefono}</td>
                                     <td className="px-6 py-4 whitespace-nowrap">{turno.selectedPet}</td>
                                     {/* Renderizado del estado Actual */}
@@ -93,26 +103,26 @@ export default function Page() {
                 </table>
             </div>
         </div>
-        <div className="col-span-2 lg:col-span-1 bg-white shadow-md rounded-md overflow-hidden bg-gray-100 p-4 sm:p-6 md:p-8 lg:p-10">
-            <h2 className="text-2xl sm:text-lg font-bold text-cyan-800 mb-4">Llamar para confirmar</h2>
-            <LlamarA />
-        </div>
+      
         {/* Tabla de turnos de peluquería */}
         <div className="col-span-3 bg-white shadow-md rounded-md overflow-hidden bg-gray-100 p-4 sm:p-6 md:p-8 lg:p-10">
             <h2 className="text-2xl sm:text-lg font-bold text-cyan-800 mb-4">Peluquería</h2>
             <table className="min-w-full divide-y divide-gray-200">
                 <thead className="bg-gray-50">
                     <tr>
+                        <th className="px-6 py-3 text-left text-xs sm:text-sm font-medium text-gray-500 uppercase tracking-wider">id</th>
+                        <th className="px-6 py-3 text-left text-xs sm:text-sm font-medium text-gray-500 uppercase tracking-wider">Turno</th>
                         <th className="px-6 py-3 text-left text-xs sm:text-sm font-medium text-gray-500 uppercase tracking-wider">Mascota</th>
                         <th className="px-6 py-3 text-left text-xs sm:text-sm font-medium text-gray-500 uppercase tracking-wider">Corte</th>
-                        <th className="px-6 py-3 text-left text-xs sm:text-sm font-medium text-gray-500 uppercase tracking-wider">Largo</th>
+                        <th className="px-6 py-3 text-left text-xs sm:text-sm font-medium text-gray-500 uppercase tracking-wider">Info</th>
+                        <th className="px-6 py-3 text-left text-xs sm:text-sm font-medium text-gray-500 uppercase tracking-wider">Transporte</th>
                         <th className="px-6 py-3 text-left text-xs sm:text-sm font-medium text-gray-500 uppercase tracking-wider">Estado</th>
                     </tr>
                 </thead>
                 <tbody className="bg-white divide-y divide-gray-200">
                     {turnosPeluqueria.map(turno => (
                         <tr key={turno.id} className={turno.id % 2 === 0 ? 'bg-violet-100' : 'bg-cyan-100'}>
-                            {turno.estadoDelTurno === "confirmar" || turno.estadoDelTurno === "finalizado" ?
+                            {turno.estadoDelTurno === "confirmar" || turno.estadoDelTurno === "finalizado" || turno.estadoDelTurno === "cancelado" ?
                                 null
                                 : <>
                                     <td className="px-6 py-4 whitespace-nowrap">{turno.selectedPet}</td>

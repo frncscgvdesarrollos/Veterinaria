@@ -361,6 +361,21 @@ export async function postTurnoPeluqueria (formData) {
     // Manejar cualquier error que ocurra durante el proceso de guardado
   }
 };
+export async function cancelarTurnoPeluqueria(id) {
+  try {
+    const q = query(collection(db, "turnosPeluqueria"), where("id", "==", id));
+    const querySnapshot = await getDocs(q);
+    
+    querySnapshot.forEach((doc) => {
+      updateDoc(doc.ref, { estadoDelTurno: "cancelado" });
+    });
+
+    return true;
+  } catch (error) {
+    console.error("Error al cancelar el turno de peluquería:", error);
+    return false;
+  }
+}
 export async function getTurnosPeluqueria() {
   const turnos = [];
   const q = await query(collection(db, "turnosPeluqueria"));
@@ -469,18 +484,24 @@ export async function verificarCapacidadTurno(selectedDate, selectedTurno) {
   }
 }
 
+
+
+
+
 export async function avanzarEstadoTurno(id) {
   try {
+    // Crear la consulta para obtener el documento del turno con el ID proporcionado
     const q = query(collection(db, "turnosPeluqueria"), where("id", "==", id));
     const querySnapshot = await getDocs(q);
-    
+
     if (querySnapshot.empty) {
       throw new Error("No se encontró ningún documento con el ID especificado");
     }
 
     const turnoDoc = querySnapshot.docs[0];
-    const estadoActual = turnoDoc.data().estadoDelTurno;
-
+    const turnoData = turnoDoc.data();
+    const estadoActual = turnoData.estadoDelTurno;
+    console.log("Estado actual del turno:", estadoActual);
     let nuevoEstado = "";
 
     switch (estadoActual) {
@@ -509,32 +530,20 @@ export async function avanzarEstadoTurno(id) {
         throw new Error("El estado actual del turno no puede avanzar.");
     }
 
-    await updateDoc(doc(db, "turnosPeluqueria", turnoDoc.id), { estadoDelTurno: nuevoEstado });
+    // Obtener la referencia del documento del turno
+    const turnoRef = doc(db, "turnosPeluqueria", turnoDoc.id);
 
-    return { id: turnoDoc.id, ...turnoDoc.data(), estadoDelTurno: nuevoEstado };
+    // Actualizar el estado del turno en la base de datos
+    await updateDoc(turnoRef, { estadoDelTurno: nuevoEstado });
+
+    return { id: turnoDoc.id, ...turnoData, estadoDelTurno: nuevoEstado };
   } catch (error) {
     console.error("Error avanzando estado del turno:", error);
     throw error;
   }
 }
 
-export async function cancelarTurnoPeluqueria(id) {
-  try {
-    const turnoRef = doc(db, "turnosPeluqueria", id);
-    const turnoSnapshot = await getDoc(turnoRef);
 
-    if (!turnoSnapshot.exists()) {
-      throw new Error("No se encontró ningún documento con el ID especificado");
-    }
-
-    await updateDoc(turnoRef, { estadoTurno: "cancelado" });
-
-    return { id: turnoSnapshot.id, ...turnoSnapshot.data(), estadoTurno: "cancelado" };
-  } catch (error) {
-    console.error("Error cancelando el turno:", error);
-    throw error;
-  }
-}
 
 
 export async function getLastTurnoPeluqueriaId() {

@@ -93,7 +93,7 @@ export default function CargarTurnoPmanual() {
   );
 
   return (
-    <div className="max-w-md mx-auto p-6 mt-20 bg-gray-100 rounded-lg shadow-md">
+    <div className="max-w-md mx-auto p-4 bg-gray-100 rounded-lg shadow-md ">
       <h1 className="text-2xl font-bold mb-4">Cargar Turno</h1>
       {!isExistingClient && (
         <div className='p-2'>
@@ -153,8 +153,8 @@ export default function CargarTurnoPmanual() {
               className="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-indigo-500 focus:ring focus:ring-indigo-200 focus:ring-opacity-50"
             />
           </div>
-
           <button type="submit" className="bg-indigo-500 text-white px-4 py-2 rounded-md hover:bg-indigo-600 transition duration-300">Guardar Turno</button>
+          <button onClick={() => setIsExistingClient(false)} className="bg-red-500 m-4 text-white px-4 py-2 rounded-md hover:bg-red-600 transition duration-300">Cancelar</button>
         </form>
       )}
 

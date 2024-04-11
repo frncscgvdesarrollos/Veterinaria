@@ -43,8 +43,8 @@ export default function PrecioPeluqueria() {
 
   return (
     <>
-    <h1 className='text-3xl font-bold mb-4'>Precios de peluquería</h1>
     <div className="overflow-x-auto rounded-lg p-4 bg-violet-300">
+    <h1 className='text-3xl font-bold mb-4'>Precios de peluquería</h1>
       <table className="w-full table-auto border-collapse rounded-lg">
         <thead className='rounded-lg'>
           <tr className="rounded-lg">

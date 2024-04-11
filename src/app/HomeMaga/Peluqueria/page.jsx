@@ -84,7 +84,8 @@ export default function Peluqueria() {
                     <tbody className="bg-white divide-y divide-gray-200">
     {turnos.map((turno, index) => (
         turno.estadoDelTurno !== "confirmar" &&
-        turno.estadoDelTurno !== "Finalizado" && (
+        turno.estadoDelTurno !== "finalizado" &&
+        turno.estadoDelTurno !== "cancelado" && (
             <tr key={index} className={index % 2 === 0 ? 'bg-violet-100' : 'bg-cyan-100'}>
                 <td className="px-6 py-4 whitespace-nowrap">{index + 1}</td>
                 <td className="px-6 py-4 whitespace-nowrap">{turno.selectedPet}</td>
