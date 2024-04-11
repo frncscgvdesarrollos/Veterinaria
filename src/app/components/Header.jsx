@@ -150,13 +150,13 @@ function EmpresaMobileMenu({ isOpen, handleMobileMenuToggle }) {
         <div className='flex flex-col'>
           <span className="text-cyan-500">Informacion</span>
           <div className="flex space-x-4">
-            <Link href="/HomeMaga/Clientes">
+            <Link href="/HomeMaga/clientes">
               Clientes
             </Link>
-            <Link href="/HomeMaga/Clientes">
+            <Link href="/HomeMaga/mascotas">
               Mascotas
             </Link>
-            <Link href="/HomeMaga/Clientes">
+            <Link href="/HomeMaga/adopciones">
               Adopciones
             </Link>
           </div>
