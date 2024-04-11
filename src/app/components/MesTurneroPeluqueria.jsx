@@ -15,6 +15,7 @@ export default function MyCalendarPeluqueria() {
   const { mascota } = MascotasContext();
   const [verificado, setVerificado] = useState(false);
   const [turnoDisponible, setTurnoDisponible] = useState(false);
+  const [noQuiereTransporte, setNoQuiereTransporte] = useState(false);
 
   const [formData, setFormData] = useState({
     id: 0,
@@ -80,22 +81,23 @@ export default function MyCalendarPeluqueria() {
         setTurnoDisponible(disponible);
         if (!disponible) {
           alert('No hay turnos disponibles para esa fecha y turno.');
+          setVerificado(false);
           throw new Error('No hay turnos disponibles');
         }
   
         // Después de verificar, marcamos el turno como verificado
         setVerificado(true);
         alert('Turno verificado correctamente. Ya puede efectuar el pago.');
+        // Proceed with form submission
+        handleFormSubmit();
       })
       .catch((error) => {
         console.error('Error al verificar la disponibilidad del turno:', error);
         alert('Hubo un error al verificar la disponibilidad del turno. Por favor, inténtalo de nuevo.');
       });
   };
-  
 
-  const handleFormSubmit = (e) => {
-    e.preventDefault();
+  const handleFormSubmit = () => {
     console.log(formData);
     Promise.all([postTurnoPeluqueria(formData), sumarTurnoPeluqueria(uid)])
       .then(() => {
@@ -154,6 +156,12 @@ export default function MyCalendarPeluqueria() {
     });
   };
   
+  const handleTransporteChange = (e) => {
+    setFormData((prevData) => ({
+      ...prevData,
+      transporte: !prevData.transporte,
+    }));
+  };
 
   const tileDisabled = ({ date, view }) => {
     const currentDate = new Date();
@@ -232,6 +240,18 @@ export default function MyCalendarPeluqueria() {
               onChange={handleDateChange}
               value={formData.selectedDate}
               tileDisabled={tileDisabled}
+            />
+          </div>
+          <div>
+            <label htmlFor="transporte" className="block font-semibold">¿No quiere transporte?</label>
+            <span className="text-sm p-2 mb-2">Me comprometo a llevar la mascota</span>
+            <input
+              type="checkbox"
+              id="transporte"
+              name="transporte"
+              checked={noQuiereTransporte}
+              onChange={() => setNoQuiereTransporte(!noQuiereTransporte)}
+              className="mr-2"
             />
           </div>
           <button

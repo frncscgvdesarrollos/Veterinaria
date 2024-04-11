@@ -148,6 +148,11 @@ export async function sumarTurnoPeluqueria(uid) {
     console.log(error);
   }
 }
+export async function sumarTurnoPeluqueriaMascota(uid) {
+  const q = query(collection(db, 'mascotas'), where("uid", "==", uid));
+  const querySnapshot = await getDocs(q);
+  
+}
 export async function getMascotasDueño(uid) {
   const mascotas = [];
   const q = await query(collection(db, "mascotas"), where("uid", "==", uid));
@@ -458,7 +463,7 @@ export async function verificarCapacidadTurno(selectedDate, selectedTurno) {
 
     const querySnapshot = await getDocs(q);
     let capacidadTurno = {
-      muyGrande: 0,
+      gigante: 0,
       grande: 0,
       mediano: 0,
       toy: 0
@@ -471,7 +476,7 @@ export async function verificarCapacidadTurno(selectedDate, selectedTurno) {
 
     // Verificar restricciones
     const capacidadExcedida =
-      capacidadTurno.muyGrande > 1 ||
+      capacidadTurno.gigante > 1 ||
       capacidadTurno.grande > 2 ||
       capacidadTurno.mediano > 3 ||
       capacidadTurno.toy > 6 ||
@@ -610,7 +615,8 @@ export async function createProduct(product) {
     console.error("Error adding document: ", e);
   }
 }
-export  async function deleteProduct(id) {
+
+export async function deleteProduct(id) {
   try {
     const docRef = doc(db, "productos", id);
     await deleteDoc(docRef);
@@ -619,6 +625,16 @@ export  async function deleteProduct(id) {
     console.error("Error deleting document: ", error);
   }
 }
+
+export async function updateProduct(id, product) {
+  const q = query(collection(db, "productos"), where("id", "==", id));
+  const querySnapshot = await getDocs(q);
+  querySnapshot.forEach((doc) => {
+    updateDoc(doc.ref, product)
+  })
+}
+
+
 
 
 export async function crearPrecioDeServicio(selectedServicio, precios) {

@@ -146,8 +146,8 @@ export default function Clientes() {
                       <td className='px-4 py-2'>{cliente.apellido}</td>
                       <td className='px-4 py-2'>{cliente.direccion}</td>
                       <td className='px-4 py-2'>{cliente.telefono}</td>
-                      <td className={cliente.terminos ? 'px-4 py-2 bg-blue-200 text-white text-center' : 'px-4 py-2 bg-red-200 text-yellow-300 text-center'}>{cliente.terminos ? 'Si' : 'No'}</td>
-                      <td className={cliente.esPremium ? 'px-4 py-2 bg-blue-200 text-center text-white' : 'px-4 py-2 bg-red-300 text-center text-yellow-300'}>{cliente.esPremium ? 'Si' : 'No'}</td>
+                      <td className={cliente.terminos ? 'px-4 py-2 text-orange-400 text-center text-lg' : 'px-4 py-2  text-red-300 text-center'}>{cliente.terminos ? 'Si' : 'No'}</td>
+                      <td className={cliente.esPremium ? 'px-4 py-2  text-center text-orange-400 text-lg' : 'px-4 py-2  text-center text-red-300'}>{cliente.esPremium ? 'Si' : 'No'}</td>
                       <td className='px-4 py-2'>{cliente.chequeosTotales}</td>
                       <td className='px-4 py-2'>{cliente.cortesTotales}</td>
                     </tr>

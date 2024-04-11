@@ -17,13 +17,23 @@ export default function FormMascota() {
     setNumPets(num);
     const newPets = Array.from({ length: num }, (_, index) => ({
       id: index,
-      nombre: '',
+      uid: uid,
       especie: '',
       raza: '',
+      edad: '',
       tamaño: '',
+      altura:"",
+      peso: '',
+      sexo: '',
+      castrado:'',
+      nombre: '',
+      foto: '',
+      estadoCivil: '',
+      info: '',
       cumpleaños: '',
-      foto: null,
-      uid: uid,
+      internacion:false,
+      turnosPeluqueria:0,
+      turnosChequeros:0,
     }));
     setPets(newPets);
   };
