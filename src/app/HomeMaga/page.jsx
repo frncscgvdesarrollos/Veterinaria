@@ -1,7 +1,7 @@
 'use client'
 import { useState, useEffect } from 'react';
 import { UserAuth } from '../context/AuthContext';
-import { getTurnosPeluqueria, getTurnosTransporte } from '../firebase'; // Suponiendo que existen funciones para obtener los turnos de peluquería y transporte
+import { getTurnosPeluqueria } from '../firebase'; // Suponiendo que existen funciones para obtener los turnos de peluquería y transporte
 import LlamarA from '../components/llamarA';
 import TurnosParaMañana from '../components/TurnosParaMañana';
 
@@ -11,8 +11,6 @@ export default function Page() {
 
     const [turnosPeluqueria, setTurnosPeluqueria] = useState([]);
     const [isLoadingPeluqueria, setIsLoadingPeluqueria] = useState(true);
-    const [turnosTransporte, setTurnosTransporte] = useState([]);
-    const [isLoadingTransporte, setIsLoadingTransporte] = useState(true);
 
     useEffect(() => {
         const fetchDataPeluqueria = () => {
@@ -33,20 +31,20 @@ export default function Page() {
 
     useEffect(() => {
         const fetchDataTransporte = () => {
-            getTurnosTransporte()
+            getTurnosPeluqueria()
                 .then(data => {
-                    setTurnosTransporte(data);
-                    setIsLoadingTransporte(false);
+                    setTurnosPeluqueria(data);
+                    setIsLoadingPeluqueria(false);
                 })
                 .catch(error => {
                     console.error('Error fetching turnos de transporte:', error);
                 });
         };
 
-        if (isLoadingTransporte) {
+        if (isLoadingPeluqueria) {
             fetchDataTransporte();
         }
-    }, [isLoadingTransporte]);
+    }, [isLoadingPeluqueria]);
 
     return (
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4 p-4 sm:p-6 md:p-8 lg:p-10">
@@ -74,12 +72,12 @@ export default function Page() {
                             </tr>
                         </thead>
                         <tbody className="bg-white divide-y divide-gray-200">
-                            {isLoadingTransporte ? (
+                            {isLoadingPeluqueria ? (
                                 <tr>
                                     <td className="px-6 py-4 whitespace-nowrap" colSpan="7">Cargando...</td>
                                 </tr>
                             ) : (
-                                turnosTransporte.map(turno => (
+                                turnosPeluqueria.map(turno => (
                                     (turno.estadoDelTurno !== 'confirmar' && turno.estadoDelTurno !== 'finalizado' && turno.estadoDelTurno !== 'cancelado' && !turno.transporte) && (
                                         <tr key={turno.id} className={turno.id % 2 === 0 ? 'bg-violet-100' : 'bg-cyan-100'}>
                                             <td className="px-6 py-4 whitespace-nowrap">{turno.id}</td>
