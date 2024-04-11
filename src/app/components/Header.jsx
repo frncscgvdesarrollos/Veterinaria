@@ -87,10 +87,10 @@ function EmpresaMenu() {
       <div className='flex flex-col'>
         <span className="text-cyan-500">Productos</span>
         <div className="flex space-x-4">
-          <Link href="/HomeMaga/Promociones">
+          <Link href="/HomeMaga/promociones">
             Promociones
           </Link>
-          <Link href="/HomeMaga/Productos">
+          <Link href="/HomeMaga/productos">
             Productos
           </Link>
         </div>
@@ -142,7 +142,7 @@ function EmpresaMobileMenu({ isOpen, handleMobileMenuToggle }) {
             <Link href="/HomeMaga" className='text-xl'>
               Inicio
             </Link>
-            <Link href="/HomeMaga" className='text-xl'>
+            <Link href="/HomeMaga/caja" className='text-xl'>
               Caja
             </Link>
           </div>
@@ -164,10 +164,10 @@ function EmpresaMobileMenu({ isOpen, handleMobileMenuToggle }) {
         <div className='flex flex-col'>
           <span className="text-cyan-500">Productos</span>
           <div className="flex space-x-4">
-            <Link href="/HomeMaga/Promociones">
+            <Link href="/HomeMaga/promociones">
               Promociones
             </Link>
-            <Link href="/HomeMaga/Productos">
+            <Link href="/HomeMaga/productos">
               Productos
             </Link>
           </div>
