@@ -27,7 +27,7 @@ export default function MisMascotas() {
           <li>Indica si tu mascota está castrada, esto puede ser relevante para su cuidado y manejo.</li>
           <li>Asegúrate de describir cualquier problema de salud o condiciones especiales que tenga tu mascota.</li>
         </ul>
-        <p className="text-gray-700 mt-4">La "cruz" de un perro se refiere a la altura medida desde el suelo hasta el punto más alto del hombro del perro.</p>
+        <p className="text-gray-700 mt-4">La cruz de un perro se refiere a la altura medida desde el suelo hasta el punto más alto del hombro del perro.</p>
         <Image src="/cruz.jpg" alt="cruz" width={200} height={200}  className="mt-4 ml-auto mr-auto"/>
       </div>
       <div className="flex flex-col w-full md:w-2/3">

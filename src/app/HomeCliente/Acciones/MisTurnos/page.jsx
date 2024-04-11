@@ -60,44 +60,42 @@ export default function MisTurnos() {
 
   const turnosPorFecha = useMemo(() => groupTurnosByDate(turnosCliente), [turnosCliente]);
 
-  const fetchTurnos = async () => {
-    setIsLoading(true);
-    try {
-      const turnos = await getMisTurnos(uid);
-      setTurnosCliente(turnos);
-    } catch (error) {
-      setError('Error al obtener los turnos');
-      console.error('Error fetching turnos:', error);
-    } finally {
-      setIsLoading(false);
-    }
-  };
-
-  const handlePaymentConfirmation = async () => {
-    try {
-      await confirmarPagos(uid);
-      await registroVenta(uid);
-    } catch (error) {
-      setError('Error al confirmar el pago');
-      console.error('Error confirming payment:', error);
-    }
-  };
 
   useEffect(() => {
-    const fetchData = async () => {
-      if (uid) {
-        await fetchTurnos();
-      }
-      if (status === 'approved') {
-        await handlePaymentConfirmation();
-      }
+    const fetchData = () => {
+      setIsLoading(true);
+      getMisTurnos(uid)
+        .then(turnos => {
+          setTurnosCliente(turnos);
+        })
+        .catch(error => {
+          setError('Error al obtener los turnos');
+          console.error('Error fetching turnos:', error);
+        })
+        .finally(() => {
+          setIsLoading(false);
+        });
     };
-
-    const fetchDataWrapper = () => {
+  
+    const handlePaymentConfirmation = () => {
+      confirmarPagos(uid)
+        .then(() => registroVenta(uid))
+        .catch(error => {
+          setError('Error al confirmar el pago');
+          console.error('Error confirming payment:', error);
+        });
+    };
+  
+    if (uid) {
       fetchData();
-    };
-    fetchDataWrapper();
+    }
+  
+    if (status === 'approved') {
+      handlePaymentConfirmation();
+    }
+  
   }, [uid, status]);
+  
 
   if (isLoading) {
     return <div>Cargando...</div>;
