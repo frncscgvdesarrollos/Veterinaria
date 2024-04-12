@@ -218,7 +218,7 @@ export default function ProductPage() {
                   <td className="px-4 py-2">{product.descripcion}</td>
                   <td className="px-4 py-2">{product.categoria}</td>
                   <td className="px-4 py-2">
-                    <Image src={product.foto} alt={product.nombre} width={64} height={64} className="w-16 h-16 object-cover" />
+                    <Image src={product.imagen} alt={product.nombre} width={64} height={64} className="object-cover" />
                   </td>
                   <td className="px-4 py-2">{product.precio}</td>
                   <td className="px-4 py-2">{product.stock}</td>

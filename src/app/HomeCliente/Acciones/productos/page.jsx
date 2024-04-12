@@ -120,7 +120,7 @@ export default function Page() {
                     .filter(producto => filtro === '' || producto.categoria === filtro)
                     .map(producto => (
                         <div key={producto.id} className="bg-gray-100 p-4 rounded-lg shadow-lg">
-                            <img src={producto.imagen} alt={producto.nombre} className="w-full h-40 object-cover mb-4 rounded-lg" />
+                            <Image src={producto.imagen} alt={producto.nombre} width={100} height={100} className="object-cover mb-4 rounded-lg" />
                             <div className="flex flex-col justify-between h-full">
                                 <div>
                                     <h2 className="text-lg font-semibold mb-2">{producto.nombre}</h2>
