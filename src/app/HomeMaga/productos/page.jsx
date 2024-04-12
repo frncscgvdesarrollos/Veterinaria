@@ -8,8 +8,8 @@ export default function ProductPage() {
   const [formData, setFormData] = useState({
     id: 0,
     nombre: '',
-    descripción: '',
-    categoría: '',
+    descripcion: '',
+    categoria: '',
     imagen: '',
     precio: 0,
     stock: 0
@@ -59,9 +59,9 @@ export default function ProductPage() {
     e.preventDefault();
     updateProduct(formData.id, formData)
       .then(() => {
-        fetchProducts(); // Actualizar la lista de productos
-        resetFormDataAndCloseForm(); // Cerrar el formulario modal
-        closeModal(); // Cerrar el modal
+        fetchProducts();
+        resetFormDataAndCloseForm();
+        closeModal();
       })
       .catch(error => {
         console.error('Error updating product:', error);
@@ -107,8 +107,8 @@ export default function ProductPage() {
     setFormData({
       id: 0,
       nombre: '',
-      descripción: '',
-      categoría: '',
+      descripcion: '',
+      categoria: '',
       imagen: '',
       precio: 0,
       stock: 0
@@ -118,7 +118,7 @@ export default function ProductPage() {
   }
 
   function openModal(product) {
-    setFormData({ ...product }); // Actualizar formData con los valores del producto seleccionado
+    setFormData({ ...product });
     setModalIsOpen(true);
   }
 
@@ -149,17 +149,17 @@ export default function ProductPage() {
             />
             <input
               type="text"
-              name="descripción"
+              name="descripcion"
               placeholder="Descripción"
-              value={formData.descripción}
+              value={formData.descripcion}
               onChange={handleChange}
               className="rounded-lg mb-2 p-2 block w-full"
             />
             <input
               type="text"
-              name="categoría"
+              name="categoria"
               placeholder="Categoría"
-              value={formData.categoría}
+              value={formData.categoria}
               onChange={handleChange}
               className="rounded-lg mb-2 p-2 block w-full"
             />
@@ -195,7 +195,7 @@ export default function ProductPage() {
             </button>
           </form>
         )}
-        <div className='flex flex-col justify-center p-4 overflow-x-auto'>
+        <div className='overflow-x-auto'>
           <table className="w-full bg-white rounded-lg shadow-lg p-4 rounded-lg">
             <thead>
               <tr className="bg-gray-200 text-gray-700">
@@ -214,8 +214,8 @@ export default function ProductPage() {
                 <tr key={product.id} className="border-t border-gray-200">
                   <td className="px-4 py-2">{product.id}</td>
                   <td className="px-4 py-2">{product.nombre}</td>
-                  <td className="px-4 py-2">{product.descripción}</td>
-                  <td className="px-4 py-2">{product.categoría}</td>
+                  <td className="px-4 py-2">{product.descripcion}</td>
+                  <td className="px-4 py-2">{product.categoria}</td>
                   <td className="px-4 py-2">
                     <img src={product.imagen} alt={product.nombre} className="w-16 h-16 object-cover" />
                   </td>
@@ -244,17 +244,17 @@ export default function ProductPage() {
               />
               <input
                 type="text"
-                name="descripción"
+                name="descripcion"
                 placeholder="Descripción"
-                value={formData.descripción}
+                value={formData.descripcion}
                 onChange={handleChange}
                 className="rounded-lg mb-2 p-2 block w-full"
               />
               <input
                 type="text"
-                name="categoría"
+                name="categoria"
                 placeholder="Categoría"
-                value={formData.categoría}
+                value={formData.categoria}
                 onChange={handleChange}
                 className="rounded-lg mb-2 p-2 block w-full"
               />
@@ -271,7 +271,7 @@ export default function ProductPage() {
                 className="rounded-lg mb-2 p-2 block w-full"
               />
               <input
-                type="text"
+                type="number"
                 name="precio"
                 placeholder="Precio"
                 value={formData.precio}
@@ -279,7 +279,7 @@ export default function ProductPage() {
                 className="rounded-lg mb-2 p-2 block w-full"
               />
               <input
-                type="text"
+                type="number"
                 name="stock"
                 placeholder="Stock"
                 value={formData.stock}
@@ -306,6 +306,4 @@ export default function ProductPage() {
       </div>
     </div>
   );
-  
-  
 }
