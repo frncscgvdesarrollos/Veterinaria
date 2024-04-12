@@ -78,31 +78,24 @@ export default function Clientes() {
   return (
     <div className="p-6 bg-purple-100 rounded-lg">
       <h1 className="text-3xl mb-6">Lista de clientes registrados</h1>
-      <div className="flex flex-col gap-4">
+      <div className="flex  gap-4">
         <input
           type="text"
           className="px-4 py-2 border rounded-lg"
           placeholder="Código Único Dueño"
           value={codigoBuscar}
           onChange={handleCodigoChange}
+          className="w-2/3 px-4 py-2 border rounded-lg"
         />
         <div className="flex flex-col sm:flex-row justify-between items-center">
           <button
-            className={`bg-${buscar ? 'red' : 'blue'}-500 hover:bg-${
+            className={`bg-${buscar ? 'red' : 'blue'}-500 w-[150px] hover:bg-${
               buscar ? 'red' : 'blue'
             }-600 text-white px-4 py-2 rounded-lg`}
             onClick={buscar ? handleCancelarClick : handleBuscarClick}
           >
             {buscar ? 'Cancelar' : 'Buscar'}
           </button>
-          {buscar && (
-            <button
-              className="bg-red-500 hover:bg-red-600 text-white px-4 py-2 rounded-lg"
-              onClick={handleCancelarClick}
-            >
-              Recargar
-            </button>
-          )}
         </div>
       </div>
       {isLoading ? (
@@ -118,7 +111,7 @@ export default function Clientes() {
                       .filter((cliente) => cliente.usuarioid === codigoBuscar)
                       .map((cliente, index) => (
                         <React.Fragment key={index}>
-                          <div className="w-full flex flex-col md:flex-row">
+                          <div className="w-full flex flex-col md:flex-row ">
                             <div className="w-full md:w-1/2 p-4">
                               <ul className="text-gray-600 gap-2 bg-purple-400 text-gray-700 p-4 rounded-lg flex gap-10">
                                 <div>
