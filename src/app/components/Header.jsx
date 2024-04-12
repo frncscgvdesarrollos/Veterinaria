@@ -13,32 +13,32 @@ function NavigationMenu({ handleLinkClick }) {
         <span className='ml-2 text-cyan-500 absolute left-40'>Inicio</span>
       </Link>
       <div className='flex px-4 items-center border-2 border-cyan-500 rounded-full bg-gray-500 m-4'>
-      <div className="flex flex-col space-x-6" >
-        <span className="text-cyan-500 text-sm  px-8">Mi información</span>
-        <div className='flex gap-4 p-2'>
-          <Link href="/HomeCliente/Acciones/Perfil">
-            Perfil
-          </Link>
-          <Link href="/HomeCliente/Acciones/Mismascotas">
-            Mascotas
-          </Link>
-          <Link href="/HomeCliente/Acciones/MisTurnos">
-            Turnos
-          </Link>
+        <div className="flex flex-col space-x-6" >
+          <span className="text-cyan-500 text-sm  px-8">Mi información</span>
+          <div className='flex gap-4 p-2'>
+            <Link href="/HomeCliente/Acciones/Perfil">
+              Perfil
+            </Link>
+            <Link href="/HomeCliente/Acciones/Mismascotas">
+              Mascotas
+            </Link>
+            <Link href="/HomeCliente/Acciones/MisTurnos">
+              Turnos
+            </Link>
+          </div>
         </div>
-      </div>
-      <hr className='h-10 border-2 border-cyan-500' />
-      <div className="flex flex-col space-x-4">
-        <span className="text-cyan-500 text-sm px-6">Compras y seguimientos!</span>
-        <div className='flex gap-4 p-2'>
-          <Link href="/HomeCliente/Acciones/productos">
-            Productos
-          </Link>
-          <Link href="/HomeCliente/Acciones/Miscompras">
-            Mis compras
-          </Link>
+        <hr className='h-10 border-2 border-cyan-500' />
+        <div className="flex flex-col space-x-4">
+          <span className="text-cyan-500 text-sm px-6">Compras y seguimientos!</span>
+          <div className='flex gap-4 p-2'>
+            <Link href="/HomeCliente/Acciones/productos">
+              Productos
+            </Link>
+            <Link href="/HomeCliente/Acciones/Miscompras">
+              Mis compras
+            </Link>
+          </div>
         </div>
-      </div>
       </div>
       <Link href="/HomeCliente/Acciones/Adopcion" className='absolute right-40 text-yellow-200 px-4 mt-6'>
         Adopción
