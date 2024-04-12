@@ -90,7 +90,7 @@ export default function Page() {
                                             <p>Precio: ${producto.precio}</p>
                                             <p>Cantidad: {producto.cantidad}</p>
                                         </div>
-                                        <Image src={producto.foto} alt={producto.nombre} width={100} height={100} className="object-cover rounded-lg mr-auto ml-auto " />
+                                        <Image src={producto.imagen} alt={producto.nombre} width={100} height={100} className="object-cover rounded-lg mr-auto ml-auto " />
                                     </div>
                                     <div className="flex items-center gap-2">
                                         <button onClick={() => eliminarDelCarrito(producto.id)} className="text-red-600 hover:text-red-800 focus:outline-none">
