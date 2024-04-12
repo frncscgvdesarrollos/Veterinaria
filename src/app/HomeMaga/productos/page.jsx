@@ -195,7 +195,7 @@ export default function ProductPage() {
             </button>
           </form>
         )}
-        <div className='flex flex-col justify-center p-4 '>
+        <div className='flex flex-col justify-center p-4 overflow-x-auto'>
           <table className="w-full bg-white rounded-lg shadow-lg p-4 rounded-lg">
             <thead>
               <tr className="bg-gray-200 text-gray-700">
@@ -217,7 +217,7 @@ export default function ProductPage() {
                   <td className="px-4 py-2">{product.descripción}</td>
                   <td className="px-4 py-2">{product.categoría}</td>
                   <td className="px-4 py-2">
-                    <Image src={product.imagen} alt={product.nombre} width={50} height={50} className="w-16 h-16 object-cover" />
+                    <img src={product.imagen} alt={product.nombre} className="w-16 h-16 object-cover" />
                   </td>
                   <td className="px-4 py-2">{product.precio}</td>
                   <td className="px-4 py-2">{product.stock}</td>
@@ -258,11 +258,9 @@ export default function ProductPage() {
                 onChange={handleChange}
                 className="rounded-lg mb-2 p-2 block w-full"
               />
-              <Image
+              <img
                 src={formData.imagen ? formData.imagen : '/placeholder-image.png'}
                 alt={formData.nombre}
-                width={50}
-                height={50}
                 className="w-16 h-16 object-cover"
               />
               <input
@@ -308,5 +306,7 @@ export default function ProductPage() {
       </div>
     </div>
   );
+  
+
   
 }
