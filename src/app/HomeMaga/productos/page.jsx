@@ -259,10 +259,10 @@ export default function ProductPage() {
                 onChange={handleChange}
                 className="rounded-lg mb-2 p-2 block w-full"
               />
-              <img
+              <Image
                 src={formData.imagen ? formData.imagen : '/placeholder-image.png'}
-                alt={formData.nombre}
-                className="w-16 h-16 object-cover"
+                alt={formData.nombre} width={64} height={64}
+                className="object-cover"
               />
               <input
                 type="file"
