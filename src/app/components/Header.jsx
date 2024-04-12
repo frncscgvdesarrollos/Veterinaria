@@ -78,7 +78,7 @@ function MobileMenu({ isOpen, handleMobileMenuToggle, handleLinkClick }) {
 // Componente para el menú de navegación de la empresa
 function EmpresaMenu() {
   return (
-    <nav className="hidden md:flex items-center space-x-10 text-white">
+    <nav className="hidden ml-10 md:flex items-center space-x-10 text-white">
       <div className='flex flex-col'>
         <span className="text-cyan-500">Oficina</span>
         <div className="flex space-x-4">
@@ -145,7 +145,7 @@ function EmpresaMenu() {
 // Componente para el menú móvil de la empresa
 function EmpresaMobileMenu({ isOpen, handleMobileMenuToggle }) {
   return (
-    <div className={`md:hidden ${isOpen ? 'block' : 'hidden'}`}>
+    <div className={`md:hidden ${isOpen ? 'block ml-10' : 'hidden'}`}>
       <nav className="flex flex-col mr-32  space-y-4 text-white text-left text-xl">
         <div className='flex flex-col'>
           <span className="text-cyan-500">Oficina</span>
