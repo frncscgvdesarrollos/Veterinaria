@@ -1,12 +1,13 @@
 'use client'
 import React, { useState, useEffect } from 'react';
-import { getClientes } from '@/app/firebase';
-
+import { getClientes, getMascotas } from '@/app/firebase';
+import Image from 'next/image';
 export default function Clientes() {
   const [clientes, setClientes] = useState([]);
   const [isLoading, setIsLoading] = useState(true);
   const [buscar, setBuscar] = useState(false);
   const [codigoBuscar, setCodigoBuscar] = useState('');
+  const [mascotasUsuario, setMascotasUsuario] = useState([]);
 
   useEffect(() => {
     const fetchData = () => {
@@ -32,6 +33,13 @@ export default function Clientes() {
   const handleBuscarClick = () => {
     if (codigoBuscar.trim() !== '') {
       setBuscar(!buscar);
+      getMascotas(codigoBuscar)
+        .then((mascotas) => {
+          setMascotasUsuario(mascotas);
+        })
+        .catch((error) => {
+          console.error('Error al obtener mascotas del usuario:', error);
+        });
     }
   };
 
@@ -65,69 +73,80 @@ export default function Clientes() {
         <p>Cargando clientes...</p>
       ) : (
         <>
-          {buscar ?
+          {buscar ? (
             <div className='w-full mt-10 mb-10 p-6 font-semibold text-gray-700 rounded-lg bg-violet-200'>
               {clientes.find(cliente => cliente.usuarioid === codigoBuscar) ? (
-                <ul className="mx-auto text-gray-600 gap-2 bg-purple-400 text-gray-700 p-4 rounded-lg">
-                  {clientes
-                    .filter(cliente => cliente.usuarioid === codigoBuscar)
-                    .map((cliente, index) => (
-                      <React.Fragment key={index}>
-                        <div className='w-full flex flex-col md:flex-row'>
-                          <div className='w-full md:w-1/2'>
-                            <li className="py-4">
-                              <span className="font-semibold">Nombre:</span> {cliente.nombre}
-                            </li>
-                            <li className="py-4">
-                              <span className="font-semibold">Apellido:</span> {cliente.apellido}
-                            </li>
-                            <li className="py-4">
-                              <span className="font-semibold">Dirección:</span> {cliente.direccion}
-                            </li>
-                            <li className="py-4">
-                              <span className="font-semibold">Esquina:</span> {cliente.esquina}
-                            </li>
-                            <li className="py-4">
-                              <span className="font-semibold">Teléfono:</span> {cliente.telefono}
-                            </li>
-                          </div>
-                          <div className='w-full md:w-1/2'>
-                            <li className="py-4">
-                              <span className="font-semibold">Es Premium:</span> {cliente.esPremium ? 'Si' : 'No'}
-                            </li>
-                            <li className="py-4">
-                              <span className="font-semibold">Chequeos Totales:</span> {cliente.chequeosTotales}
-                            </li>
-                            <li className="py-4">
-                              <span className="font-semibold">Cortes Totales:</span> {cliente.cortesTotales}
-                            </li>
-                            <li className="py-4">
-                              <span className="font-semibold">Términos:</span> {cliente.terminos ? 'Si' : 'No'}
-                            </li>
-                            <li className="py-4">
-                              <span className="font-semibold">ID de Usuario:</span> {cliente.usuarioid}
-                            </li>
-                            <div className='flex gap-4 mt-4'>
-                              <button className='bg-blue-600 hover:bg-blue-600 hover:text-pink-300  text-white px-4 py-2 rounded-lg w-full h-10' onClick={handleBuscarClick}>
-                                Editar
-                              </button>
-                              <button className='bg-blue-500 hover:bg-blue-500 hover:text-pink-300 text-white px-4 py-2 rounded-lg w-full h-10' onClick={handleBuscarClick}>
-                                Libreta
-                              </button>
-                              <button className='bg-blue-400 hover:bg-blue-400 hover:text-pink-600  text-white px-4 py-2 rounded-lg w-full h-10' onClick={handleBuscarClick}>
-                                Registros
-                              </button>
+                <>
+                  <ul className="mx-auto text-gray-600 gap-2 bg-purple-300 text-gray-700 p-4 rounded-lg">
+                    {clientes
+                      .filter(cliente => cliente.usuarioid === codigoBuscar)
+                      .map((cliente, index) => (
+                        <React.Fragment key={index}>
+                          <div className='w-full flex flex-col md:flex-row'>
+                            <div className='w-full md:w-1/2 p-4'>
+                              <ul className="text-gray-600 gap-2 bg-purple-400 text-gray-700 p-4 rounded-lg flex gap-10">
+                                
+                                <div>
+                                <li className="py-4">
+                                  <span className="font-semibold">Nombre:</span> {cliente.nombre}
+                                </li>
+                                <li className="py-4">
+                                  <span className="font-semibold">Apellido:</span> {cliente.apellido}
+                                </li>
+                                <li className="py-4">
+                                  <span className="font-semibold">Dirección:</span> {cliente.direccion}
+                                </li>
+                                <li className="py-4">
+                                  <span className="font-semibold">Teléfono:</span> {cliente.telefono}
+                                </li>
+                                </div>
+                                <div>
+                                <li className="py-4">
+                                  <span className="font-semibold">Términos:</span> {cliente.terminos ? 'Si' : 'No'}
+                                </li>
+                                <li className="py-4">
+                                  <span className="font-semibold">Es Premium:</span> {cliente.esPremium ? 'Si' : 'No'}
+                                </li>
+                                <li className="py-4">
+                                  <span className="font-semibold">Chequeos Totales:</span> {cliente.chequeosTotales}
+                                </li>
+                                <li className="py-4">
+                                  <span className="font-semibold">Cortes Totales:</span> {cliente.cortesTotales}
+                                </li>
+                                </div>
+                              </ul>
+                            </div>
+                            <div className='w-full md:w-1/2 p-4 '>
+                              <div className="mascotas-grid flex h-[200px] gap-6 items-center border border-gray-200 rounded-lg p-4 gradient bg-violet-500">
+                                {mascotasUsuario.map((mascota, index) => (
+                                  <div key={index} className="mascota-item mx-auto  rounded-lg">
+                                    <Image src={mascota.foto} alt={mascota.nombre} width={100} height={100} className="rounded-full" />
+                                    <p className="mascota-nombre">{mascota.nombre}</p>
+                                  </div>
+                                ))}
+                              </div>
+                              <div className='flex gap-4 mt-4'>
+                                <button className='bg-blue-600 hover:bg-blue-600 hover:text-pink-300 text-white px-4 py-2 rounded-lg w-full h-10' onClick={handleBuscarClick}>
+                                  Editar
+                                </button>
+                                <button className='bg-blue-500 hover:bg-blue-500 hover:text-pink-300 text-white px-4 py-2 rounded-lg w-full h-10' onClick={handleBuscarClick}>
+                                  Libreta
+                                </button>
+                                <button className='bg-blue-400 hover:bg-blue-400 hover:text-pink-600 text-white px-4 py-2 rounded-lg w-full h-10' onClick={handleBuscarClick}>
+                                  Registros
+                                </button>
+                              </div>
                             </div>
                           </div>
-                        </div>
-                      </React.Fragment>
-                    ))}
-                </ul>
+                        </React.Fragment>
+                      ))}
+                  </ul>
+                </>
               ) : (
                 <p>No se encontraron clientes con el código único especificado.</p>
               )}
             </div>
-            :
+          ) : (
             <div className="overflow-x-auto rounded-lg w-full mx-auto">
               <table className="w-full table-auto bg-white border border-purple-200 rounded-lg shadow-md">
                 <thead className='text-lg bg-violet-200'>
@@ -158,9 +177,10 @@ export default function Clientes() {
                 </tbody>
               </table>
             </div>
-          }
+          )}
         </>
       )}
     </div>
   );
+  
 }
