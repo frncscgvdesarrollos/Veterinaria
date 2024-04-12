@@ -46,7 +46,7 @@ export default function Footer() {
             Urgencias - Sabados y Domingos
           </p>
           <p className="text-2xl font-bold text-center text-red-500 ">
-            Tel: 2954-456-456
+            Tel: 2954-.....
           </p>
         </div>
         {/* Reemplazar <img> con <Image /> */}
