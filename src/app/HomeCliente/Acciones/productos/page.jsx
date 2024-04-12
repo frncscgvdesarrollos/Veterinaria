@@ -56,20 +56,18 @@ export default function Page() {
     };
 
     return (
-        <div>
+        <div className="p-4 md:p-8 lg:p-12">
             <h1 className="text-3xl font-bold text-center mt-8 mb-4">Productos</h1>
-            <div className="flex justify-between w-3/4 mx-auto items-center">
-                <div className="flex justify-center space-x-4 my-4 border border-gray-400 px-4 py-2 rounded-md bg-gray-100">
+            <div className="flex flex-col md:flex-row justify-between items-center mb-8">
+                <div className="flex justify-center space-x-4 my-4 border border-gray-400 px-4 py-2 rounded-md bg-gray-100 md:w-1/3">
                     {/* Lista de navegación de categorías */}
-                    <button className={`border border-gray-400 px-4 py-2 rounded-md ${filtro === '' ? 'bg-blue-500 text-white' : 'bg-white text-gray-700'}`} onClick={() => filtrarProductos('')}>Todos</button>
-                    <button className={`border border-gray-400 px-4 py-2 rounded-md ${filtro === 'categoria1' ? 'bg-blue-500 text-white' : 'bg-white text-gray-700'}`} onClick={() => filtrarProductos('categoria1')}>Categoría 1</button>
-                    <button className={`border border-gray-400 px-4 py-2 rounded-md ${filtro === 'categoria2' ? 'bg-blue-500 text-white' : 'bg-white text-gray-700'}`} onClick={() => filtrarProductos('categoria2')}>Categoría 2</button>
-                    <button className={`border border-gray-400 px-4 py-2 rounded-md ${filtro === 'categoria3' ? 'bg-blue-500 text-white' : 'bg-white text-gray-700'}`} onClick={() => filtrarProductos('categoria3')}>Categoría 3</button>
-                    <button className={`border border-gray-400 px-4 py-2 rounded-md ${filtro === 'categoria4' ? 'bg-blue-500 text-white' : 'bg-white text-gray-700'}`} onClick={() => filtrarProductos('categoria4')}>Categoría 4</button>
+                    <button className={`w-full md:w-auto border border-gray-400 px-4 py-2 rounded-md ${filtro === '' ? 'bg-blue-500 text-white' : 'bg-white text-gray-700'}`} onClick={() => filtrarProductos('')}>Todos</button>
+                    <button className={`w-full md:w-auto border border-gray-400 px-4 py-2 rounded-md ${filtro === 'categoria1' ? 'bg-blue-500 text-white' : 'bg-white text-gray-700'}`} onClick={() => filtrarProductos('categoria1')}>Categoría 1</button>
+                    <button className={`w-full md:w-auto border border-gray-400 px-4 py-2 rounded-md ${filtro === 'categoria2' ? 'bg-blue-500 text-white' : 'bg-white text-gray-700'}`} onClick={() => filtrarProductos('categoria2')}>Categoría 2</button>
                 </div>
                 {/* Icono del carrito */}
                 <div className="relative">
-                    <p className="text-3xl cursor-pointer" onClick={() => setMostrarCarrito(!mostrarCarrito)}> 🛒</p>
+                    <p className="text-3xl cursor-pointer" onClick={() => setMostrarCarrito(!mostrarCarrito)}>🛒</p>
                     {/* Contador de elementos en el carrito */}
                     {carrito.length > 0 && (
                         <div className="absolute top-0 right-0 bg-red-500 text-white rounded-full w-6 h-6 flex items-center justify-center">
@@ -80,8 +78,8 @@ export default function Page() {
             </div>
             {/* Modal del carrito */}
             {mostrarCarrito && (
-                <div className="fixed inset-0 bg-black bg-opacity-50 flex justify-center items-center w-[100vw]">
-                    <div className="bg-white p-8 rounded-lg w-2/3">
+                <div className="fixed inset-0 bg-black bg-opacity-50 flex justify-center items-center w-full h-full">
+                    <div className="bg-white p-8 rounded-lg md:w-2/3">
                         <div className="flex justify-between mb-4 w-full">
                             <h2 className="text-lg font-semibold">Carrito de compras</h2>
                             <button onClick={() => setMostrarCarrito(false)}>Cerrar</button>
@@ -108,16 +106,15 @@ export default function Page() {
                             <p className="text-gray-600">Total: ${calcularPrecioTotal()}</p>
                             <button onClick={() => setComprar(true)} className="bg-lime-700 hover:bg-lime-300 text-white hover:text-black font-semibold py-2 px-4 rounded focus:outline-none">Comprar</button>
                         </div>
-                        {comprar ?
-                            new Promise((resolve, reject) => {
-                                resolve(<ProductosMP carrito={calcularPrecioTotal()} />);
-                            }).then((component) => component)
-                            : null
+                        {comprar &&
+                            <div>
+                                <ProductosMP carrito={calcularPrecioTotal()} />
+                            </div>
                         }
                     </div>
                 </div>
             )}
-            <div className="grid p-20 grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 xl:grid-cols-5 gap-6 justify-center">
+            <div className="grid p-4 md:p-8 lg:p-12 grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 xl:grid-cols-5 gap-6 justify-center">
                 {/* Renderizar los productos filtrados según la categoría */}
                 {productos
                     .filter(producto => filtro === '' || producto.categoria === filtro)
@@ -139,4 +136,5 @@ export default function Page() {
             </div>
         </div>
     );
+    
 }
