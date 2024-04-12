@@ -1,4 +1,4 @@
-'use client'
+'use client';
 import { useState, useEffect } from 'react';
 import { getTurnosPeluqueria } from '../firebase';
 
@@ -44,7 +44,7 @@ export default function TurnosParaMañana() {
             .catch((error) => {
                 console.error('Error fetching turnos:', error);
             });
-    }
+    };
 
     useEffect(() => {
         getTurnos();
@@ -104,41 +104,10 @@ export default function TurnosParaMañana() {
                 </div>
             )}
             <div className="bg-violet-600 mt-4 flex justify-end p-2 rounded-lg">
-                {verMasTurnos ? 
-                    <div className="m-auto max-w-screen-lg bg-white rounded-lg shadow-md p-6">
-    <table className="w-full border border-gray-200 rounded-lg">
-        <thead className="bg-gray-100">
-            <tr>
-                <th className="px-4 py-2 border-b border-gray-200">Cliente</th>
-                <th className="px-4 py-2 border-b border-gray-200">Teléfono</th>
-                <th className="px-4 py-2 border-b border-gray-200">Mascota</th>
-                <th className="px-4 py-2 border-b border-gray-200">Turno</th>
-                <th className="px-4 py-2 border-b border-gray-200">Transporte</th>
-                <th className="px-4 py-2 border-b border-gray-200">Estado</th>
-            </tr>
-        </thead>
-        <tbody>
-            {turnosHoy.map((turno) => (
-                <tr key={turno.id}>
-                    <td className="px-4 py-2 border-b border-gray-200">{turno.nombre}</td>
-                    <td className="px-4 py-2 border-b border-gray-200">{turno.telefono}</td>
-                    <td className="px-4 py-2 border-b border-gray-200">{turno.selectedPet}</td>
-                    <td className="px-4 py-2 border-b border-gray-200">{turno.selectedTurno}</td>
-                    <td className="px-4 py-2 border-b border-gray-200">{turno.transporte ? 'Si' : 'No'}</td>
-                    <td className={`px-4 py-2 border-b border-gray-200 ${turno.estadoDelTurno === 'confirmar' ? 'text-cyan-900 bg-blue-200' : 'text-green-500 bg-green-100'} rounded-lg`}>{turno.estadoDelTurno}</td>
-                </tr>
-            ))}
-        </tbody>
-    </table>
-    <button className="block mx-auto mt-4 bg-violet-300 hover:bg-violet-400 text-white font-bold py-2 px-4 rounded" onClick={() => setVerMasTurnos(!verMasTurnos)}>
-        {verMasTurnos ? 'Ocultar turnos' : 'Ver más turnos'}
-    </button>
-</div>
-
-                                : <button className='mr-32 bg-violet-300 hover:bg-violet-400 text-white font-bold py-2 px-4 rounded' onClick={()=> setVerMasTurnos(!verMasTurnos)}>ver mas turnos</button>}
-
-
-                    </div>
+                <button className={verMasTurnos ? 'mr-32 bg-violet-300 hover:bg-violet-400 text-white font-bold py-2 px-4 rounded' : 'bg-violet-300 hover:bg-violet-400 text-white font-bold py-2 px-4 rounded'} onClick={()=> setVerMasTurnos(!verMasTurnos)}>
+                    {verMasTurnos ? 'Ocultar turnos' : 'Ver más turnos'}
+                </button>
             </div>
+        </div>
     );
 }

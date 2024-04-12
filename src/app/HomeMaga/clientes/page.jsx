@@ -78,18 +78,17 @@ export default function Clientes() {
   return (
     <div className="p-6 bg-purple-100 rounded-lg">
       <h1 className="text-3xl mb-6">Lista de clientes registrados</h1>
-      <div className="flex  gap-4">
+      <div className="flex gap-4">
         <input
           type="text"
-          className="px-4 py-2 border rounded-lg"
+          className="w-2/3 px-4 py-2 border rounded-lg"
           placeholder="Código Único Dueño"
           value={codigoBuscar}
           onChange={handleCodigoChange}
-          className="w-2/3 px-4 py-2 border rounded-lg"
         />
         <div className="flex flex-col sm:flex-row justify-between items-center">
           <button
-            className={`bg-${buscar ? 'red' : 'blue'}-500 w-[150px] hover:bg-${
+            className={`bg-${buscar ? 'red' : 'blue'}-500 w-[150px]  hover:bg-${
               buscar ? 'red' : 'blue'
             }-600 text-white px-4 py-2 rounded-lg`}
             onClick={buscar ? handleCancelarClick : handleBuscarClick}
