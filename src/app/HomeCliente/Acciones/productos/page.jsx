@@ -57,7 +57,7 @@ export default function Page() {
                 <button className="relative text-3xl cursor-pointer" onClick={() => setMostrarCarrito(!mostrarCarrito)}>
                     🛒
                     {carrito.length > 0 && (
-                        <div className="absolute -top-1 -right-1 bg-red-500 text-white rounded-full w-6 h-6 flex items-center justify-center">
+                        <div className="bg-red-500 text-white rounded-full w-6 h-6 flex items-center justify-center">
                             {carrito.reduce((total, producto) => total + producto.cantidad, 0)}
                         </div>
                     )}
