@@ -129,7 +129,7 @@ export default function ProductPage() {
   return (
     <div className="bg-gray-100 min-h-screen">
       <h1 className="text-3xl text-center mt-8 mb-4">PRODUCTOS</h1>
-      <div className="max-w-3xl mx-auto bg-white rounded-lg shadow-lg p-8">
+      <div className="container mx-auto p-4 md:p-8 bg-white rounded-lg shadow-lg">
         <h2 className="text-2xl mb-4">Lista de productos</h2>
         <button
           onClick={() => setShowForm(!showForm)}
@@ -231,7 +231,7 @@ export default function ProductPage() {
           </table>
         </div>
         {modal &&
-          <div className="fixed flex-col flex inset-0 flex items-center justify-center bg-black bg-opacity-50">
+          <div className="fixed inset-0 flex items-center justify-center bg-black bg-opacity-50">
             <h2 className="text-2xl mb-4 text-center text-gray-700 font-bold uppercase bg-white rounded-lg p-4">Editar Producto</h2>
             <form className="bg-gray-200 rounded-lg p-4">
               <input
@@ -307,6 +307,5 @@ export default function ProductPage() {
     </div>
   );
   
-
   
 }
