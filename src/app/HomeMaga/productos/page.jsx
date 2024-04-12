@@ -69,6 +69,7 @@ export default function ProductPage() {
   }
   
   function handleDeleteProduct(id) {
+    console.log('Deleting product with ID:', id);
     deleteProduct(id)
       .then(() => {
         fetchProducts();

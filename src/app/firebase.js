@@ -617,14 +617,13 @@ export async function createProduct(product) {
 }
 
 export async function deleteProduct(id) {
-  try {
-    const docRef = doc(db, "productos", id);
-    await deleteDoc(docRef);
-    console.log("Document deleted successfully");
-  } catch (error) {
-    console.error("Error deleting document: ", error);
-  }
+  const q = query(collection(db, "productos"), where("id", "==", id));
+  const querySnapshot = await getDocs(q);
+  querySnapshot.forEach((doc) => {
+    deleteDoc(doc.ref)
+  })
 }
+
 
 export async function updateProduct(id, product) {
   const q = query(collection(db, "productos"), where("id", "==", id));
