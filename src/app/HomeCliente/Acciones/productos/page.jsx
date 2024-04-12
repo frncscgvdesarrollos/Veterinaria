@@ -1,8 +1,8 @@
-'use client';
+'use client'
 import { useState, useEffect } from 'react';
 import { getProducts } from '@/app/firebase';
 import ProductosMP from '@/app/components/ProductosMp';
-
+import Image from 'next/image';
 
 export default function Page() {
     const [productos, setProductos] = useState([]);
@@ -30,17 +30,14 @@ export default function Page() {
     };
 
     // Función para agregar un producto al carrito
-    const agregarAlCarrito = (producto, cantidad) => {
-        // Verificar si el producto ya está en el carrito
+    const agregarAlCarrito = (producto) => {
         const index = carrito.findIndex(item => item.id === producto.id);
         if (index !== -1) {
-            // Si el producto ya está en el carrito, actualizar la cantidad
             const nuevoCarrito = [...carrito];
-            nuevoCarrito[index].cantidad += cantidad;
+            nuevoCarrito[index].cantidad += 1;
             setCarrito(nuevoCarrito);
         } else {
-            // Si el producto no está en el carrito, agregarlo con la cantidad
-            setCarrito([...carrito, { ...producto, cantidad }]);
+            setCarrito([...carrito, { ...producto, cantidad: 1 }]);
         }
     };
 
@@ -66,15 +63,15 @@ export default function Page() {
                     <button className={`w-full md:w-auto border border-gray-400 px-4 py-2 rounded-md ${filtro === 'categoria2' ? 'bg-blue-500 text-white' : 'bg-white text-gray-700'}`} onClick={() => filtrarProductos('categoria2')}>Categoría 2</button>
                 </div>
                 {/* Icono del carrito */}
-                <div className="relative">
-                    <p className="text-3xl cursor-pointer" onClick={() => setMostrarCarrito(!mostrarCarrito)}>🛒</p>
+                <button className="relative text-3xl cursor-pointer" onClick={() => setMostrarCarrito(!mostrarCarrito)}>
+                    🛒
                     {/* Contador de elementos en el carrito */}
                     {carrito.length > 0 && (
-                        <div className="absolute top-0 right-0 bg-red-500 text-white rounded-full w-6 h-6 flex items-center justify-center">
-                            {carrito.length}
+                        <div className="absolute -top-1 -right-1 bg-red-500 text-white rounded-full w-6 h-6 flex items-center justify-center">
+                            {carrito.reduce((total, producto) => total + producto.cantidad, 0)}
                         </div>
                     )}
-                </div>
+                </button>
             </div>
             {/* Modal del carrito */}
             {mostrarCarrito && (
@@ -84,13 +81,16 @@ export default function Page() {
                             <h2 className="text-lg font-semibold">Carrito de compras</h2>
                             <button onClick={() => setMostrarCarrito(false)}>Cerrar</button>
                         </div>
-                        <div className='flex flex-col gap-2 w-full'>
+                        <div className='flex  flex-row flex-wrap gap-2 w-[400px] mx-auto bg-pink-100'>
                             {carrito.map((producto) => (
-                                <div key={producto.id} className="flex items-center justify-between w-full bg-gray-100 px-4 py-2 rounded-lg">
-                                    <div className="flex flex-col gap-2 bg-gray-300 w-full rounded-lg p-2">
-                                        <p className="font-semibold">{producto.nombre}</p>
-                                        <p>Precio: ${producto.precio}</p>
-                                        <p>Cantidad: {producto.cantidad}</p>
+                                <div key={producto.id} className="flex  items-center justify-around w-full bg-gray-100 px-4 py-2 rounded-lg">
+                                    <div className="flex items-center gap-2 bg-gray-300 w-full rounded-lg p-2">
+                                        <div className="flex flex-col gap-2 mx-auto">
+                                            <p className="font-semibold">{producto.nombre}</p>
+                                            <p>Precio: ${producto.precio}</p>
+                                            <p>Cantidad: {producto.cantidad}</p>
+                                        </div>
+                                        <Image src={producto.imagen} alt={producto.nombre} width={100} height={100} className="w-20 h-20 object-cover rounded-lg mr-auto ml-auto " />
                                     </div>
                                     <div className="flex items-center gap-2">
                                         <button onClick={() => eliminarDelCarrito(producto.id)} className="text-red-600 hover:text-red-800 focus:outline-none">
@@ -108,7 +108,7 @@ export default function Page() {
                         </div>
                         {comprar &&
                             <div>
-                                <ProductosMP carrito={calcularPrecioTotal()} />
+                                <ProductosMP carrito={carrito} />
                             </div>
                         }
                     </div>
@@ -126,9 +126,7 @@ export default function Page() {
                                     <h2 className="text-lg font-semibold mb-2">{producto.nombre}</h2>
                                     <p className="text-gray-700 mb-2">Precio: ${producto.precio}</p>
                                     <p className="text-gray-700 mb-2">Descripción: {producto.descripcion}</p>
-                                    <p>Stock: {producto.stock}</p>
-                                    <input placeholder='Cantidad' type="number" min="1" value={producto.cantidad || 1} onChange={(e) => agregarAlCarrito(producto, parseInt(e.target.value))} />
-                                    <button onClick={() => agregarAlCarrito(producto, 1)} className="bg-blue-500 hover:bg-blue-700 text-white font-semibold py-2 px-4 rounded focus:outline-none">Agregar al carrito</button>
+                                    <button onClick={() => agregarAlCarrito(producto)} className="bg-blue-500 hover:bg-blue-700 text-white font-semibold py-2 px-4 rounded focus:outline-none">Agregar al carrito</button>
                                 </div>
                             </div>
                         </div>
@@ -136,5 +134,4 @@ export default function Page() {
             </div>
         </div>
     );
-    
 }
