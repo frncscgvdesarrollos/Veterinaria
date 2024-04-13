@@ -23,9 +23,6 @@ export const storage = getStorage(app)
 
 
 
-//FUNCIONES DE FIREBASE !! 
-
-
 //Cliente... 
 export async function registrarCliente({ datosCliente }) { // Modificación aquí
   console.log("estos son los datos del cliente", datosCliente);
@@ -297,14 +294,7 @@ export async function registroVenta(venta) {
   const docRef = await addDoc(collection(db, "ventas"), venta);
   return docRef
 }
-//----------------------------------------------------------------------
-//-------------------------------------------------------
-//_------------------------------------
-//---------------------
-//----------
-//-----
-//--
-//-
+
 //TURNOS
 export async function registerTurno(registro) {
   const docRef = await addDoc(collection(db, "turnos"), registro);

@@ -1,3 +1,4 @@
+'use client';
 import React, { useState, useEffect } from 'react';
 import { postTurnoPeluqueria, getClientes, getMascotas } from '../firebase';
 import { redirect } from 'next/navigation';
@@ -25,7 +26,7 @@ export default function CargarTurnoPmanual() {
   const [clientes, setClientes] = useState([]);
   const [mascotas, setMascotas] = useState([]);
   const [searchQuery, setSearchQuery] = useState('');
-  const [isExistingClient, setIsExistingClient] = useState(false);
+  const [isExistingClient, setIsExistingClient] = useState(null); // Inicializar en null
 
   useEffect(() => {
     getClientes()
@@ -99,12 +100,12 @@ export default function CargarTurnoPmanual() {
         <div className='p-2'>
           <h2 className='text-center p-2 my-2 text-lg font-bold'>¿Está registrado como cliente?</h2>
           <div className='flex justify-around'>
-          <button className="bg-blue-500 w-1/2 text-white p-2 mx-2 rounded-lg"onClick={() => setIsExistingClient(true)}>Sí</button>
-          <button className="bg-red-500 w-1/2 text-white p-2 mx-2 rounded-lg"onClick={() => setIsExistingClient(false)}>No</button>
+            <button className="bg-blue-500 w-1/2 text-white p-2 mx-2 rounded-lg" onClick={() => setIsExistingClient(true)}>Sí</button>
+            <button className="bg-red-500 w-1/2 text-white p-2 mx-2 rounded-lg" onClick={() => setIsExistingClient(false)}>No</button>
           </div>
         </div>
       )}
-
+  
       {isExistingClient && (
         <form onSubmit={handleSubmit}>
           <div className="mb-4">
@@ -116,7 +117,7 @@ export default function CargarTurnoPmanual() {
               ))}
             </select>
           </div>
-
+  
           <div className="mb-4">
             <label htmlFor="selectedPet" className="block text-sm font-medium text-gray-700">Mascota</label>
             <select id="selectedPet" name="selectedPet" value={formData.selectedPet} onChange={handleChange} className="mt-1 p-2 block w-full rounded-md border-gray-300 focus:border-indigo-500 focus:ring focus:ring-indigo-200 focus:ring-opacity-50">
@@ -126,8 +127,7 @@ export default function CargarTurnoPmanual() {
               ))}
             </select>
           </div>
-
-          {/* Agregar campos de turno y día para clientes existentes */}
+  
           <div className="mb-4">
             <label htmlFor="selectedTurno" className="block text-sm font-medium text-gray-700">Turno</label>
             <input
@@ -139,7 +139,7 @@ export default function CargarTurnoPmanual() {
               className="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-indigo-500 focus:ring focus:ring-indigo-200 focus:ring-opacity-50"
             />
           </div>
-
+  
           <div className="mb-4">
             <label htmlFor="selectedDate" className="block text-sm font-medium text-gray-700">Fecha del Turno</label>
             <input
@@ -154,16 +154,100 @@ export default function CargarTurnoPmanual() {
             />
           </div>
           <button type="submit" className="bg-indigo-500 text-white px-4 py-2 rounded-md hover:bg-indigo-600 transition duration-300">Guardar Turno</button>
-          <button onClick={() => setIsExistingClient(false)} className="bg-red-500 m-4 text-white px-4 py-2 rounded-md hover:bg-red-600 transition duration-300">Cancelar</button>
+          <button onClick={() => setIsExistingClient(null)} className="bg-red-500 m-4 text-white px-4 py-2 rounded-md hover:bg-red-600 transition duration-300">Cancelar</button>
         </form>
       )}
-
-      {!isExistingClient && (
+  
+      {isExistingClient === false && (
         <form onSubmit={handleSubmit}>
-          {/* Formulario para clientes no registrados */}
-          {/* (tu código existente para clientes no registrados) */}
+          <div className="mb-4">
+            <label htmlFor="nombre" className="block text-sm font-medium text-gray-700">Nombre</label>
+            <input
+              type="text"
+              id="nombre"
+              name="nombre"
+              value={formData.nombre}
+              onChange={handleChange}
+              className="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-indigo-500 focus:ring focus:ring-indigo-200 focus:ring-opacity-50"
+            />
+          </div>
+  
+          <div className="mb-4">
+            <label htmlFor="apellido" className="block text-sm font-medium text-gray-700">Apellido</label>
+            <input
+              type="text"
+              id="apellido"
+              name="apellido"
+              value={formData.apellido}
+              onChange={handleChange}
+              className="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-indigo-500 focus:ring focus:ring-indigo-200 focus:ring-opacity-50"
+            />
+          </div>
+  
+          <div className="mb-4">
+            <label htmlFor="direccion" className="block text-sm font-medium text-gray-700">Dirección</label>
+            <input
+              type="text"
+              id="direccion"
+              name="direccion"
+              value={formData.direccion}
+              onChange={handleChange}
+              className="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-indigo-500 focus:ring focus:ring-indigo-200 focus:ring-opacity-50"
+            />
+          </div>
+  
+          <div className="mb-4">
+            <label htmlFor="telefono" className="block text-sm font-medium text-gray-700">Teléfono</label>
+            <input
+              type="text"
+              id="telefono"
+              name="telefono"
+              value={formData.telefono}
+              onChange={handleChange}
+              className="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-indigo-500 focus:ring focus:ring-indigo-200 focus:ring-opacity-50"
+            />
+          </div>
+  
+          <div className="mb-4">
+            <label htmlFor="selectedPet" className="block text-sm font-medium text-gray-700">Mascota</label>
+            <select id="selectedPet" name="selectedPet" value={formData.selectedPet} onChange={handleChange} className="mt-1 p-2 block w-full rounded-md border-gray-300 focus:border-indigo-500 focus:ring focus:ring-indigo-200 focus:ring-opacity-50">
+              <option value="">Seleccionar Mascota</option>
+              {mascotas.map((mascota, index) => (
+                <option key={index} value={mascota.id} onClick={() => handlePetSelection(mascota.id)}>{mascota.nombre}</option>
+              ))}
+            </select>
+          </div>
+  
+          <div className="mb-4">
+            <label htmlFor="selectedTurno" className="block text-sm font-medium text-gray-700">Turno</label>
+            <input
+              type="text"
+              id="selectedTurno"
+              name="selectedTurno"
+              value={formData.selectedTurno}
+              onChange={handleChange}
+              className="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-indigo-500 focus:ring focus:ring-indigo-200 focus:ring-opacity-50"
+            />
+          </div>
+  
+          <div className="mb-4">
+            <label htmlFor="selectedDate" className="block text-sm font-medium text-gray-700">Fecha del Turno</label>
+            <input
+              type="date"
+              id="selectedDate"
+              name="selectedDate"
+              min={new Date().toISOString().split('T')[0]}
+              max={new Date(new Date().getTime() + 20 * 24 * 60 * 60 * 1000).toISOString().split('T')[0]}
+              value={formData.selectedDate}
+              onChange={handleChange}
+              className="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-indigo-500 focus:ring focus:ring-indigo-200 focus:ring-opacity-50"
+            />
+          </div>
+          <button type="submit" className="bg-indigo-500 text-white px-4 py-2 rounded-md hover:bg-indigo-600 transition duration-300">Guardar Turno</button>
+          <button onClick={() => setIsExistingClient(null)} className="bg-red-500 m-4 text-white px-4 py-2 rounded-md hover:bg-red-600 transition duration-300">Cancelar</button>
         </form>
       )}
     </div>
   );
+  
 }
