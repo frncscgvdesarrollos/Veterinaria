@@ -382,10 +382,12 @@ export async function getTurnosPeluqueria() {
   return turnos
 }
 
+
 export async function getPreciosPorTamaño(servicio, tamaño) {
+  console.log(servicio, tamaño)
   try {
-    const preciosRef = collection(db, 'preciosDeServicios').doc(servicio).collection(tamaño);
-    const preciosSnapshot = await preciosRef.get();
+    const preciosRef = collection(db, 'preciosDeServicios', servicio); // Combina servicio y tamaño en una sola cadena
+    const preciosSnapshot = await getDocs(preciosRef);
     const precios = [];
     preciosSnapshot.forEach(doc => {
       precios.push({ id: doc.id, ...doc.data() });
@@ -397,41 +399,50 @@ export async function getPreciosPorTamaño(servicio, tamaño) {
   }
 }
 
-// Función para actualizar el precio de un servicio de corte para un tamaño específico
-export async function actualizarPrecio(servicio, tamaño, id, nuevoPrecio) {
-  try {
-    const precioRef = collection(db,'preciosDeServicios').doc(servicio).collection(tamaño).doc(id);
-    await precioRef.update({ precio: nuevoPrecio });
-    console.log('Precio actualizado correctamente');
-  } catch (error) {
-    console.error('Error al actualizar el precio:', error);
-    throw error;
-  }
-}
 
-// Función para crear un nuevo precio para un servicio de corte y un tamaño específico
-export async function crearPrecio(servicio, tamaño, nuevoPrecio) {
-  try {
-    const preciosRef = db.collection('preciosDeServicios').doc(servicio).collection(tamaño);
-    await preciosRef.add({ precio: nuevoPrecio });
-    console.log('Nuevo precio creado correctamente');
-  } catch (error) {
-    console.error('Error al crear el precio:', error);
-    throw error;
-  }
-}
+// export async function actualizarPrecio(servicio, id, nuevoPrecio) {
+//   try {
+//     const precioRef = query(collection(db, 'preciosDeServicios', servicio), where('id', '==', id));
+//     const docSnap = await getDoc(precioRef);
+//     if (docSnap.exists()) {
+//       await updateDoc(doc(precioRef), {
+//         toy: nuevoPrecio.toy,
+//         mediano: nuevoPrecio.mediano,
+//         grande: nuevoPrecio.grande,
+//         gigante: nuevoPrecio.gigante
+//       });
+//       console.log('Precio actualizado correctamente');
+//     } else {
+//       console.error('No se encontró el documento');
+//     }
+//   } catch (error) {
+//     console.error('Error al actualizar el precio:', error);
+//     throw error;
+//   }
+// }
 
-// Función para eliminar un precio de un servicio de corte para un tamaño específico
-export async function eliminarPrecio(servicio, tamaño, id) {
-  try {
-    const precioRef = db.collection('preciosDeServicios').doc(servicio).collection(tamaño).doc(id);
-    await precioRef.delete();
-    console.log('Precio eliminado correctamente');
-  } catch (error) {
-    console.error('Error al eliminar el precio:', error);
-    throw error;
-  }
-}
+
+// export async function crearPrecio(servicio, tamaño, nuevoPrecio) {
+//   try {
+//     const preciosRef = collection(db, 'preciosDeServicios', servicio, tamaño);
+//     await addDoc(preciosRef, { precio: nuevoPrecio });
+//     console.log('Nuevo precio creado correctamente');
+//   } catch (error) {
+//     console.error('Error al crear el precio:', error);
+//     throw error;
+//   }
+// }
+
+// export async function eliminarPrecio(servicio, tamaño, id) {
+//   try {
+//     const precioRef = doc(db, 'preciosDeServicios', servicio, tamaño, id);
+//     await deleteDoc(precioRef);
+//     console.log('Precio eliminado correctamente');
+//   } catch (error) {
+//     console.error('Error al eliminar el precio:', error);
+//     throw error;
+//   }
+// } 
 
 export async function getNextTurn(uid) {
   const turnos = [];
@@ -445,13 +456,15 @@ export async function getNextTurn(uid) {
 }
 export async function verificarCapacidadTurno(selectedDate, selectedTurno) {
   try {
+    // Obtener todos los turnos para la fecha y turno seleccionados
     const q = query(
       collection(db, "turnosPeluqueria"),
       where("selectedDate", "==", selectedDate),
       where("selectedTurno", "==", selectedTurno)
     );
-
     const querySnapshot = await getDocs(q);
+
+    // Inicializar el objeto de capacidad con valores predeterminados
     let capacidadTurno = {
       gigante: 0,
       grande: 0,
@@ -459,20 +472,34 @@ export async function verificarCapacidadTurno(selectedDate, selectedTurno) {
       toy: 0
     };
 
+    // Contar el número de perros de cada tamaño en los turnos encontrados
     querySnapshot.forEach((doc) => {
       const data = doc.data();
-      capacidadTurno[data.tamaño]++; // Aumenta el contador de perros según su tamaño
+      if (data.tamaño === "gigante") {
+        capacidadTurno.gigante++;
+      } else if (data.tamaño === "grande") {
+        capacidadTurno.grande++;
+      } else if (data.tamaño === "mediano") {
+        capacidadTurno.mediano++;
+      } else if (data.tamaño === "toy") {
+        capacidadTurno.toy++;
+      }
     });
 
-    // Verificar restricciones
-    const capacidadExcedida =
-      capacidadTurno.gigante > 1 ||
-      capacidadTurno.grande > 2 ||
-      capacidadTurno.mediano > 3 ||
-      capacidadTurno.toy > 6 ||
-      Object.values(capacidadTurno).reduce((acc, cur) => acc + cur, 0) > 6;
-
-    return !capacidadExcedida; // Capacidad suficiente si no se excede ninguna restricción
+    // Verificar si se excede la capacidad permitida
+    if (capacidadTurno.gigante === 1) {
+      // Si ya hay un perro gigante, no se permite guardar otro
+      return false;
+    } else if (capacidadTurno.grande === 1) {
+      // Si hay un perro grande, se aplican las restricciones para medianos y toys
+      return capacidadTurno.mediano <= 2 && capacidadTurno.toy <= 3;
+    } else if (capacidadTurno.mediano === 3) {
+      // Si hay 3 perros medianos, se aplican las restricciones para toys
+      return capacidadTurno.toy <= 3;
+    } else {
+      // Si no hay restricciones previas, se permiten solo toys hasta un máximo de 6
+      return capacidadTurno.toy < 6;
+    }
   } catch (error) {
     console.error("Error al verificar capacidad del turno:", error);
     return false; // Error al verificar la capacidad
@@ -481,6 +508,14 @@ export async function verificarCapacidadTurno(selectedDate, selectedTurno) {
 
 
 
+
+export async function borrarTodosLosTurnos() {
+  const q = query(collection(db, "turnosPeluqueria"));
+  const querySnapshot = await getDocs(q);
+  querySnapshot.forEach((doc) => {
+    deleteDoc(doc.ref);
+  });  
+}
 
 
 export async function avanzarEstadoTurno(id) {
@@ -674,15 +709,59 @@ export async function obtenerPreciosDeServicios() {
 }
 
 // Función para actualizar un documento de preciosDeServicios por ID
-export async function actualizarPrecioDeServicio(selectedServicio, nuevosPrecios) {
-  // Actualiza el documento de la colección "preciosDeServicios" con el ID especificado
+// Función para actualizar un documento de preciosDeServicios por nombre de servicio
+export async function actualizarPrecioDeServicio(nombreServicio, nuevosPrecios) {
   try {
-    await db.collection("preciosDeServicios").doc(selectedServicio).update(nuevosPrecios);
-    console.log("Precio de servicio actualizado exitosamente");
+    // Mapeo de valores numéricos a nombres de servicio
+    const servicioMapping = {
+      0: "BañoCorteHigienico",
+      1: "BañoCorteHigienicoPelar",
+      2: "BañoCorteHigienicoCepillar",
+      3: "BañoCorteHigienicoCorte"
+    };
+
+    // Verificar si el valor numérico es válido
+    if (!(nombreServicio in servicioMapping)) {
+      throw new Error("El valor numérico proporcionado no es válido");
+    }
+
+    // Obtener el nombre de servicio correspondiente
+    const nombreServicioActualizado = servicioMapping[nombreServicio];
+
+    // Obtener la referencia a la colección "preciosDeServicios"
+    const preciosRef = collection(db, "preciosDeServicios");
+
+    // Consultar los documentos que coinciden con el nombre de servicio actualizado
+    const querySnapshot = await getDocs(query(preciosRef, where("id", "==", nombreServicio)));
+
+    // Almacenar las referencias de los documentos que necesitan ser actualizados
+    const docsToUpdate = [];
+    const preciosActuales = []; // Almacenar los precios actuales de los documentos
+    querySnapshot.forEach(doc => {
+      docsToUpdate.push(doc.ref);
+      preciosActuales.push(doc.data());
+    });
+
+    // Actualizar los documentos en paralelo
+    const updatePromises = docsToUpdate.map((docRef, index) => {
+      // Combinar precios actuales y nuevos precios
+      const preciosActualizados = { ...preciosActuales[index], ...nuevosPrecios };
+      return updateDoc(docRef, preciosActualizados);
+    });
+
+    // Esperar a que todas las actualizaciones se completen
+    await Promise.all(updatePromises);
+
+    console.log("Precios de servicio actualizados exitosamente");
   } catch (error) {
-    console.error("Error al actualizar precio de servicio: ", error);
+    console.error("Error al actualizar precios de servicio: ", error);
+    throw error;
   }
 }
+
+
+
+
 
 // Función para eliminar un documento de preciosDeServicios por ID
 export async function eliminarPrecioDeServicio(selectedServicio) {

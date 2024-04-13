@@ -1,4 +1,4 @@
-'use client'
+'use client';
 import React, { useState, useEffect } from 'react';
 import { getMascotas, getClientes } from '@/app/firebase';
 import Image from 'next/image';
@@ -9,6 +9,8 @@ export default function Mascotas() {
   const [isLoading, setIsLoading] = useState(true);
   const [nombreBuscar, setNombreBuscar] = useState('');
   const [mascotaEncontrada, setMascotaEncontrada] = useState(null);
+  const [modalAbierto, setModalAbierto] = useState(false);
+  const [mascotaSeleccionada, setMascotaSeleccionada] = useState(null);
 
   useEffect(() => {
     const fetchData = () => {
@@ -45,8 +47,17 @@ export default function Mascotas() {
     setNombreBuscar(event.target.value);
   };
 
+  const abrirModal = (mascota) => {
+    setMascotaSeleccionada(mascota);
+    setModalAbierto(true);
+  };
+
+  const cerrarModal = () => {
+    setModalAbierto(false);
+  };
+
   return (
-    <div className="p-4 md:p-8 bg-purple-100 rounded-lg">
+    <div className="p-4 md:p-8 bg-violet-100 rounded-lg">
       <div className="mb-4 md:mb-6">
         <h1 className="text-2xl md:text-3xl">Lista de mascotas registradas</h1>
         <div className='flex flex-col md:flex-row items-center'>
@@ -58,7 +69,7 @@ export default function Mascotas() {
             onChange={handleNombreChange}
           />
           <button
-            className='bg-blue-500 text-white px-4 py-2 rounded-lg w-full md:w-1/3'
+            className='bg-purple-500 text-white px-4 py-2 rounded-lg w-full md:w-1/3'
             onClick={handleBuscarClick}
           >
             Buscar
@@ -70,7 +81,7 @@ export default function Mascotas() {
       ) : (
         <>
           {mascotaEncontrada ? (
-            <div className="bg-blue-200 p-4 mb-4 rounded-lg text-center flex flex-col md:flex-row gap-4">
+            <div className="bg-violet-200 p-4 mb-4 rounded-lg text-center flex flex-col md:flex-row gap-4">
               <h3 className="text-lg font-semibold mb-2">Mascota Encontrada:</h3>
               <div className="flex flex-col items-center md:items-start">
                 <p>Nombre: {mascotaEncontrada.nombre}</p>
@@ -83,7 +94,7 @@ export default function Mascotas() {
             </div>
           ) : null}
           <div className="overflow-x-auto">
-            <table className="w-full md:w-2/3 mx-auto text-center bg-green-100 rounded-lg">
+            <table className="w-full md:w-2/3 mx-auto text-center bg-purple-200 rounded-lg">
               <thead className="text-xl">
                 <tr>
                   <th className="px-4 py-2">Nombre</th>
@@ -96,7 +107,7 @@ export default function Mascotas() {
               </thead>
               <tbody>
                 {mascotas.map((mascota, index) => (
-                  <tr key={index}>
+                  <tr key={index} onClick={() => abrirModal(mascota)} style={{cursor: 'pointer'}}>
                     <td className="px-4 py-2">{mascota.nombre}</td>
                     <td className="px-4 py-2">{mascota.raza}</td>
                     <td className="px-4 py-2">{mascota.tamaño}</td>
@@ -117,6 +128,20 @@ export default function Mascotas() {
             </table>
           </div>
         </>
+      )}
+      {modalAbierto && (
+        <div className="fixed top-0 left-0 w-full h-full bg-black bg-opacity-50 flex justify-center items-center">
+          <div className="bg-white p-8 rounded-lg">
+            <h2 className="text-2xl font-semibold mb-4">Detalles de la mascota</h2>
+            <p>Nombre: {mascotaSeleccionada.nombre}</p>
+            <p>Raza: {mascotaSeleccionada.raza}</p>
+            <p>Tamaño: {mascotaSeleccionada.tamaño}</p>
+            <p>Cumpleaños: {mascotaSeleccionada.cumpleaños}</p>
+            <p>Cliente: {mascotaSeleccionada.uid}</p>
+            <Image src={mascotaSeleccionada.foto} alt="fotomascota" width={150} height={100} className='rounded-full'/>
+            <button className="bg-purple-500 text-white px-4 py-2 rounded-lg mt-4" onClick={cerrarModal}>Cerrar</button>
+          </div>
+        </div>
       )}
     </div>
   );

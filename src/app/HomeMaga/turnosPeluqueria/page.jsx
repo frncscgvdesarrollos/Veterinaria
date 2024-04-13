@@ -59,8 +59,8 @@ export default function VistaTurnosPeluqueriaVeterinaria() {
                     <CargarTurnoPmanual />
                 </div>
             </div>
-            <div className="container mx-auto mt-8">
-                <h1 className="text-2xl font-bold mb-4 text-center underline text-purple-800">Turnos de Peluquería para hoy:</h1>
+            <div className="container mx-auto mt-8 bg-violet-200 rounded-lg p-5 ">
+                <h1 className="text-2xl font-bold mb-4  underline text-purple-800">Turnos de Peluquería para hoy:</h1>
                 <div className="overflow-x-auto">
                     <table className="w-full divide-y divide-gray-200 text-sm">
                         <thead className="bg-gray-200">
@@ -101,8 +101,8 @@ export default function VistaTurnosPeluqueriaVeterinaria() {
                     </table>
                 </div>
             </div>
-            <div className="container mx-auto mt-8">
-                <h1 className="text-2xl font-bold mb-4 text-center underline text-purple-800">Turnos finalizados:</h1>
+            <div className="container mx-auto mt-8 bg-violet-200 rounded-lg p-5">
+                <h1 className="text-2xl font-bold mb-4  underline text-purple-800">Turnos finalizados:</h1>
                 <div className="overflow-x-auto">
                     <table className="w-full divide-y divide-gray-200 text-sm">
                         <thead className="bg-gray-200">
@@ -143,8 +143,8 @@ export default function VistaTurnosPeluqueriaVeterinaria() {
                     </table>
                 </div>
             </div>
-            <div className="container mx-auto mt-8">
-                <h1 className="text-2xl font-bold mb-4 text-center underline text-purple-800">Turnos cancelados:</h1>
+            <div className="container mx-auto mt-8 bg-violet-200 rounded-lg p-5">
+                <h1 className="text-2xl font-bold mb-4  underline text-purple-800">Turnos cancelados:</h1>
                 <div className="overflow-x-auto">
                     <table className="w-full divide-y divide-gray-200 text-sm">
                         <thead className="bg-gray-200">
