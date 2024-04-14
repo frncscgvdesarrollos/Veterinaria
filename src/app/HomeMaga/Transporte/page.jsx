@@ -56,7 +56,7 @@ function TransporteHome() {
       });
   };
   return (
-    <div className="bg-gray-100 p-4 sm:p-6 md:p-8 lg:p-10">
+    <div className="bg-purple-200 p-4 sm:p-6 md:p-8 lg:p-10 rounded-lg">
       <h1 className="text-3xl font-bold underline text-center mb-6">Transporte</h1>
       <div className="overflow-x-auto">
         <h1 className="text-xl font-bold">turno mañana</h1>

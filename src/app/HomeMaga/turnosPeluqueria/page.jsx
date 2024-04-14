@@ -50,7 +50,7 @@ export default function VistaTurnosPeluqueriaVeterinaria() {
     }
 
     return (
-        <div className="bg-purple-100 p-4 sm:p-8">
+        <div className="bg-purple-100 p-4 sm:p-8 rounded-lg">
             <div className="flex flex-col sm:flex-row gap-4">
                 <div className="w-full sm:w-2/3">
                     <PrecioPeluqueria />

@@ -25,7 +25,7 @@ export default function MisTurnos() {
       <ul>
         {turnos.map((turno, index) => (
           <li key={index}>
-            {turno.selectedDate} {turno.selectedTime} {turno.selectedPet}
+            {turno.selectedDate} {turno.selectedTime} {turno.selectedPet} {turno.selectedTurno} { turno.transporte ? 'si ' : 'no' }
           </li>
         ))}
       </ul>

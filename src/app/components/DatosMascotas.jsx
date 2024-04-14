@@ -2,6 +2,7 @@
 import { useEffect, useState } from 'react';
 import Image from 'next/image';
 import { MascotasContext } from '../context/MascotaContext';
+import { situacionMascota } from '../firebase';
 
 export default function DatosMascotas() {
     const { mascota } = MascotasContext();
@@ -44,9 +45,9 @@ export default function DatosMascotas() {
                                     <p className="text-sm text-gray-600">Raza: {mascota.raza}</p>
                                     <p className="text-sm text-gray-600">Situación: {mascota.estadoCivil || 'No definida'}</p>
                                     {!mascota.estadoCivil && (
-                                        <button className="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded mt-4">
+                                        <p className="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded mt-4">
                                             Definir Situación
-                                        </button>
+                                        </p>
                                     )}
                                 </div>
                             </div>

@@ -8,11 +8,10 @@ export default function MisMascotas() {
   const [nuevaMascota, setNuevaMascota] = useState(false);
 
   return (
-    <div className="flex flex-col justify-center items-center HomeCliente p-4 rounded-lg border border-gray-800">
-  <h2 className="text-3xl font-bold text-gray-800 mb-4">Tus Mascotas</h2>
-  <div className="flex flex-wrap justify-center mb-4">
-    <button onClick={() => setNuevaMascota(!nuevaMascota)} className="btn btn-primary m-3 bg-blue-500 rounded border border-black p-2">Agregar mascota</button>
-    <button className="btn btn-primary m-3 bg-green-700 rounded border border-black p-2">Editar Mascota</button>
+    <div className="flex flex-col container mx-auto bg-violet-200 p-4">
+  <h2 className="text-3xl font-bold text-gray-800 m-4">Tus Mascotas</h2>
+  <div className="flex flex-wrap mb-4 text-white">
+    <button onClick={() => setNuevaMascota(!nuevaMascota)} className="btn btn-primary m-3 bg-purple-500 rounded border border-black p-2">Agregar mascota</button>
     {/* <button className="btn btn-primary m-3 bg-pink-500 rounded border border-black p-2">Cruzar Mascota</button> */}
   </div>
   {nuevaMascota ? (

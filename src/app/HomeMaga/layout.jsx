@@ -1,6 +1,6 @@
 export default function LayoutNegocio( { children } ) {
   return (
-    <div>
+    <div className="HomeCliente">
       { children }
     </div>
   )

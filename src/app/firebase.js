@@ -773,3 +773,17 @@ export async function eliminarPrecioDeServicio(selectedServicio) {
     console.error("Error al eliminar precio de servicio: ", error);
   }
 }
+
+
+
+
+
+
+
+export async function situacionMascota(estadoCivil, id) {
+  const q = query(collection(db, "mascotas"), where("id", "==", id));
+  const docs = await getDocs(q);
+  docs.forEach(doc => {
+    updateDoc(doc.ref, { estadoCivil: estadoCivil });
+  });
+}

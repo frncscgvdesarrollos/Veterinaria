@@ -46,15 +46,18 @@ export default function Page() {
     };
 
     return (
-        <div className="p-4 md:p-8 lg:p-12">
-            <h1 className="text-3xl font-bold text-center mt-8 mb-4">Productos</h1>
-            <div className="flex flex-col md:flex-row justify-between items-center mb-8">
+        <div className="p-4 md:p-8 lg:p-12 bg-violet-200">
+            <div className='bg-violet-300 p-4 rounded-lg m-4 w-2/3'>
+            <h1 className="text-3xl font-bold text-left mt-8 mb-4 text-gray-800 ">Productos</h1>
+            <div className="flex flex-col md:flex-row  items-center mb-8">
                 <div className="flex justify-center space-x-4 my-4 md:my-0 md:mr-auto">
                     <button className={`border border-gray-400 px-4 py-2 rounded-md ${filtro === '' ? 'bg-blue-500 text-white' : 'bg-white text-gray-700'}`} onClick={() => filtrarProductos('')}>Todos</button>
-                    <button className={`border border-gray-400 px-4 py-2 rounded-md ${filtro === 'categoria1' ? 'bg-blue-500 text-white' : 'bg-white text-gray-700'}`} onClick={() => filtrarProductos('categoria1')}>Categoría 1</button>
-                    <button className={`border border-gray-400 px-4 py-2 rounded-md ${filtro === 'categoria2' ? 'bg-blue-500 text-white' : 'bg-white text-gray-700'}`} onClick={() => filtrarProductos('categoria2')}>Categoría 2</button>
+                    <button className={`border border-gray-400 px-4 py-2 rounded-md ${filtro === 'categoria1' ? 'bg-blue-500 text-white' : 'bg-white text-gray-700'}`} onClick={() => filtrarProductos('categoria1')}>Alimentos</button>
+                    <button className={`border border-gray-400 px-4 py-2 rounded-md ${filtro === 'categoria4' ? 'bg-blue-500 text-white' : 'bg-white text-gray-700'}`} onClick={() => filtrarProductos('categoria4')}>Cuidado</button>
+                    <button className={`border border-gray-400 px-4 py-2 rounded-md ${filtro === 'categoria2' ? 'bg-blue-500 text-white' : 'bg-white text-gray-700'}`} onClick={() => filtrarProductos('categoria2')}>Correas</button>
+                    <button className={`border border-gray-400 px-4 py-2 rounded-md ${filtro === 'categoria3' ? 'bg-blue-500 text-white' : 'bg-white text-gray-700'}`} onClick={() => filtrarProductos('categoria3')}>Ropa</button>
                 </div>
-                <button className="relative text-3xl cursor-pointer" onClick={() => setMostrarCarrito(!mostrarCarrito)}>
+                <button className="relative text-3xl cursor-pointer mr-10 mb-5" onClick={() => setMostrarCarrito(!mostrarCarrito)}>
                     🛒
                     {carrito.length > 0 && (
                         <div className="bg-red-500 text-white rounded-full w-6 h-6 flex items-center justify-center">
@@ -63,16 +66,17 @@ export default function Page() {
                     )}
                 </button>
             </div>
+            </div>
             {mostrarCarrito && (
                 <div className="fixed inset-0 bg-black bg-opacity-50 flex justify-center items-center w-full h-full">
-                    <div className="bg-white p-8 rounded-lg md:w-2/3">
+                    <div className="bg-purple-200 p-8 rounded-lg md:w-2/3">
                         <div className="flex justify-between mb-4">
                             <h2 className="text-lg font-semibold">Carrito de compras</h2>
                             <button onClick={() => setMostrarCarrito(false)}>Cerrar</button>
                         </div>
-                        <div className='flex flex-col gap-4 w-full'>
+                        <div className='flex flex-col gap-4 w-1/3'>
                             {carrito.map((producto) => (
-                                <div key={producto.id} className="flex items-center bg-gray-100 rounded-lg p-4">
+                                <div key={producto.id} className="flex items-center bg-violet-100 rounded-lg p-4">
                                     <div className="flex items-center gap-4 w-full">
                                         <div className="flex flex-col gap-2 w-full">
                                             <p className="font-semibold">{producto.nombre}</p>
@@ -105,7 +109,7 @@ export default function Page() {
                 {productos
                     .filter(producto => filtro === '' || producto.categoria === filtro)
                     .map(producto => (
-                        <div key={producto.id} className="bg-gray-100 rounded-lg p-4">
+                        <div key={producto.id} className="bg-pink-300 rounded-lg p-4">
                             <Image src={producto.imagen} alt={producto.nombre} width={200} height={200} className="object-cover mb-4 rounded-lg" />
                             <div className="flex flex-col justify-between h-full">
                                 <div>
