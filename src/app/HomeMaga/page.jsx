@@ -47,7 +47,7 @@ export default function Page() {
     }, [isLoadingPeluqueria]);
 
     return (
-        <div className="grid grid-cols-1 bg-purple-200 md:grid-cols-2 lg:grid-cols-3 gap-4 p-4 sm:p-6 md:p-8 lg:p-10">
+        <div className="container mx-auto grid grid-cols-1 bg-purple-200 md:grid-cols-2 lg:grid-cols-3 gap-4 p-4 sm:p-6 md:p-8 lg:p-10">
             <div className="col-span-1 md:col-span-2 lg:col-span-2 bg-violet-100 shadow-md rounded-md overflow-hidden bg-gray-100 p-4 sm:p-6 md:p-8 lg:p-10">
                 <h2 className="text-2xl sm:text-lg font-bold text-cyan-800 mb-4">Llamar para confirmar</h2>
                 <LlamarA />

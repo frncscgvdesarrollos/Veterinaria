@@ -120,6 +120,34 @@ export async function confirmarTerminos(uid) {
     console.error('Error al actualizar campo "terminos":', error);
   }
 }
+export async function modificarCampoCliente(uid, campo, valor) {
+  try {
+    // Obtener la referencia del documento que cumple con la condición
+    const q = query(collection(db, 'clientes'), where("usuarioid", "==", uid));
+    const querySnapshot = await getDocs(q);
+    
+    // Verificar si se encontró un documento que cumpla con la condición
+    if (!querySnapshot.empty) {
+      // Obtener la referencia del primer documento encontrado
+      const firstDoc = querySnapshot.docs[0];
+      const docRef = doc(db, 'clientes', firstDoc.id);
+
+      // Crear un objeto con el campo y valor que se desea modificar
+      const updateData = {};
+      updateData[campo] = valor;
+
+      // Actualizar el campo especificado con el valor proporcionado
+      await updateDoc(docRef, updateData);
+      
+      console.log(`Campo "${campo}" actualizado a "${valor}" con éxito.`);
+    } else {
+      console.error('No se encontró ningún documento con el usuario ID proporcionado:', uid);
+    }
+  } catch (error) {
+    console.error(`Error al actualizar campo "${campo}":`, error);
+  }
+}
+
 
 export async function getMisTurnos(uid) {
   const turnos = [];

@@ -4,6 +4,8 @@ import Veterinaria from '../components/Veterinaria';
 import { UserAuth } from '../context/AuthContext';
 import { clienteExiste } from '../firebase';
 import { useRouter } from 'next/navigation';
+import MisDatos from '../components/MisDatos';
+import DatosMascotas from '../components/DatosMascotas';
 
 export default function HomeCliente() {
   const { user } = UserAuth();
@@ -33,14 +35,14 @@ export default function HomeCliente() {
   return (
     <>
       {existe && (
-        <div className="min-h-screen bg-violet-200 HomeCliente">
-          <div className="flex flex-col p-5 sm:flex-col lg:flex-row lg:p-10">
-            <div className='bg-white w-full sm:w-1/2 sm:mr-auto lg:w-1/3 p-5 rounded-lg h-1/4 mt-10 ml-auto'>
-              <h1 className="text-3xl sm:text-4xl font-bold text-gray-800 lg:text-5xl pb-5">Reserva tus turnos.</h1>
-              <p className="text-lg text-yellow-400 mb-6 border-b-4 bg-gray-800 p-6 rounded-lg">¡Reserva tus turnos en línea y acumula puntos!</p>
-            </div>
+        <div className="min-h-screen bg-violet-200 HomeCliente p-5">
+          <div className="flex flex-col p-5 sm:flex-col lg:flex-row lg:p-10 w-2/3 mx-auto bg-violet-100 bg-opacity-50 p-10">
             <Veterinaria />
           </div>
+          <div className="flex flex-col p-5 sm:flex-col lg:flex-row lg:p-10 gap-10">
+            <MisDatos />
+            <DatosMascotas />
+            </div>
         </div>
       )}
     </>
