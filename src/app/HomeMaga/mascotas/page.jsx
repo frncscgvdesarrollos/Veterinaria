@@ -1,4 +1,4 @@
-'use client';
+'use client'
 import React, { useState, useEffect } from 'react';
 import { getMascotas, getClientes } from '@/app/firebase';
 import Image from 'next/image';
@@ -8,33 +8,32 @@ export default function Mascotas() {
   const [clientes, setClientes] = useState([]);
   const [isLoading, setIsLoading] = useState(true);
   const [nombreBuscar, setNombreBuscar] = useState('');
-  const [mascotaEncontrada, setMascotaEncontrada] = useState(null);
+  const [mascotasEncontradas, setMascotasEncontradas] = useState([]);
   const [modalAbierto, setModalAbierto] = useState(false);
   const [mascotaSeleccionada, setMascotaSeleccionada] = useState(null);
 
   useEffect(() => {
     const fetchData = () => {
-      return new Promise((resolve, reject) => {
-        Promise.all([getClientes(), getMascotas()])
-          .then(([clientesData, mascotasData]) => {
-            setClientes(clientesData);
-            setMascotas(mascotasData);
-            setIsLoading(false);
-            resolve();
-          })
-          .catch((error) => {
-            console.error('Error fetching data:', error);
-            reject(error);
-          });
-      });
+      getClientes()
+        .then(clientesData => {
+          setClientes(clientesData);
+          return getMascotas();
+        })
+        .then(mascotasData => {
+          setMascotas(mascotasData);
+          setIsLoading(false);
+        })
+        .catch(error => {
+          console.error('Error fetching data:', error);
+        });
     };
 
     fetchData();
   }, []);
 
   const buscarMascota = (nombre) => {
-    const mascota = mascotas.find(mascota => mascota.nombre.toLowerCase() === nombre.toLowerCase());
-    setMascotaEncontrada(mascota);
+    const mascotasEncontradas = mascotas.filter(mascota => mascota.nombre.toLowerCase() === nombre.toLowerCase());
+    setMascotasEncontradas(mascotasEncontradas);
   };
 
   const handleBuscarClick = () => {
@@ -57,19 +56,19 @@ export default function Mascotas() {
   };
 
   return (
-    <div className="p-4 md:p-8 bg-violet-100 rounded-lg">
+    <div className="p-4 md:p-8 bg-purple-50 rounded-lg">
       <div className="mb-4 md:mb-6">
-        <h1 className="text-2xl md:text-3xl">Lista de mascotas registradas</h1>
-        <div className='flex flex-col md:flex-row items-center'>
+        <h1 className="text-2xl md:text-3xl text-purple-800 mb-4 font-bold">Lista de mascotas registradas</h1>
+        <div className='flex flex-col md:flex-row items-center bg-purple-200 p-4 rounded-lg'>
           <input
             type="text"
-            className="px-4 py-2 border rounded-lg mb-4 md:mb-0 md:mr-4 w-full md:w-2/3"
+            className="px-4 py-2 border border-purple-400 rounded-lg mb-4 md:mb-0 md:mr-4 w-full md:w-2/3 focus:outline-none focus:ring focus:border-purple-500"
             placeholder='Nombre de la mascota'
             value={nombreBuscar}
             onChange={handleNombreChange}
           />
           <button
-            className='bg-purple-500 text-white px-4 py-2 rounded-lg w-full md:w-1/3'
+            className='bg-purple-600 text-white px-6 py-2 rounded-lg w-full md:w-1/3 hover:bg-purple-700 focus:outline-none focus:ring focus:border-purple-500'
             onClick={handleBuscarClick}
           >
             Buscar
@@ -77,42 +76,47 @@ export default function Mascotas() {
         </div>
       </div>
       {isLoading ? (
-        <p>Cargando mascotas...</p>
+        <p className="text-purple-800">Cargando mascotas...</p>
       ) : (
         <>
-          {mascotaEncontrada ? (
-            <div className="bg-violet-200 p-4 mb-4 rounded-lg text-center flex flex-col md:flex-row gap-4">
-              <h3 className="text-lg font-semibold mb-2">Mascota Encontrada:</h3>
-              <div className="flex flex-col items-center md:items-start">
-                <p>Nombre: {mascotaEncontrada.nombre}</p>
-                <p>Raza: {mascotaEncontrada.raza}</p>
-                <p>Tamaño: {mascotaEncontrada.tamaño}</p>
-                <p>Cumpleaños: {mascotaEncontrada.cumpleaños}</p>
-                <p>Cliente: {mascotaEncontrada.uid}</p>
-                <Image src={mascotaEncontrada.foto} alt="fotomascota" width={150} height={100} className='rounded-full'/>
-              </div>
-            </div>
-          ) : null}
-          <div className="overflow-x-auto">
-            <table className="w-full md:w-2/3 mx-auto text-center bg-purple-200 rounded-lg">
+{mascotasEncontradas.length > 0 ? (
+  mascotasEncontradas.map((mascota, index) => (
+    <div key={index} className="bg-purple-200 p-4 mb-4 rounded-lg flex flex-col md:flex-row items-center">
+        <button className="bg-purple-600 text-white px-6 py-2 rounded-lg hover:bg-purple-700 focus:outline-none focus:ring focus:border-purple-500" onClick={() => setMascotasEncontradas([])}>Cerrar</button>
+      <div className="m-auto bg-purple-300 p-4 rounded-lg">
+        <p className="text-purple-800"><span className="font-semibold">Nombre:</span> {mascota.nombre}</p>
+        <p className="text-purple-800"><span className="font-semibold">Raza:</span> {mascota.raza}</p>
+        <p className="text-purple-800"><span className="font-semibold">Tamaño:</span> {mascota.tamaño}</p>
+        <p className="text-purple-800"><span className="font-semibold">Cumpleaños:</span> {mascota.cumpleaños}</p>
+        <p className="text-purple-800"><span className="font-semibold">Cliente:</span> {mascota.uid}</p>
+      </div>
+      <div className="m-auto">
+        <Image src={mascota.foto} alt="fotomascota" width={150} height={100} className='rounded-full'/>
+      </div>
+    </div>
+  ))
+) : null}
+
+          <div className="overflow-x-auto bg-purple-200 p-4 rounded-lg">
+            <table className="w-full md:w-2/3 mx-auto text-center bg-purple-300 rounded-lg">
               <thead className="text-xl">
                 <tr>
-                  <th className="px-4 py-2">Nombre</th>
-                  <th className="px-4 py-2">Raza</th>
-                  <th className="px-4 py-2">Tamaño</th>
-                  <th className="px-4 py-2">Cumpleaños</th>
-                  <th className="px-4 py-2">Cliente</th>
-                  <th className="px-4 py-2">Foto</th>
+                  <th className="px-4 py-2 text-purple-800">Nombre</th>
+                  <th className="px-4 py-2 text-purple-800">Raza</th>
+                  <th className="px-4 py-2 text-purple-800">Tamaño</th>
+                  <th className="px-4 py-2 text-purple-800">Cumpleaños</th>
+                  <th className="px-4 py-2 text-purple-800">Cliente</th>
+                  <th className="px-4 py-2 text-purple-800">Foto</th>
                 </tr>
               </thead>
               <tbody>
                 {mascotas.map((mascota, index) => (
                   <tr key={index} onClick={() => abrirModal(mascota)} style={{cursor: 'pointer'}}>
-                    <td className="px-4 py-2">{mascota.nombre}</td>
-                    <td className="px-4 py-2">{mascota.raza}</td>
-                    <td className="px-4 py-2">{mascota.tamaño}</td>
-                    <td className="px-4 py-2">{mascota.cumpleaños}</td>
-                    <td className="px-4 py-2">{mascota.uid}</td>
+                    <td className="px-4 py-2 text-purple-800">{mascota.nombre}</td>
+                    <td className="px-4 py-2 text-purple-800">{mascota.raza}</td>
+                    <td className="px-4 py-2 text-purple-800">{mascota.tamaño}</td>
+                    <td className="px-4 py-2 text-purple-800">{mascota.cumpleaños}</td>
+                    <td className="px-4 py-2 text-purple-800">{mascota.uid}</td>
                     <td className="px-4 py-2">
                       <Image
                         src={mascota.foto}
@@ -132,18 +136,17 @@ export default function Mascotas() {
       {modalAbierto && (
         <div className="fixed top-0 left-0 w-full h-full bg-black bg-opacity-50 flex justify-center items-center">
           <div className="bg-white p-8 rounded-lg">
-            <h2 className="text-2xl font-semibold mb-4">Detalles de la mascota</h2>
-            <p>Nombre: {mascotaSeleccionada.nombre}</p>
-            <p>Raza: {mascotaSeleccionada.raza}</p>
-            <p>Tamaño: {mascotaSeleccionada.tamaño}</p>
-            <p>Cumpleaños: {mascotaSeleccionada.cumpleaños}</p>
-            <p>Cliente: {mascotaSeleccionada.uid}</p>
+            <h2 className="text-2xl font-semibold mb-4 text-purple-800">Detalles de la mascota</h2>
+            <p className="text-purple-800">Nombre: {mascotaSeleccionada.nombre}</p>
+            <p className="text-purple-800">Raza: {mascotaSeleccionada.raza}</p>
+            <p className="text-purple-800">Tamaño: {mascotaSeleccionada.tamaño}</p>
+            <p className="text-purple-800">Cumpleaños: {mascotaSeleccionada.cumpleaños}</p>
+            <p className="text-purple-800">Cliente: {mascotaSeleccionada.uid}</p>
             <Image src={mascotaSeleccionada.foto} alt="fotomascota" width={150} height={100} className='rounded-full'/>
-            <button className="bg-purple-500 text-white px-4 py-2 rounded-lg mt-4" onClick={cerrarModal}>Cerrar</button>
+            <button className="bg-purple-600 text-white px-4 py-2 rounded-lg mt-4 hover:bg-purple-700 focus:outline-none focus:ring focus:border-purple-500" onClick={cerrarModal}>Cerrar</button>
           </div>
         </div>
       )}
     </div>
   );
-  
 }

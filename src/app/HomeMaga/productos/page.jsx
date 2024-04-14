@@ -128,18 +128,18 @@ export default function ProductPage() {
   }
 
   return (
-    <div className="bg-gray-100 min-h-screen">
-      <h1 className="text-3xl text-center mt-8 mb-4">PRODUCTOS</h1>
-      <div className="container mx-auto p-4 md:p-8 bg-white rounded-lg shadow-lg">
+    <div className="bg-purple-100 min-h-screen">
+      <h1 className="text-3xl ml-6 p-5 mb-4">PRODUCTOS</h1>
+      <div className="container mx-auto p-4 md:p-8 bg-violet-200 rounded-lg shadow-lg">
         <h2 className="text-2xl mb-4">Lista de productos</h2>
         <button
           onClick={() => setShowForm(!showForm)}
-          className="bg-blue-500 text-white px-4 py-2 rounded-lg hover:bg-blue-600 mb-4"
+          className="bg-purple-500 text-white px-4 py-2 rounded-lg hover:bg-purple-600 mb-4"
         >
           {showForm ? 'Cerrar Formulario' : 'Agregar Producto'}
         </button>
         {showForm && (
-          <form className="bg-gray-200 rounded-lg p-4 mb-4">
+          <form className="bg-violet-200 rounded-lg p-4 mb-4">
             <input
               type="text"
               name="nombre"
@@ -197,9 +197,9 @@ export default function ProductPage() {
           </form>
         )}
         <div className='overflow-x-auto'>
-          <table className="w-full bg-white rounded-lg shadow-lg p-4 rounded-lg">
-            <thead>
-              <tr className="bg-gray-200 text-gray-700">
+          <table className="w-full bg-violet-200 rounded-lg shadow-lg p-4 rounded-lg">
+            <thead >
+              <tr className="bg-violet-200 text-violet-300 bg-violet-500">
                 <th className="px-4 py-2">ID</th>
                 <th className="px-4 py-2">Nombre</th>
                 <th className="px-4 py-2">Descripción</th>
@@ -210,7 +210,7 @@ export default function ProductPage() {
                 <th className="px-4 py-2">Acciones</th>
               </tr>
             </thead>
-            <tbody>
+            <tbody className='text-center'>
               {products.map(product => (
                 <tr key={product.id} className="border-t border-gray-200">
                   <td className="px-4 py-2">{product.id}</td>
@@ -223,8 +223,8 @@ export default function ProductPage() {
                   <td className="px-4 py-2">{product.precio}</td>
                   <td className="px-4 py-2">{product.stock}</td>
                   <td className="px-4 py-2">
-                    <button className="w-full my-2 bg-red-500 text-white px-2 py-1 rounded-lg hover:bg-red-600 mr-2" onClick={() => handleDeleteProduct(product.id)}>Eliminar</button>
-                    <button className="w-full my-2 bg-blue-500 text-white px-2 py-1 rounded-lg hover:bg-blue-600" onClick={() => openModal(product)}>Editar</button>
+                    <button className="w-full my-2 bg-blue-400 text-white px-2 py-1 rounded-lg hover:bg-blue-600" onClick={() => openModal(product)}>Editar</button>
+                    <button className="w-full my-2 bg-purple-500 text-white px-2 py-1 rounded-lg hover:bg-red-600 mr-2" onClick={() => handleDeleteProduct(product.id)}>Eliminar</button>
                   </td>
                 </tr>
               ))}
@@ -233,75 +233,77 @@ export default function ProductPage() {
         </div>
         {modal &&
           <div className="fixed inset-0 flex items-center justify-center bg-black bg-opacity-50">
-            <h2 className="text-2xl mb-4 text-center text-gray-700 font-bold uppercase bg-white rounded-lg p-4">Editar Producto</h2>
-            <form className="bg-gray-200 rounded-lg p-4">
-              <input
-                type="text"
-                name="nombre"
-                placeholder="Nombre"
-                value={formData.nombre}
-                onChange={handleChange}
-                className="rounded-lg mb-2 p-2 block w-full"
-              />
-              <input
-                type="text"
-                name="descripcion"
-                placeholder="Descripción"
-                value={formData.descripcion}
-                onChange={handleChange}
-                className="rounded-lg mb-2 p-2 block w-full"
-              />
-              <input
-                type="text"
-                name="categoria"
-                placeholder="Categoría"
-                value={formData.categoria}
-                onChange={handleChange}
-                className="rounded-lg mb-2 p-2 block w-full"
-              />
-              <Image
-                src={formData.imagen ? formData.imagen : '/placeholder-image.png'}
-                alt={formData.nombre} width={64} height={64}
-                className="object-cover"
-              />
-              <input
-                type="file"
-                name="imagen"
-                accept="image/*"
-                onChange={handleImageChange}
-                className="rounded-lg mb-2 p-2 block w-full"
-              />
-              <input
-                type="number"
-                name="precio"
-                placeholder="Precio"
-                value={formData.precio}
-                onChange={handleChange}
-                className="rounded-lg mb-2 p-2 block w-full"
-              />
-              <input
-                type="number"
-                name="stock"
-                placeholder="Stock"
-                value={formData.stock}
-                onChange={handleChange}
-                className="rounded-lg mb-2 p-2 block w-full"
-              />
-              <button
-                type="button"
-                onClick={handleUpdateProduct}
-                className="bg-green-500 text-white px-4 py-2 rounded-lg hover:bg-green-600"
-              >
-                Actualizar
-              </button>
-              <button
-                type="button"
-                onClick={closeModal}
-                className="bg-red-500 text-white px-4 py-2 rounded-lg hover:bg-red-600 ml-2"
-              >
-                Cancelar
-              </button>
-            </form>
+            <div className="bg-white rounded-lg p-8">
+              <h2 className="text-2xl mb-4 text-center text-gray-700 font-bold uppercase">Editar Producto</h2>
+              <form className="bg-violet-200 rounded-lg p-4">
+                <input
+                  type="text"
+                  name="nombre"
+                  placeholder="Nombre"
+                  value={formData.nombre}
+                  onChange={handleChange}
+                  className="rounded-lg mb-2 p-2 block w-full"
+                />
+                <input
+                  type="text"
+                  name="descripcion"
+                  placeholder="Descripción"
+                  value={formData.descripcion}
+                  onChange={handleChange}
+                  className="rounded-lg mb-2 p-2 block w-full"
+                />
+                <input
+                  type="text"
+                  name="categoria"
+                  placeholder="Categoría"
+                  value={formData.categoria}
+                  onChange={handleChange}
+                  className="rounded-lg mb-2 p-2 block w-full"
+                />
+                <Image
+                  src={formData.imagen ? formData.imagen : '/placeholder-image.png'}
+                  alt={formData.nombre} width={64} height={64}
+                  className="object-cover"
+                />
+                <input
+                  type="file"
+                  name="imagen"
+                  accept="image/*"
+                  onChange={handleImageChange}
+                  className="rounded-lg mb-2 p-2 block w-full"
+                />
+                <input
+                  type="number"
+                  name="precio"
+                  placeholder="Precio"
+                  value={formData.precio}
+                  onChange={handleChange}
+                  className="rounded-lg mb-2 p-2 block w-full"
+                />
+                <input
+                  type="number"
+                  name="stock"
+                  placeholder="Stock"
+                  value={formData.stock}
+                  onChange={handleChange}
+                  className="rounded-lg mb-2 p-2 block w-full"
+                />
+                <button
+                  type="button"
+                  onClick={handleUpdateProduct}
+                  className="bg-green-500 text-white px-4 py-2 rounded-lg hover:bg-green-600"
+                >
+                  Actualizar
+                </button>
+                <button
+                  type="button"
+                  onClick={closeModal}
+                  className="bg-red-500 text-white px-4 py-2 rounded-lg hover:bg-red-600 ml-2"
+                >
+                  Cancelar
+                </button>
+              </form>
+            </div>
           </div>
         }
       </div>

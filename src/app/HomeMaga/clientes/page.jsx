@@ -75,10 +75,17 @@ export default function Clientes() {
       });
   };
 
+  const handleCerrarCliente = () => {
+    setBuscar(false);
+    setCodigoBuscar('');
+    setMascotasUsuario([]);
+    setClienteSeleccionado(null);
+  };
+
   return (
-    <div className="p-6 bg-purple-100 rounded-lg">
-      <h1 className="text-3xl mb-6">Lista de clientes registrados</h1>
-      <div className="flex gap-4">
+    <div className="p-6 bg-purple-100 ">
+      <h1 className="text-3xl mb-6 font-bold text-purple-700 ">Lista de clientes registrados</h1>
+      <div className="flex gap-4 bg-violet-200 justify-between p-4 items-center rounded-lg m-10">
         <input
           type="text"
           className="w-2/3 px-4 py-2 border rounded-lg"
@@ -88,7 +95,7 @@ export default function Clientes() {
         />
         <div className="flex flex-col sm:flex-row justify-between items-center">
           <button
-            className={`bg-${buscar ? 'red' : 'blue'}-500 w-[150px]  hover:bg-${
+            className={`bg-${buscar ? 'violet' : 'purple'}-500 w-[150px]  hover:bg-${
               buscar ? 'red' : 'blue'
             }-600 text-white px-4 py-2 rounded-lg`}
             onClick={buscar ? handleCancelarClick : handleBuscarClick}
@@ -105,6 +112,11 @@ export default function Clientes() {
             <div className="w-full mt-10 mb-10 p-6 font-semibold text-gray-700 rounded-lg bg-violet-200">
               {clientes.find((cliente) => cliente.usuarioid === codigoBuscar) ? (
                 <>
+                <button className="float-right text-gray-500 hover:text-gray-700 bg-red-400 rounded-full mt-1 mr-1" onClick={handleCerrarCliente}>
+                    <svg xmlns="http://www.w3.org/2000/svg" className="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                            <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M6 18L18 6M6 6l12 12" />
+                      </svg>
+                </button>
                   <ul className="mx-auto text-gray-600 gap-2 bg-purple-300 text-gray-700 p-4 rounded-lg">
                     {clientes
                       .filter((cliente) => cliente.usuarioid === codigoBuscar)
@@ -168,15 +180,16 @@ export default function Clientes() {
                         </React.Fragment>
                       ))}
                   </ul>
+                  
                 </>
               ) : (
                 <p>No se encontraron clientes con el código único especificado.</p>
               )}
             </div>
           ) : (
-            <div className="overflow-x-auto rounded-lg w-full mx-auto">
-              <table className="w-full table-auto bg-white border border-purple-200 rounded-lg shadow-md">
-                <thead className="text-lg bg-violet-200">
+            <div className="overflow-x-auto rounded-lg w-full mx-auto p-6 bg-violet-200 ">
+              <table className="w-full table-auto bg-white border  border-purple-200 shadow-md">
+                <thead className="text-lg bg-violet-500 text-violet-200">
                   <tr>
                     <th className="px-4 py-2">Nombre</th>
                     <th className="px-4 py-2">Apellido</th>
@@ -202,7 +215,9 @@ export default function Clientes() {
                     </tr>
                   ))}
                 </tbody>
+              
               </table>
+              
             </div>
           )}
         </>
