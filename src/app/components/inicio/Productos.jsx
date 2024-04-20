@@ -71,17 +71,18 @@ export default function Productos() {
                 <div className="w-full flex justify-around items-center mx-auto">
                     <div className='producto flex '> 
                         <h1 className="text-3xl font-bold text-left mt-8 mb-4 text-purple-800 text-center bg-pink-300 p-2 rounded-lg bg-opacity-50 ml-10 flex ">
-                            <Image src="/celular2.png" alt="logo" width={32} height={32} className="object-cover rounded-lg" />Hace tu pedido !
+                            {/* <Image src="/celular2.png" alt="logo" width={32} height={32} className="object-cover rounded-lg" /> */}
+                            Hace tu pedido
                         </h1>
                     </div>
                     <div className='flex  producto absolute top-12 mt-12'>
-                        <h2 className="text-3xl font-bold text-left mt-8 mb-4 text-purple-800 text-center bg-pink-300 p-2 rounded-lg bg-opacity-50 ml-10  ">Pedilo donde quieras y ... 
-                        <Image src="/dondesea.png" alt="logo" width={32} height={32} className="object-cover rounded-lg" />
+                        <h2 className="text-3xl font-bold text-left mt-8 mb-4 text-purple-800 text-center bg-pink-300 p-2 rounded-lg bg-opacity-50 ml-10  ">Cuando quieras ! 
+                        {/* <Image src="/dondesea.png" alt="logo" width={32} height={32} className="object-cover rounded-lg" /> */}
                         </h2>
                     </div>
                     <div className='flex flex-col producto absolute top-24 mt-24'> 
-                        <h3 className="text-3xl font-bold text-left mt-8 mb-4 text-purple-800 text-center bg-pink-300 p-2 rounded-lg bg-opacity-50 ml-10 ">Esperalo en tu casa !</h3>
-                        <Image src="/casa.png" alt="logo" width={32} height={32} className="object-cover rounded-lg" />
+                        <h3 className="text-3xl font-bold text-left mt-8 mb-4 text-purple-800 text-center bg-pink-300 p-2 rounded-lg bg-opacity-50 ml-10 ">Y esperalo en tu casa !</h3>
+                        {/* <Image src="/casa.png" alt="logo" width={32} height={32} className="object-cover rounded-lg" /> */}
                     </div>
                 </div>
                 <div className="p-4 md:p-8 lg:p-12 bg-violet-200 bg-opacity-50 w-full mx-auto rounded-lg mt-10">

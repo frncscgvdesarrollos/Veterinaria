@@ -185,20 +185,21 @@
 .element4 { 
   width: 250px !important;
   opacity: 0.4;
-  transform: rotateY(-15deg) rotateX(10deg) rotate3d(1,1, 1, -15deg) scale(0.8); /* Ajuste para inclinar hacia la derecha */
+  transform: rotateY(-15deg) rotateX(10deg) rotate3d(1,1, 1, -15deg); /* Ajuste para inclinar hacia la derecha */
   transform-style: preserve-3d;
-  transition: 0.3s;
+  transition: 3s;
   z-index: 900;
+  margin-left: 20px !important;
   animation: cambiarOpacidad 2s linear infinite; /* La animación dura 1 segundo */
 }
 
 .element4:hover {
-  transform: rotateY(0deg) rotateX(0deg) scale(1); /* Ajuste para el efecto hover */
+  transform: rotateY(0deg) rotateX(0deg); /* Ajuste para el efecto hover */
   opacity: 1;
   z-index: 999; /* Ajuste para que esté por encima de los demás elementos */
-  transition: 0.3s;
+  transition: 3s;
   animation: none;
-  margin-left: 150px !important;
+  margin-left: 130px !important;
 }
 .element4::before {
   transform: rotateY(0deg) rotateX(0deg) rotate3d(1,1, 1, 0deg); 

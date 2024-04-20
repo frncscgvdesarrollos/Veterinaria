@@ -3,6 +3,7 @@ import { useEffect, useState } from 'react';
 import Image from 'next/image';
 import FormAgregarMascota from '@/app/components/inicio/agregarMascota';
 import { MascotasContext } from '../../context/MascotaContext';
+import Link from 'next/link';
 
 export default function MisMascotas() {
   const { mascota } = MascotasContext();
@@ -47,9 +48,12 @@ export default function MisMascotas() {
           <button className="btn btn-secondary mt-4" onClick={() => setNuevaMascota(false)}>Cancelar</button>
         </div>
       ) : (
-        <div className="flex flex-col items-center">
+        <div className="flex flex-col items-center bg-pink-300 bg-opacity-70 rounded-lg p-4">
           {!mascotas || mascotas.length === 0 ? (
-            <p className="text-gray-600 text-lg">No tienes ninguna mascota. Puedes agregar una o adoptar.</p>
+            <>
+            <p className="text-gray-600 text-xl p-2 ">No tienes ninguna mascota.</p>
+            <Link href="#Adopciones" className="text-purple-800 bg-opacity-70 rounded-full text-xl p-4 my-4 bg-purple-800 text-yellow-300 mx-auto ">Adoptar. </Link>
+            </>
           ) : (
             <div className="flex gap-4 relative mb-4">
               <button onClick={prevPage} className="bg-purple-800 text-white bg-opacity-70 rounded-full  w-[50px] h-[70px] my-auto">&#8592;</button>

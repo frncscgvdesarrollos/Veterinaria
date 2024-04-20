@@ -7,7 +7,7 @@ import { UserAuth } from '../../context/AuthContext';
 export default function FormCliente() {
   const { user } = UserAuth();
   useEffect(() => {
-    if (user && uid) {
+    if (user) {
       setDatosForm((prevState) => ({
         ...prevState,
         usuarioid: user?.uid
@@ -41,8 +41,8 @@ export default function FormCliente() {
       registrarCliente({ datosCliente: updatedDatosForm })
         .then(() => {
 
-          resolve(() =>  redirect('/HomeCliente'));
-        })
+          resolve(window.location.href = '/HomeCliente');
+          })
         .catch((error) => {
           // Manejar cualquier error
           console.error('Error al registrar cliente:', error);
@@ -67,9 +67,6 @@ export default function FormCliente() {
   return (
     <>
       <form onSubmit={handleSubmit} className="max-w-md mx-auto mt-8 bg-gray-200 p-6 rounded-lg">
-              <h2 className='text-2xl text-center font-bold mb-5 text-red-400'>
-            Información personal
-          </h2>
         <div className="mb-4">
           <p className="text-gray-700 text-lg mb-2">
             Por favor, completa los siguientes campos con información veraz y actualizada. Esta información es valiosa para poder ofrecerte un servicio de calidad.

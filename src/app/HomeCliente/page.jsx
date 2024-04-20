@@ -7,8 +7,44 @@ import MascotasAdopcion from '../components/inicio/MascotasAdopcion';
 import MisTurnos from '../components/inicio/MisTurnos';
 import { UserAuth } from '../context/AuthContext';
 import { redirect } from 'next/navigation';
+import { clienteExiste } from '../firebase';
 export default function HomeCliente() {
   const { user } = UserAuth();
+  const uid = user?.uid;
+
+function verificarCliente(uid) {
+  return new Promise((resolve, reject) => {
+    clienteExiste(uid)
+      .then(cliente => {
+        if (cliente) {
+          // El cliente existe, resolvemos la promesa con el cliente
+          resolve(cliente);
+        } else {
+          // El cliente no existe, rechazamos la promesa
+          reject(new Error(`No se encontró ningún cliente con el UID proporcionado: ${uid}`));
+        }
+      })
+      .catch(error => {
+        // Manejar cualquier error ocurrido al consultar el cliente
+        reject(error);
+      });
+  });
+}
+
+// Ejemplo de uso
+verificarCliente(uid)
+  .then(cliente => {
+    // El cliente existe, puedes hacer lo que necesites aquí
+    console.log("El cliente existe:", cliente);
+  })
+  .catch(error => {
+    // El cliente no existe o ocurrió un error
+    console.error(error.message);
+    // Redirigir a la página de datos del nuevo cliente
+    window.location.href = '/newClient/datosCliente';
+  });
+
+
   if (!user) {
     return redirect('/newClient/datosCliente');
   }
@@ -30,7 +66,7 @@ export default function HomeCliente() {
       <div className="mt-20 p-10  mx-auto">
         <Productos />
       </div>
-      <div className="mt-8">
+      <div className="mt-8" id="Adopciones">
         <MascotasAdopcion />
       </div>
     </div>
