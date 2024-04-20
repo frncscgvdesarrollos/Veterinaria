@@ -35,7 +35,7 @@ export default function DatosCliente() {
     if (terminosAceptados) {
       redirect('/HomeCliente'); // Usar router.push en lugar de redirect
     }
-  }, [terminosAceptados, router]); // Agregar router a la lista de dependencias
+  }, [terminosAceptados]); // Agregar router a la lista de dependencias
 
   return (
     <div className='bg-gray-800 h-auto p-5'>
