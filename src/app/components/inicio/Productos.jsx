@@ -1,4 +1,4 @@
-'use client'
+'use client';
 import React, { useState, useEffect } from 'react';
 import { getProducts } from '@/app/firebase';
 import ProductosMP from '@/app/components/mercadopago/ProductosMp';
@@ -11,7 +11,7 @@ export default function Productos() {
     const [mostrarCarrito, setMostrarCarrito] = useState(false);
     const [comprar, setComprar] = useState(false);
     const [currentPage, setCurrentPage] = useState(1);
-    const [productsPerPage] = useState(5);
+    const productsPerPage = 5;
 
     useEffect(() => {
         getProducts()
@@ -21,13 +21,22 @@ export default function Productos() {
             .catch(error => {
                 console.error('Error al obtener los productos:', error);
             });
-    }, []);
+    }, [currentPage]);
 
+    const totalPages = Math.ceil(productos.length / productsPerPage);
     const indexOfLastProduct = currentPage * productsPerPage;
     const indexOfFirstProduct = indexOfLastProduct - productsPerPage;
     const currentProducts = productos.slice(indexOfFirstProduct, indexOfLastProduct);
 
-    const paginate = pageNumber => setCurrentPage(pageNumber);
+    const paginate = pageNumber => {
+        if (pageNumber < 1) {
+            setCurrentPage(1);
+        } else if (pageNumber > totalPages) {
+            setCurrentPage(totalPages);
+        } else {
+            setCurrentPage(pageNumber);
+        }
+    };
 
     const filtrarProductos = (categoria) => {
         setFiltro(categoria);
@@ -52,6 +61,9 @@ export default function Productos() {
     const calcularPrecioTotal = () => {
         return carrito.reduce((total, producto) => total + (producto.precio * producto.cantidad), 0);
     };
+
+    const firstProductIndexOnPage = (currentPage - 1) * productsPerPage + 1;
+    const lastProductIndexOnPage = Math.min(currentPage * productsPerPage, productos.length);
 
     return (
         <React.Fragment>
@@ -126,17 +138,13 @@ export default function Productos() {
                             </div>
                         </div>
                     )}
-                    <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 xl:grid-cols-5 gap-6 p-5 rounded-lg container-perspective mx-auto w-2/3 mx-auto my-10">
+                    <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 xl:grid-cols-5 gap-6 p-5 rounded-lg container-perspective mx-auto w-2/3 ml-14 my-10 ">
                         {currentProducts
                             .filter(producto => filtro === '' || producto.categoria === filtro)
-                            .map((producto, index) => (
-                                <div 
-                                    key={producto.id} 
-                                    className={`bg-pink-300 border-4 border-yellow-200 rounded-lg p-4 mx-auto element4 element`}
-                                    style={{ marginLeft: `${index >= 0 ? '-70%' : 'auto '}` }}
-                                >
+                            .map((producto , index) => (
+                                <div key={index} className="bg-pink-300 border-4 border-yellow-200 rounded-lg p-4 mx-auto element4 element">
                                     <Image src={producto.imagen} alt={producto.nombre} width={150} height={150} className="object-cover mb-4 rounded-lg mx-auto" />
-                                    <div className="flex flex-col justify-between h-auto  bg-violet-100 rounded-lg p-4 mt-full ">
+                                    <div className="flex flex-col justify-between h-auto bg-violet-100 rounded-lg p-4">
                                         <div>
                                             <h2 className="text-lg font-semibold mb-2">{producto.nombre}</h2>
                                             <p className="text-gray-700 mb-2">Precio: ${producto.precio}</p>
@@ -155,7 +163,7 @@ export default function Productos() {
                         <span className="bg-gray-300 text-gray-800 font-bold py-2 px-4">
                             Página {currentPage}
                         </span>
-                        <button onClick={() => paginate(currentPage + 1)} disabled={currentProducts.length < productsPerPage} className="bg-gray-300 hover:bg-gray-400 text-gray-800 font-bold py-2 px-4 rounded-r mt-10">
+                        <button onClick={() => paginate(currentPage + 1)} disabled={currentPage === totalPages} className="bg-gray-300 hover:bg-gray-400 text-gray-800 font-bold py-2 px-4 rounded-r mt-10">
                             Siguiente
                         </button>
                     </div>

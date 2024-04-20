@@ -103,7 +103,7 @@
 .container-perspective {
   transform-style: preserve-3d;
   perspective-origin: center;
-  perspective: 1000px;
+  perspective: 1200px;
 }
 
 .element {
@@ -181,10 +181,11 @@
   }
 }
 
+
 .element4 { 
   width: 250px !important;
   opacity: 0.4;
-  transform: rotateY(-15deg) rotateX(10deg) rotate3d(1,1, 1, -15deg); /* Ajuste para inclinar hacia la derecha */
+  transform: rotateY(-15deg) rotateX(10deg) rotate3d(1,1, 1, -15deg) scale(0.8); /* Ajuste para inclinar hacia la derecha */
   transform-style: preserve-3d;
   transition: 0.3s;
   z-index: 900;
@@ -192,12 +193,12 @@
 }
 
 .element4:hover {
-  transform: rotateY(0deg) rotateX(0deg) scale(1.2); /* Ajuste para el efecto hover */
+  transform: rotateY(0deg) rotateX(0deg) scale(1); /* Ajuste para el efecto hover */
   opacity: 1;
   z-index: 999; /* Ajuste para que esté por encima de los demás elementos */
   transition: 0.3s;
   animation: none;
-  margin-left: 40px !important;
+  margin-left: 150px !important;
 }
 .element4::before {
   transform: rotateY(0deg) rotateX(0deg) rotate3d(1,1, 1, 0deg); 
@@ -205,12 +206,12 @@
   z-index: 800;
 }
 .element4:hover  .element3 {
-  margin-right  : 15% !important;
+  margin-right  : 20% !important;
 }
 
 /* Ajustar márgenes de elementos adyacentes */
 .element4:hover + .element{
-  margin-left: 50% !important; /* Ajustar según sea necesario para alejar los elementos
+  margin-left: 200px !important; /* Ajustar según sea necesario para alejar los elementos
 }
 
 .element4:hover ~ .element  { 
