@@ -1,8 +1,8 @@
 'use client'
 import React, { useState, useEffect } from 'react';
 import { getTurnosPeluqueria, cancelarTurnoPeluqueria } from '@/app/firebase';
-import CargarTurnoPmanual from '@/app/components/CargarTurnoPmanual';
-import PrecioPeluqueria from '@/app/components/PrecioPeluqueria';
+import CargarTurnoPmanual from '@/app/components/admin/CargarTurnoPmanual';
+import PrecioPeluqueria from '@/app/components/admin/PrecioPeluqueria';
 
 export default function VistaTurnosPeluqueriaVeterinaria() {
     const [turnosActivos, setTurnosActivos] = useState([]);

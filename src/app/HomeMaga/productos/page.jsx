@@ -33,7 +33,7 @@ export default function ProductPage() {
   }
 
   function handleCreateProduct() {
-    getProducts()
+    return getProducts()
       .then(allProducts => {
         const lastProductId = allProducts.length > 0 ? allProducts[0].id : 0;
         const newProductId = lastProductId + 1;
@@ -55,9 +55,8 @@ export default function ProductPage() {
     setShowForm(true);
   }
 
-  function handleUpdateProduct(e) {
-    e.preventDefault();
-    updateProduct(formData.id, formData)
+  function handleUpdateProduct() {
+    return updateProduct(formData.id, formData)
       .then(() => {
         fetchProducts();
         resetFormDataAndCloseForm();
@@ -70,7 +69,7 @@ export default function ProductPage() {
   
   function handleDeleteProduct(id) {
     console.log('Deleting product with ID:', id);
-    deleteProduct(id)
+    return deleteProduct(id)
       .then(() => {
         fetchProducts();
       })

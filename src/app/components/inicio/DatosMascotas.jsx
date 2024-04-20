@@ -1,0 +1,92 @@
+'use client';
+import { useEffect, useState } from 'react';
+import Image from 'next/image';
+import FormAgregarMascota from '@/app/components/inicio/agregarMascota';
+import { MascotasContext } from '../../context/MascotaContext';
+
+export default function MisMascotas() {
+  const { mascota } = MascotasContext();
+  const [currentPage, setCurrentPage] = useState(0);
+  const [nuevaMascota, setNuevaMascota] = useState(false);
+  const [mascotas, setMascotas] = useState([]);
+
+  useEffect(() => {
+    setMascotas(mascota); // Actualizar mascotas cuando cambie el contexto
+  }, [mascota]);
+
+  const toggleNuevaMascota = () => {
+    setNuevaMascota(!nuevaMascota);
+  };
+
+  const nextPage = () => {
+    setCurrentPage((prevPage) => (prevPage === mascotas.length - 1 ? 0 : prevPage + 1));
+  };
+
+  const prevPage = () => {
+    setCurrentPage((prevPage) => (prevPage === 0 ? mascotas.length - 1 : prevPage - 1));
+  };
+
+  let currentMascota;
+  if (!mascotas || mascotas.length === 0) {
+    currentMascota = "No tienes ninguna mascota";
+  } else {
+    currentMascota = mascotas[currentPage];
+  }
+
+  return (
+    <div className="container mx-auto p-4 border-2 border-purple-800 rounded-lg">
+      <div className="mb-8 flex justify-between items-center bg-purple-200 bg-opacity-70 rounded-lg p-4">
+        <h2 className="text-2xl font-bold text-purple-800 mb-2 text-purple-800">Tus Mascotas</h2>
+        <button onClick={toggleNuevaMascota} className="bg-purple-800 text-violet-100 bg-opacity-70 rounded-full p-2">
+          Agregar mascota
+        </button>
+      </div>
+      {nuevaMascota ? (
+        <div className="mb-8">
+          <FormAgregarMascota />
+          <button className="btn btn-secondary mt-4" onClick={() => setNuevaMascota(false)}>Cancelar</button>
+        </div>
+      ) : (
+        <div className="flex flex-col items-center">
+          {!mascotas || mascotas.length === 0 ? (
+            <p className="text-gray-600 text-lg">No tienes ninguna mascota. Puedes agregar una o adoptar.</p>
+          ) : (
+            <div className="flex gap-4 relative mb-4">
+              <button onClick={prevPage} className="bg-purple-800 text-white bg-opacity-70 rounded-full  w-[50px] h-[70px] my-auto">&#8592;</button>
+              <div className="bg-violet-100 rounded-lg overflow-hidden mt-4">
+                <div className="relative">
+                  {currentMascota && currentMascota.foto ? (
+                    <div className="relative" style={{ width: '200px', height: '200px' }}>
+                      <Image
+                        src={currentMascota.foto}
+                        alt={`Foto de ${currentMascota.nombre}`}
+                        layout='fill'
+                        objectFit='cover'
+                        loading='lazy'
+                      />
+                    </div>
+                  ) : (
+                    <div className="bg-gray-300 w-full h-48 flex items-center justify-center">
+                      <p className="text-gray-600 text-lg">Foto no disponible</p>
+                    </div>
+                  )}
+                  <div className="absolute bottom-0 left-0 bg-purple-900 bg-opacity-75 text-white p-2 w-full">
+                    <h2 className="text-lg font-semibold">{currentMascota ? currentMascota.nombre : 'Nombre de la mascota'}</h2>
+                  </div>
+                </div>
+                <div className="p-4">
+                  <p className="text-sm text-gray-600 py-2">Especie: {currentMascota ? currentMascota.especie : 'Especie'}</p>
+                  <p className="text-sm text-gray-600 py-2">Tamaño: {currentMascota ? currentMascota.tamaño : 'Tamaño'}</p>
+                  <p className="text-sm text-gray-600 py-2">Raza: {currentMascota ? currentMascota.raza : 'Raza'}</p>
+                  <p className="text-sm text-gray-600 py-2">Situación: {currentMascota ? currentMascota.estadoCivil || 'No definida' : 'No definida'}</p>
+                  <button className="bg-purple-800 text-white bg-opacity-70 rounded-full p-2 w-full mt-4">Ver Carnet</button>
+                </div>
+              </div>
+              <button onClick={nextPage} className="bg-purple-800 text-white bg-opacity-70 rounded-full  w-[50px] h-[70px] my-auto cursor-pointer">&#8594;</button>
+            </div>
+          )}
+        </div>
+      )}
+    </div>
+  );
+}

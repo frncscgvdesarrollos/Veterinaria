@@ -1,6 +1,5 @@
-
-import Footer from './components/Footer'
-import Header from './components/Header'
+import Footer from './components/estructura/Footer'
+import Header from './components/estructura/Header'
 import { AuthContextProvider} from '../app/context/AuthContext';
 import './globals.css'
 
@@ -13,11 +12,13 @@ export default function RootLayout({ children  }) {
 
   return (
     <html lang="en">
-      <body>
+      <body className='bg-gray-800'>
         <AuthContextProvider>
+
               <Header />
                 {children}
               <Footer />
+
         </AuthContextProvider>
       </body>
     </html>

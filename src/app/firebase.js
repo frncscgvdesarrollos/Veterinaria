@@ -21,8 +21,6 @@ export  const auth = getAuth(app);
 export const db = getFirestore(app);
 export const storage = getStorage(app)
 
-
-
 //Cliente... 
 export async function registrarCliente({ datosCliente }) { // Modificación aquí
   console.log("estos son los datos del cliente", datosCliente);
@@ -148,25 +146,41 @@ export async function modificarCampoCliente(uid, campo, valor) {
   }
 }
 
-
 export async function getMisTurnos(uid) {
   const turnos = [];
   const q = query(collection(db, "turnosPeluqueria"), where("usuarioid", "==", uid));
   const querySnapshot = await getDocs(q);
   querySnapshot.forEach((doc) => {
-    turnos.push(doc.data());
-  })
-  return turnos
+    turnos.push(doc.data()); // Aquí se obtienen los datos del documento utilizando el método data()
+  });
+  return turnos;
 }
+
+
 export async function sumarTurnoPeluqueria(uid) {
   console.log(uid)
   try {
     const q = query(collection(db, 'clientes'), where("usuarioid", "==", uid));
     const querySnapshot = await getDocs(q);
     querySnapshot.forEach(async (doc) => {
-      const suma = doc.data().cortesTotales + 1;
+      const suma = doc.data().turnosPeluqueria + 1;
       await updateDoc(doc.ref, {
-        'cortesTotales': suma
+        'turnosPeluqueria': suma
+      });
+    });
+  } catch (error) {
+    console.log(error);
+  }
+}
+export async function sumarTurnoChekeo(uid) {
+  console.log(uid)
+  try {
+    const q = query(collection(db, 'clientes'), where("usuarioid", "==", uid));
+    const querySnapshot = await getDocs(q);
+    querySnapshot.forEach(async (doc) => {
+      const suma = doc.data().turnosConsulta + 1;
+      await updateDoc(doc.ref, {
+        'turnosConsulta': suma
       });
     });
   } catch (error) {
@@ -174,10 +188,35 @@ export async function sumarTurnoPeluqueria(uid) {
   }
 }
 export async function sumarTurnoPeluqueriaMascota(uid) {
-  const q = query(collection(db, 'mascotas'), where("uid", "==", uid));
-  const querySnapshot = await getDocs(q);
-  
+  try {
+    const q = query(collection(db, 'mascotas'), where("uid", "==", uid));
+    const querySnapshot = await getDocs(q);
+    querySnapshot.forEach(async (doc) => {
+      const suma = doc.data().turnosPeluqueria + 1;
+      await updateDoc(doc.ref, {
+        'turnosPeluqueria': suma
+      });
+    });
+  } catch (error) {
+    console.log(error);
+  }
 }
+export async function sumarTurnoCheckeoMascota(uid, mascota) {
+  try {
+    const q = query(collection(db, 'mascotas'), where("uid", "==", uid));
+    const querySnapshot = await getDocs(q);
+    querySnapshot.forEach(async doc => {
+      if (doc.data().nombre === mascota) {
+        const turnosConsultaActualizados = doc.data().turnosConsulta + 1;
+        await updateDoc(doc.ref, { turnosConsulta: turnosConsultaActualizados });
+      }
+    });
+  } catch (error) {
+    console.error(error);
+  }
+}
+
+
 export async function getMascotasDueño(uid) {
   const mascotas = [];
   const q = await query(collection(db, "mascotas"), where("uid", "==", uid));
@@ -372,6 +411,19 @@ export async function getTurnosChekeo() {
   console.log(turnos)
   return turnos
 }
+export async function getLastTurnoChekeoId() {
+  let idUltimo = 0;
+  const q = query(collection(db, "turnosCheckeo"));
+  const querySnapshot = await getDocs(q);
+  querySnapshot.forEach((doc) => {
+    if (doc.data().id > idUltimo) {
+      idUltimo = doc.data().id;
+    }
+  })
+  console.log(idUltimo)
+  idUltimo++
+  return idUltimo
+}
 
 export async function postTurnoPeluqueria (formData) {
   try {
@@ -426,51 +478,23 @@ export async function getPreciosPorTamaño(servicio, tamaño) {
     throw error;
   }
 }
+export async function getPrecioConsulta() {
+  try {
+    const preciosRef = doc(db, 'preciosDeServicios', 'ConsultaVeterinaria');
+    const preciosDoc = await getDoc(preciosRef);
 
+    if (preciosDoc.exists()) {
+      const precio = preciosDoc.data().precio;
+      return precio;
+    } else {
+      throw new Error('No se encontró el precio de la consulta veterinaria');
+    }
+  } catch (error) {
+    console.error('Error al obtener el precio de la consulta veterinaria:', error);
+    throw new Error('Error al obtener el precio de la consulta veterinaria');
+  }
+}
 
-// export async function actualizarPrecio(servicio, id, nuevoPrecio) {
-//   try {
-//     const precioRef = query(collection(db, 'preciosDeServicios', servicio), where('id', '==', id));
-//     const docSnap = await getDoc(precioRef);
-//     if (docSnap.exists()) {
-//       await updateDoc(doc(precioRef), {
-//         toy: nuevoPrecio.toy,
-//         mediano: nuevoPrecio.mediano,
-//         grande: nuevoPrecio.grande,
-//         gigante: nuevoPrecio.gigante
-//       });
-//       console.log('Precio actualizado correctamente');
-//     } else {
-//       console.error('No se encontró el documento');
-//     }
-//   } catch (error) {
-//     console.error('Error al actualizar el precio:', error);
-//     throw error;
-//   }
-// }
-
-
-// export async function crearPrecio(servicio, tamaño, nuevoPrecio) {
-//   try {
-//     const preciosRef = collection(db, 'preciosDeServicios', servicio, tamaño);
-//     await addDoc(preciosRef, { precio: nuevoPrecio });
-//     console.log('Nuevo precio creado correctamente');
-//   } catch (error) {
-//     console.error('Error al crear el precio:', error);
-//     throw error;
-//   }
-// }
-
-// export async function eliminarPrecio(servicio, tamaño, id) {
-//   try {
-//     const precioRef = doc(db, 'preciosDeServicios', servicio, tamaño, id);
-//     await deleteDoc(precioRef);
-//     console.log('Precio eliminado correctamente');
-//   } catch (error) {
-//     console.error('Error al eliminar el precio:', error);
-//     throw error;
-//   }
-// } 
 
 export async function getNextTurn(uid) {
   const turnos = [];
@@ -617,6 +641,7 @@ export async function getLastTurnoPeluqueriaId() {
   idUltimo++
   return idUltimo
 }
+
 
 
 

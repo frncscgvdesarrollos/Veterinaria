@@ -1,4 +1,4 @@
-import MyCalendarPeluqueria from '@/app/components/MesTurneroPeluqueria';
+import MyCalendarPeluqueria from '@/app/components/pedirturnos/MesTurneroPeluqueria';
 export default function Peluqueria() {
   return (
     <div className="mx-auto p-2 lg:p-10 bg-violet-100 flex flex-col lg:flex-row">

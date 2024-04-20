@@ -100,8 +100,251 @@
     background: linear-gradient(90deg, #f6e144, #162975); /* Color de fondo final (opuesto a la sombra) */
   }
 }
+.container-perspective {
+  transform-style: preserve-3d;
+  perspective-origin: center;
+  perspective: 1200px;
+}
+
+.element {
+  transform: rotateY(-10deg);
+  transform-style: preserve-3d;
+  transition: 1s;
+  z-index: 999;
+}
+
+.element:hover {
+  transform: rotateY(0deg);
+  transition: 1s;
+}
+
+.element::before {
+  transform: rotateY(-35deg);
+  transition: 5s;
+}
+
+.element2 {
+  transform: rotateY(10deg);
+  transform-style: preserve-3d;
+  transition: 1s;
+}
+
+.element2:hover {
+  transform: rotateY(0deg);
+  transition: 1s;
+}
+
+.element2::before {
+  transform: rotateY(35deg);
+  transition: 5s;
+}
+
+.element3 {
+  opacity: 0.5;
+  transform: rotateY(-50deg); /* Ajuste para inclinar hacia la izquierda */
+  transform: rotateX(10deg);
+  transform-style: preserve-3d;
+  transition: transform 0.5s, z-index 0.5s; /* Agregué z-index aquí para incluirlo en la transición */
+  z-index: 900;
+  transform: scale(1.5);
+}
+
+.element3:hover {
+  margin-inline: 100px;
+  transform: scale(1.9) rotateX(50deg) rotateY(50deg); /* Aplicar ambas transformaciones al mismo tiempo */
+  z-index: 999;
+}
+
+/* Aplicar transformación a los elementos adyacentes cuando .element3 está en hover */
+.element3:hover + .element-adyacente,
+.element3:hover ~ .element-hermano {
+  margin-right: 100px; /* Cambia la distancia según lo necesites */
+  transition: margin-right 0.5s;
+}
 
 
+.element3::before {
+  z-index: 900;
+  transform: rotateY(-55deg);
+  transition: 5s;
+}
+
+@keyframes cambiarOpacidad {
+  0% {
+    opacity: 0.7;
+  }
+  50% {
+    opacity: 0.9;
+  }
+  100% {
+    opacity: 0.7;
+  }
+}
+
+.element4 {
+  width: 300px !important;
+  opacity: 0.4;
+  transform: rotateY(-15deg) rotateX(10deg) rotate3d(1,1, 1, -20deg); /* Ajuste para inclinar hacia la derecha */
+  transform-style: preserve-3d;
+  transition: 0.3s;
+  z-index: 900;
+  animation: cambiarOpacidad 2s linear infinite; /* La animación dura 1 segundo */
+}
+
+.element4:hover {
+  transform: rotateY(0deg) rotateX(0deg) scale(1.2); /* Ajuste para el efecto hover */
+  opacity: 1;
+  z-index: 999; /* Ajuste para que esté por encima de los demás elementos */
+  transition: 0.3s;
+  animation: none;
+  margin-left: 20px !important;
+}
+.element4::before {
+  transform: rotateY(0deg) rotateX(0deg) rotate3d(1,1, 1, 0deg); 
+  transition: 1s;
+  z-index: 800;
+}
+.element4:hover  .element3 {
+  margin-right  : 10% !important;
+}
+
+/* Ajustar márgenes de elementos adyacentes */
+.element4:hover + .element{
+  margin-left: 50% !important; /* Ajustar según sea necesario para alejar los elementos
+}
+
+.element4:hover ~ .element  { 
+  margin-left: 10px !important;
+}
 
 
+.element4::before {
+  transform: rotateY(55deg);
+  transition: 1s;
+  z-index: 800;
+}
 
+.element4::before ~ .element {
+  opacity: 0.1; /* Ajustar aquí sea necesario para alejar los elementos */
+}
+
+.element4 ~ .element4 {
+  margin-left: 50%; /* Ajustar aquí sea necesario para alejar los elementos */
+  
+}
+
+.element:focus,
+.element2:focus,
+.element3:focus,
+.element4:focus {
+  animation-play-state: running;
+}
+
+
+.imagenHero  {
+  margin-top: 10% !important;
+  position: relative;
+  margin-left: auto;
+  margin-right: auto;
+  width: 300px;
+  height: 300px;
+  border-radius: 50%; 
+}
+
+/* 
+.producto {
+  position: relative;
+  perspective: 1000px; 
+}
+
+.producto h1 {
+  position: relative;
+  display: inline-block;
+  transform-style: preserve-3d; 
+  animation: bamboleo 5s ease-in-out infinite alternate;
+}
+.producto h2 {
+  position: relative;
+  display: inline-block;
+  transform-style: preserve-3d; 
+  animation: bamboleo 5s ease-in-out infinite alternate;
+}
+
+.producto h3 {
+  position: relative;
+  display: inline-block;
+  transform-style: preserve-3d; 
+  animation: bamboleo 5s ease-in-out infinite alternate;
+}
+
+@keyframes bamboleo {
+  0% {
+    transform: rotateX(10deg) rotateY(-7deg) translateZ(0); 
+  }
+  50% {
+    transform: rotateX(-10deg) rotateY(5deg) translateZ(40px); 
+  }
+  100% {
+    transform: rotateX(10deg) rotateY(-7deg) translateZ(0); 
+  }
+} */
+
+.producto {
+  position: relative;
+  perspective: 1000px;
+  text-align: center;
+}
+
+.producto h1 {
+  display: inline-block;
+  transform-style: preserve-3d;
+  animation: bamboleo1 5s ease-in-out infinite alternate;
+}
+
+.producto h2 {
+  display: inline-block;
+  transform-style: preserve-3d;
+  animation: bamboleo2 5s ease-in-out infinite alternate;
+}
+
+.producto h3 {
+  display: inline-block;
+  transform-style: preserve-3d;
+  animation: bamboleo3 5s ease-in-out infinite alternate;
+}
+
+@keyframes bamboleo1 {
+  0% {
+    transform: rotateX(10deg) rotateY(-7deg) translateZ(0);
+  }
+  50% {
+    transform: rotateX(-10deg) rotateY(5deg) translateZ(40px);
+  }
+  100% {
+    transform: rotateX(10deg) rotateY(-7deg) translateZ(0);
+  }
+}
+
+@keyframes bamboleo2 {
+  0% {
+    transform: rotateX(10deg) rotateY(-7deg) translateZ(0);
+  }
+  50% {
+    transform: rotateX(-10deg) rotateY(5deg) translateZ(40px);
+  }
+  100% {
+    transform: rotateX(10deg) rotateY(-7deg) translateZ(0);
+  }
+}
+
+@keyframes bamboleo3 {
+  0% {
+    transform: rotateX(10deg) rotateY(-7deg) translateZ(0);
+  }
+  50% {
+    transform: rotateX(-10deg) rotateY(5deg) translateZ(40px);
+  }
+  100% {
+    transform: rotateX(10deg) rotateY(-7deg) translateZ(0);
+  }
+}

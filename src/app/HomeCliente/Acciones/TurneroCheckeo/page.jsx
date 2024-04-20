@@ -1,4 +1,4 @@
-import MyCalendar from "@/app/components/MesTurnero";
+import MyCalendar from "@/app/components/pedirturnos/MesTurnero";
 
 export default function Page() {
   return (

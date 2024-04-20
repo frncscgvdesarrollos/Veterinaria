@@ -1,16 +1,16 @@
 'use client';
 import { useEffect, useState } from 'react';
-import FormCliente from '../../components/FormCliente';
+import FormCliente from '../../components/nuevosClientes/FormCliente';
 import { clienteExisteConTerminosTRUE } from '../../firebase';
 import { UserAuth } from '../../context/AuthContext';
-import { useRouter } from 'next/navigation'; // Importar useRouter en lugar de redirect
+import { redirect } from 'next/navigation'; // Importar useRouter en lugar de redirect
 
 export default function DatosCliente() {
   const { user } = UserAuth();
   const uid = user?.uid;
   const [terminosAceptados, setTerminosAceptados] = useState(false);
   const [errorVerificacion, setErrorVerificacion] = useState(null);
-  const router = useRouter(); // Crear una instancia del enrutador
+
 
   useEffect(() => {
     if (user) {
@@ -33,7 +33,7 @@ export default function DatosCliente() {
 
   useEffect(() => {
     if (terminosAceptados) {
-      router.push('/HomeCliente'); // Usar router.push en lugar de redirect
+      redirect('/HomeCliente'); // Usar router.push en lugar de redirect
     }
   }, [terminosAceptados, router]); // Agregar router a la lista de dependencias
 
