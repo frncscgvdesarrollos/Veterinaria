@@ -27,7 +27,7 @@ export default function HomeCliente() {
           <DatosMascotas />
         </div>
       </div>
-      <div className="mt-20 container  mx-auto">
+      <div className="mt-20 p-10  mx-auto">
         <Productos />
       </div>
       <div className="mt-8">

@@ -135,8 +135,8 @@ export default function Productos() {
                                     className={`bg-pink-300 border-4 border-yellow-200 rounded-lg p-4 mx-auto element4 element`}
                                     style={{ marginLeft: `${index >= 0 ? '-70%' : 'auto '}` }}
                                 >
-                                    <Image src={producto.imagen} alt={producto.nombre} width={200} height={200} className="object-cover mb-4 rounded-lg mx-auto" />
-                                    <div className="flex flex-col justify-between h-auto  bg-violet-100 rounded-lg p-4">
+                                    <Image src={producto.imagen} alt={producto.nombre} width={150} height={150} className="object-cover mb-4 rounded-lg mx-auto" />
+                                    <div className="flex flex-col justify-between h-auto  bg-violet-100 rounded-lg p-4 mt-full ">
                                         <div>
                                             <h2 className="text-lg font-semibold mb-2">{producto.nombre}</h2>
                                             <p className="text-gray-700 mb-2">Precio: ${producto.precio}</p>

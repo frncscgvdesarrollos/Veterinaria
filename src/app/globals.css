@@ -103,7 +103,7 @@
 .container-perspective {
   transform-style: preserve-3d;
   perspective-origin: center;
-  perspective: 1200px;
+  perspective: 1000px;
 }
 
 .element {
@@ -181,10 +181,10 @@
   }
 }
 
-.element4 {
-  width: 300px !important;
+.element4 { 
+  width: 250px !important;
   opacity: 0.4;
-  transform: rotateY(-15deg) rotateX(10deg) rotate3d(1,1, 1, -20deg); /* Ajuste para inclinar hacia la derecha */
+  transform: rotateY(-15deg) rotateX(10deg) rotate3d(1,1, 1, -15deg); /* Ajuste para inclinar hacia la derecha */
   transform-style: preserve-3d;
   transition: 0.3s;
   z-index: 900;
@@ -197,7 +197,7 @@
   z-index: 999; /* Ajuste para que esté por encima de los demás elementos */
   transition: 0.3s;
   animation: none;
-  margin-left: 20px !important;
+  margin-left: 40px !important;
 }
 .element4::before {
   transform: rotateY(0deg) rotateX(0deg) rotate3d(1,1, 1, 0deg); 
@@ -205,7 +205,7 @@
   z-index: 800;
 }
 .element4:hover  .element3 {
-  margin-right  : 10% !important;
+  margin-right  : 15% !important;
 }
 
 /* Ajustar márgenes de elementos adyacentes */
