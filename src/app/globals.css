@@ -42,19 +42,19 @@
   }
 }
 
-.clase-fondo{
+.clase-fondo {
   background-image: url('/patron1.jpg');
   background-repeat: no-repeat;
   background-size: cover;
   background-position: center;
-  
 }
+
 .modalBackground {
   background: linear-gradient(90deg, #162975, #d3538a); /* Color de fondo inicial (opuesto a la sombra) */
   position: absolute;
   top: 0;
   left: 0;
-  border-radius: 50%; 
+  border-radius: 50%;
   animation: backgroundAnimation 10s ease-in infinite alternate; /* Se aplica la animación al fondo */
 }
 .imagenModal {
@@ -64,7 +64,7 @@
   width: 300px;
   height: 300px;
   box-shadow: -100px 50px 200px #f6e144;
-  border-radius: 50%; 
+  border-radius: 50%;
   animation: fadeIn 10s ease-in;
   transform: rotate(0deg);
 }
@@ -81,12 +81,12 @@
   85% {
     box-shadow: -100px 50px 200px #3ea4da;
     opacity: 1;
-    transform: rotate(360deg); 
+    transform: rotate(360deg);
   }
   100% {
     box-shadow: -100px 50px 200px #f6e144;
     opacity: 1;
-    transform: rotate(360deg); 
+    transform: rotate(360deg);
   }
 }
 @keyframes backgroundAnimation {
@@ -182,10 +182,10 @@
 }
 
 
-.element4 { 
+.element4 {
   width: 250px !important;
   opacity: 0.4;
-  transform: rotateY(-15deg) rotateX(10deg) rotate3d(1,1, 1, -15deg); /* Ajuste para inclinar hacia la derecha */
+  transform: rotateY(-15deg) rotateX(10deg) rotate3d(1, 1, 1, -15deg); /* Ajuste para inclinar hacia la derecha */
   transform-style: preserve-3d;
   transition: 3s;
   z-index: 900;
@@ -202,20 +202,20 @@
   margin-left: 130px !important;
 }
 .element4::before {
-  transform: rotateY(0deg) rotateX(0deg) rotate3d(1,1, 1, 0deg); 
+  transform: rotateY(0deg) rotateX(0deg) rotate3d(1, 1, 1, 0deg);
   transition: 1s;
   z-index: 800;
 }
-.element4:hover  .element3 {
-  margin-right  : 20% !important;
+.element4:hover .element3 {
+  margin-right: 20% !important;
 }
 
 /* Ajustar márgenes de elementos adyacentes */
-.element4:hover + .element{
-  margin-left: 200px !important; /* Ajustar según sea necesario para alejar los elementos
+.element4:hover + .element {
+  margin-left: 200px !important; /* Ajustar según sea necesario para alejar los elementos */
 }
 
-.element4:hover ~ .element  { 
+.element4:hover ~ .element {
   margin-left: 10px !important;
 }
 
@@ -232,7 +232,7 @@
 
 .element4 ~ .element4 {
   margin-left: 50%; /* Ajustar aquí sea necesario para alejar los elementos */
-  
+
 }
 
 .element:focus,
@@ -243,14 +243,14 @@
 }
 
 
-.imagenHero  {
+.imagenHero {
   margin-top: 10% !important;
   position: relative;
   margin-left: auto;
   margin-right: auto;
   width: 300px;
   height: 300px;
-  border-radius: 50%; 
+  border-radius: 50%;
 }
 
 /* 
@@ -354,29 +354,27 @@
 /* Define tus animaciones y estilos aquí */
 
 /* Media query para dispositivos móviles en modo retrato y tabletas en modo vertical */
-/* Media query para dispositivos móviles en modo retrato y tabletas en modo vertical */
-@media only screen and (max-width: 768px) and (orientation: portrait) {
-  .element,
-  .element2,
-  .element3,
-  .element4,
-  .producto h1,
-  .producto h2,
-  .producto h3 {
-    animation: none !important; /* Anula las animaciones */
+@media only screen and (max-width: 800px) and (orientation: portrait) {
+  .element4:focus,
+  .element:focus {
+    transform: rotate3d(1, 1, 1, 60deg);
+    animation: nuevaAnimacion 2s linear infinite; /* Cambia la animación en dispositivos móviles */
     transform: none !important; /* Anula cualquier transformación */
-    opacity: 1 !important; /* Restaura la opacidad */
-    margin: 0 !important; /* Restaura los márgenes */
+    transition: none !important; /* Anula cualquier transición */
   }
 
-  .element3:hover {
-    margin-inline: 0 !important; /* Restaura los márgenes en el estado hover */
-  }
-
-  .element:focus,
-  .element2:focus,
-  .element3:focus,
-  .element4:focus {
-    animation-play-state: paused !important; /* Pausa las animaciones en el estado de enfoque */
+  @keyframes nuevaAnimacion {
+    0% {
+      /* Define los estilos de inicio de la nueva animación */
+      transform: rotateY(0deg) rotate3d(1, 1, 1, 60deg);
+    }
+    50% {
+      /* Define los estilos intermedios de la nueva animación */
+      transform: rotateY(90deg)rotate3d(1, 1, 1, 60deg); /* Gira 90 grados */
+    }
+    100% {
+      /* Define los estilos finales de la nueva animación */
+      transform: rotateY(180deg) rotate3d(1, 1, 1, 60deg); /* Gira 180 grados */
+    }
   }
 }

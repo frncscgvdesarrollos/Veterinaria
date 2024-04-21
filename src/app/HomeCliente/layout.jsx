@@ -10,7 +10,7 @@ export default function HomeClientelayout({ children }) {
     const uid = user?.uid;
     return (
         <div className="w-full mx-auto">
-        <div className="HomeCliente container mx-auto">   
+        <div className="HomeCliente container">   
           <Hero />
             {uid ?
             <ClientContextProvider uid={uid}>

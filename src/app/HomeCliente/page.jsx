@@ -62,7 +62,7 @@ export default function HomeCliente() {
 
   return (
     <div className="min-h-screen flex flex-col p-2 lg:container-perspective mx-auto">
-      <div className="rounded-lg mb-8 pl-5">
+      <div className="rounded-lg mb-8 pr-10">
         <Veterinaria />
       </div>
       <div className="flex flex-col lg:flex-row lg:w-3/4 lg:mx-auto gap-10 mb-8 container-perspective lg:ml-28 lg:mt-20">
