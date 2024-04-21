@@ -117,7 +117,7 @@ export default function Productos() {
                                                     <p>Precio: ${producto.precio}</p>
                                                     <p>Cantidad: {producto.cantidad}</p>
                                                 </div>
-                                                <Image src={producto.imagen} alt={producto.nombre} width={100} height={100} className="object-cover rounded-lg" />
+                                                <Image src={producto.imagen} alt={producto.nombre} width={100} height={100} className="object-cover rounded-lg " />
                                                 <button onClick={() => eliminarDelCarrito(producto.id)} className="text-red-600 hover:text-red-800 focus:outline-none">
                                                     <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
                                                         <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M6 18L18 6M6 6l12 12"></path>
@@ -146,7 +146,7 @@ export default function Productos() {
                                 <div key={index} className="bg-pink-300 border-4 border-yellow-200 rounded-lg p-4 mx-auto element4 element">
                                     <Image src={producto.imagen} alt={producto.nombre} width={150} height={150} className="object-cover mb-4 rounded-lg mx-auto" />
                                     <div className="flex flex-col justify-between h-auto bg-violet-100 rounded-lg p-4">
-                                        <div>
+                                        <div className='mt-20'>
                                             <h2 className="text-lg font-semibold mb-2">{producto.nombre}</h2>
                                             <p className="text-gray-700 mb-2">Precio: ${producto.precio}</p>
                                             <p className="text-gray-700 mb-2">Descripción: {producto.descripcion}</p>
