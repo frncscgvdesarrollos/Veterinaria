@@ -216,7 +216,7 @@
 }
 
 .element4:hover ~ .element {
-  margin-left: 10px !important;
+  margin-left: 150px !important;
 }
 
 
@@ -228,6 +228,7 @@
 
 .element4::before ~ .element {
   opacity: 0.1; /* Ajustar aquí sea necesario para alejar los elementos */
+  
 }
 
 .element4 ~ .element4 {
@@ -355,10 +356,29 @@
 
 /* Media query para dispositivos móviles en modo retrato y tabletas en modo vertical */
 @media only screen and (max-width: 800px) and (orientation: portrait) {
+ .element4 {
+    margin-left: -30%;
+  }
+  .element4:hover {
+      transform: rotateY(0deg) rotateX(0deg); /* Ajuste para el efecto hover */
+      opacity: 1;
+      z-index: 999; /* Ajuste para que esté por encima de los demás elementos */
+      transition: 1s;
+      animation: none;
+      margin-left: 0px !important;
+    }
+  
+  .element {
+    margin-top: -5% ;
+  }
+
+  .element4:hover ~ .element {
+    margin-left: 20px !important;
+  }
   .element4:focus,
   .element:focus {
-    transform: rotate3d(1, 1, 1, 60deg);
-    animation: nuevaAnimacion 2s linear infinite; /* Cambia la animación en dispositivos móviles */
+
+    animation: none !important; /* Cambia la animación en dispositivos móviles */
     transform: none !important; /* Anula cualquier transformación */
     transition: none !important; /* Anula cualquier transición */
   }
@@ -366,15 +386,15 @@
   @keyframes nuevaAnimacion {
     0% {
       /* Define los estilos de inicio de la nueva animación */
-      transform: rotateY(0deg) rotate3d(1, 1, 1, 60deg);
+      transform: rotateY(0deg) rotate3d(1, 1, 1, 10deg);
     }
     50% {
       /* Define los estilos intermedios de la nueva animación */
-      transform: rotateY(90deg)rotate3d(1, 1, 1, 60deg); /* Gira 90 grados */
+      transform: rotateY(90deg) rotate3d(1, 1, 1, 30deg); /* Gira 90 grados */
     }
     100% {
       /* Define los estilos finales de la nueva animación */
-      transform: rotateY(180deg) rotate3d(1, 1, 1, 60deg); /* Gira 180 grados */
+      transform: rotateY(180deg) rotate3d(1, 1, 1, 70deg); /* Gira 180 grados */
     }
   }
 }
