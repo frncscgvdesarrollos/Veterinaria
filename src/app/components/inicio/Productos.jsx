@@ -108,6 +108,7 @@ export default function Productos() {
                                     <h2 className="text-lg font-semibold">Tu pedido</h2>
                                     <button onClick={() => setMostrarCarrito(false)}>Cerrar</button>
                                 </div>
+                                <div>
                                 <div className='flex flex-col gap-4 mx-auto '>
                                     {carrito.map((producto) => (
                                         <div key={producto.id} className="flex items-center bg-violet-100 rounded-lg p-4 ">
@@ -126,6 +127,19 @@ export default function Productos() {
                                             </div>
                                         </div>
                                     ))}
+                                </div>
+                                <div>
+                                    <h2>Detalles de la compra</h2>
+                                    <div>
+                                        <p>el envio se realizara a convenir en tu domicilio</p>
+                                    </div>
+                                    <div>
+                                        <form>
+                                            <label>Envio? </label>
+                                            <label></label>
+                                        </form>
+                                    </div>
+                                </div>
                                 </div>
                                 <div className="flex justify-between items-center">
                                     <p className="text-gray-600">Total: ${calcularPrecioTotal()}</p>
