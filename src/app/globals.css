@@ -16,6 +16,10 @@
   }
 }
 
+body{
+  overflow-x:hidden;
+}
+
 .gradient-bg {
   background: linear-gradient(0deg, #2e9ef4, #09cef5);
 }
