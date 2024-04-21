@@ -189,7 +189,8 @@
   transform-style: preserve-3d;
   transition: 3s;
   z-index: 900;
-  margin-left: 20px !important;
+
+  margin-left: -60px !important;
   animation: cambiarOpacidad 2s linear infinite; /* La animación dura 1 segundo */
 }
 
@@ -199,7 +200,7 @@
   z-index: 999; /* Ajuste para que esté por encima de los demás elementos */
   transition: 3s;
   animation: none;
-  margin-left: 130px !important;
+  margin-left: 50px !important;
 }
 .element4::before {
   transform: rotateY(0deg) rotateX(0deg) rotate3d(1, 1, 1, 0deg);
@@ -357,6 +358,7 @@
 /* Media query para dispositivos móviles en modo retrato y tabletas en modo vertical */
 @media only screen and (max-width: 800px) and (orientation: portrait) {
  .element4 {
+  transform: rotateY(-  10deg) rotateX(10deg);
     margin-left: -30%;
   }
   .element4:hover {
@@ -369,7 +371,7 @@
     }
   
   .element {
-    margin-top: -5% ;
+    margin-top: 5% ;
   }
 
   .element4:hover ~ .element {
