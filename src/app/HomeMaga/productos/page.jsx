@@ -132,12 +132,15 @@ export default function ProductPage() {
     setModalIsOpen(false);
   }
   function handleUpdateIds() {
-      actualizarId().then(() => {
+    actualizarId()
+      .then(() => {
         window.location.reload();
-      }).catch(error => {
-        console.error('Error updating IDs:', error);
       })
+      .catch(error => {
+        console.error('Error updating IDs:', error);
+      });
   }
+  
   return (
     <div className="bg-purple-100 min-h-screen">
       <h1 className="text-3xl ml-6 p-5 mb-4">PRODUCTOS</h1>

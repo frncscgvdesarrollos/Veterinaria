@@ -21,19 +21,24 @@ export  const auth = getAuth(app);
 export const db = getFirestore(app);
 export const storage = getStorage(app)
 
-//revisar esta funcion
-export async function actualizarId(){
-  let nuevoId = 0;
-  const productosActualizados = [];
+export async function actualizarId() {
   const q = query(collection(db, "productos"));
   const querySnapshot = await getDocs(q);
-  querySnapshot.forEach((doc) => {
-    productosActualizados.push({ ...doc.data(), id: nuevoId });
-    nuevoId++;
-  })
-  return productosActualizados
 
+  const batch = writeBatch(db);
+
+  // Contador para asignar nuevos IDs
+  let nuevoId = 0;
+
+  querySnapshot.forEach((doc) => {
+    const ref = doc.ref;
+    batch.update(ref, { id: nuevoId.toString() });
+    nuevoId++;
+  });
+
+  await batch.commit();
 }
+
 
 
 

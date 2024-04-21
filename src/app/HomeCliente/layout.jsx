@@ -9,7 +9,7 @@ export default function HomeClientelayout({ children }) {
     const { user } = UserAuth();
     const uid = user?.uid;
     return (
-        <div>
+        <div className="w-full mx-auto">
         <div className="HomeCliente container mx-auto">   
           <Hero />
             {uid ?

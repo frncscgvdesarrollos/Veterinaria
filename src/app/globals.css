@@ -350,3 +350,33 @@
     transform: rotateX(10deg) rotateY(-7deg) translateZ(0);
   }
 }
+
+/* Define tus animaciones y estilos aquí */
+
+/* Media query para dispositivos móviles en modo retrato y tabletas en modo vertical */
+/* Media query para dispositivos móviles en modo retrato y tabletas en modo vertical */
+@media only screen and (max-width: 768px) and (orientation: portrait) {
+  .element,
+  .element2,
+  .element3,
+  .element4,
+  .producto h1,
+  .producto h2,
+  .producto h3 {
+    animation: none !important; /* Anula las animaciones */
+    transform: none !important; /* Anula cualquier transformación */
+    opacity: 1 !important; /* Restaura la opacidad */
+    margin: 0 !important; /* Restaura los márgenes */
+  }
+
+  .element3:hover {
+    margin-inline: 0 !important; /* Restaura los márgenes en el estado hover */
+  }
+
+  .element:focus,
+  .element2:focus,
+  .element3:focus,
+  .element4:focus {
+    animation-play-state: paused !important; /* Pausa las animaciones en el estado de enfoque */
+  }
+}
