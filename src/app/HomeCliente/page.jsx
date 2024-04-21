@@ -55,11 +55,11 @@ verificarCliente(uid)
         <Veterinaria />
       </div>
       <div className="grid grid-cols-1 lg:grid-cols-2 gap-4 mb-8 container-perspective">
-        <div className="p-3 lg:p-5 element2 w-2/3 mx-auto h-[300px] lg:h-[400px] rounded-lg bg-violet-100 bg-opacity-50 flex flex-col gap-4">
+        <div className="p-3 lg:p-5 element2 w-2/3 mx-auto h-[300px] lg:h-[400px] rounded-lg bg-violet-100 bg-opacity-50 flex flex-col gap-4 my-10">
           <MisDatos />
           <MisTurnos  />
         </div>
-        <div className="bg-violet-100 bg-opacity-50 rounded-lg p-3 lg:p-5 element w-3/4 mx-auto">
+        <div className="bg-violet-100 bg-opacity-50 rounded-lg p-3 lg:p-5 element w-3/4 mx-auto my-20">
           <DatosMascotas />
         </div>
       </div>

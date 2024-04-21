@@ -20,10 +20,9 @@ export default function Veterinaria() {
               <Link href='/HomeCliente/Acciones/TurneroCheckeo' className='botonVeterinaria text-center text-xl bg-purple-500 text-white w-2/3 p-2 border-2  rounded-lg'>Reservar</Link>
             </div>
           </div>
-          <div className='w-full py-2 sm:w-1/2 md:w-1/3   border-4 border-blue-200 rounded-lg bg-purple-200 bg-opacity-80 mt-14 h-full'>
+          <div className='w-full py-2 sm:w-1/2 md:w-1/3   border-4 border-blue-200 rounded-lg bg-purple-200 bg-opacity-80 mt-10 h-full '>
             <Image src="/vete3.jpg" alt="veterinaria" width={200} height={200} className='imagenVeterinaria scale-100 rounded-lg w-[70%] mx-auto mt-2' />
             <Image src="/vete4.jpg" alt="veterinaria" width={200} height={200} className='imagenVeterinaria scale-100 rounded-lg w-[70%] mx-auto mt-2' />
-
             </div>
           <div className='w-full sm:w-1/2 md:w-1/3 p-5 sm:p-10 border w-full border-4 border-blue-200 rounded-lg bg-cyan-200 bg-opacity-80 mt-20 h-full element mr-10'>
             <div className='w-full flex flex-col sm:w-32 md:w-auto mb-2 rounded-full overflow-hidden mx-auto'>

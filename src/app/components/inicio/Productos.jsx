@@ -67,7 +67,7 @@ export default function Productos() {
 
     return (
         <React.Fragment>
-            <div className="mt-14">
+            <div className="mt-28">
                 <div className="w-full flex justify-around items-center mx-auto">
                     <div className='producto flex '> 
                         <h1 className="text-3xl font-bold text-left mt-8 mb-4 text-purple-800 text-center bg-pink-300 p-2 rounded-lg bg-opacity-50 ml-10 flex ">
@@ -111,7 +111,7 @@ export default function Productos() {
                                 <div>
                                 <div className='flex flex-col gap-4 mx-auto '>
                                     {carrito.map((producto) => (
-                                        <div key={producto.id} className="flex items-center bg-violet-100 rounded-lg p-4 ">
+                                        <div key={producto.id} className="flex items-center bg-violet-100 rounded-lg p-4 max-h-16 ">
                                             <div className="flex items-center gap-4 w-full">
                                                 <div className="flex flex-col gap-2 w-full">
                                                     <p className="font-semibold">{producto.nombre}</p>
@@ -158,15 +158,15 @@ export default function Productos() {
                             .filter(producto => filtro === '' || producto.categoria === filtro)
                             .map((producto , index) => (
                                 <div key={index} className="bg-pink-300 border-4 border-yellow-200 rounded-lg p-4 mx-auto element4 element">
-                                    <Image src={producto.imagen} alt={producto.nombre} width={150} height={150} className="object-cover mb-4 rounded-lg mx-auto" />
-                                    <div className="flex flex-col justify-between h-auto bg-violet-100 rounded-lg p-4">
-                                        <div className='mt-20'>
+                                    <Image src={producto.imagen} alt={producto.nombre} width={150} height={150} className="object-cover mb-4 rounded-lg mx-auto h-[200px]" />
+                                    <div className="flex flex-col justify-between h-auto bg-violet-100 rounded-lg p-4 h-[200px]">
+                                        <div className=''>
                                             <h2 className="text-lg font-semibold mb-2">{producto.nombre}</h2>
                                             <p className="text-gray-700 mb-2">Precio: ${producto.precio}</p>
                                             <p className="text-gray-700 mb-2">Descripción: {producto.descripcion}</p>
-                                            <button onClick={() => agregarAlCarrito(producto)} className="bg-blue-500 hover:bg-blue-700 text-white font-semibold py-2 px-4 rounded focus:outline-none">Agregar al carrito</button>
                                         </div>
                                     </div>
+                                            <button onClick={() => agregarAlCarrito(producto)} className="bg-purple-500 hover:bg-blue-700 text-white font-semibold py-2 px-4 w-full rounded focus:outline-none">Agregar al carrito</button>
                                 </div>
                             ))}
                     </div>
