@@ -1,6 +1,6 @@
 'use client'
 import React, { useState, useEffect } from 'react';
-import { getProducts, createProduct, deleteProduct, updateProduct } from '@/app/firebase';
+import { getProducts, createProduct, deleteProduct, updateProduct, actualizarId } from '@/app/firebase';
 import Image from 'next/image';
 
 export default function ProductPage() {
@@ -131,7 +131,13 @@ export default function ProductPage() {
   function closeModal() {
     setModalIsOpen(false);
   }
-
+  function handleUpdateIds() {
+      actualizarId().then(() => {
+        window.location.reload();
+      }).catch(error => {
+        console.error('Error updating IDs:', error);
+      })
+  }
   return (
     <div className="bg-purple-100 min-h-screen">
       <h1 className="text-3xl ml-6 p-5 mb-4">PRODUCTOS</h1>
@@ -143,6 +149,7 @@ export default function ProductPage() {
         >
           {showForm ? 'Cerrar Formulario' : 'Agregar Producto'}
         </button>
+        <button onClick={() => handleUpdateIds()} className='bg-green-500 text-white px-4 py-2 rounded-lg hover:bg-green-600 mb-4'>Actualizar IDs</button>
         <div className="bg-violet-300 rounded-lg  ">
         {showForm && (
           <div className='flex mx-auto p-10 container-perspecitve'>
@@ -263,7 +270,7 @@ export default function ProductPage() {
         <div className='overflow-x-auto'>
           <table className="w-full bg-violet-200 rounded-lg shadow-lg p-4 rounded-lg">
             <thead >
-              <tr className="bg-violet-200 text-violet-300 bg-violet-500">
+              <tr className="bg-violet-200 text-violet-300 bg-violet-500">     
                 <th className="px-4 py-2">ID</th>
                 <th className="px-4 py-2">Nombre</th>
                 <th className="px-4 py-2">Descripción</th>

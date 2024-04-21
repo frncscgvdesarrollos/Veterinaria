@@ -21,6 +21,24 @@ export  const auth = getAuth(app);
 export const db = getFirestore(app);
 export const storage = getStorage(app)
 
+
+export async function actualizarId(){
+  let nuevoId = 0;
+  const productosActualizados = [];
+  const q = query(collection(db, "productos"));
+  const querySnapshot = await getDocs(q);
+  querySnapshot.forEach((doc) => {
+    productosActualizados.push({ ...doc.data(), id: nuevoId });
+    nuevoId++;
+  })
+  return productosActualizados
+
+}
+
+
+
+
+
 //Cliente... 
 export async function registrarCliente({ datosCliente }) { // Modificación aquí
   console.log("estos son los datos del cliente", datosCliente);
