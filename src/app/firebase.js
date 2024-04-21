@@ -21,7 +21,7 @@ export  const auth = getAuth(app);
 export const db = getFirestore(app);
 export const storage = getStorage(app)
 
-
+//revisar esta funcion
 export async function actualizarId(){
   let nuevoId = 0;
   const productosActualizados = [];
@@ -163,10 +163,28 @@ export async function modificarCampoCliente(uid, campo, valor) {
     console.error(`Error al actualizar campo "${campo}":`, error);
   }
 }
+export async function getTurnosChekeo2() {
+  const turnos = [];
+  const q = query(collection(db,"turnosCheckeo"))
+  const docs = await getDocs(q);
+  docs.forEach(doc => {
+    turnos.push(doc.data())
+  })
+  return turnos
+}
 
 export async function getMisTurnos(uid) {
   const turnos = [];
   const q = query(collection(db, "turnosPeluqueria"), where("usuarioid", "==", uid));
+  const querySnapshot = await getDocs(q);
+  querySnapshot.forEach((doc) => {
+    turnos.push(doc.data()); // Aquí se obtienen los datos del documento utilizando el método data()
+  });
+  return turnos;
+}
+export async function getMisTurnosChekeo(uid) {
+  const turnos = [];
+  const q = query(collection(db, "turnosCheckeo"), where("usuarioId", "==", uid));
   const querySnapshot = await getDocs(q);
   querySnapshot.forEach((doc) => {
     turnos.push(doc.data()); // Aquí se obtienen los datos del documento utilizando el método data()

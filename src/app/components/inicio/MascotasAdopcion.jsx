@@ -35,15 +35,15 @@ export default function MascotasAdopcion() {
         <h1 className="text-3xl text-white">Mascotas en Adopción</h1>
       </div>
       {/* Contenido de mascotas en adopción */}
-      <div className="bg-violet-300 bg-opacity-70 w-[300px] mx-auto rounded-lg p-5 flex flex-wrap justify-center gap-4 sm:justify-start md:justify-center lg:justify-start mb-8 mt-10">
+      <div className="bg-violet-300 bg-opacity-70 flex  mx-auto rounded-lg p-5 flex flex-wrap justify-center gap-4 sm:justify-start md:justify-center lg:justify-start mb-8 mt-10">
         {isLoading ? (
           <div>Cargando...</div>
         ) : error ? (
           <div>Error: {error}</div>
         ) : (
           mascotas.map((mascota, index) => (
-            <div key={index} className="bg-blue-300 bg-opacity-70 shadow-md rounded-md overflow-hidden text-white font-semibold">
-              <div className="relative overflow-hidden">
+            <div key={index} className="flex bg-blue-300 w-2/5 mx-auto bg-opacity-70 shadow-md rounded-md overflow-hidden text-white font-semibold">
+              <div className="relative overflow-hidden w-4/5 mx-auto">
                 {mascota.foto ? (
                   <Image
                     className="object-cover w-full h-48 sm:h-56 md:h-64"

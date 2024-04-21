@@ -79,7 +79,6 @@ export default function MisMascotas() {
                   </div>
                 </div>
                 <div className="p-4">
-                  <p className="text-sm text-gray-600 py-2">Especie: {currentMascota ? currentMascota.especie : 'Especie'}</p>
                   <p className="text-sm text-gray-600 py-2">Tamaño: {currentMascota ? currentMascota.tamaño : 'Tamaño'}</p>
                   <p className="text-sm text-gray-600 py-2">Raza: {currentMascota ? currentMascota.raza : 'Raza'}</p>
                   <p className="text-sm text-gray-600 py-2">Situación: {currentMascota ? currentMascota.estadoCivil || 'No definida' : 'No definida'}</p>
