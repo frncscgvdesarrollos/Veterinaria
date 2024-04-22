@@ -29,7 +29,7 @@ export default function MascotasAdopcion() {
   }, []);
 
   return (
-    <div className="bg-violet-200 bg-opacity-50 rounded-lg p-5 max-w-screen-lg mx-auto">
+    <div className="bg-violet-200 bg-opacity-50 rounded-lg p-5 max-w-screen-lg mx-auto flex flex-col items-center justify-center    ">
       {/* Título */}
       <div className="p-5 rounded-lg bg-purple-600 bg-opacity-50 mx-auto text-center py-8">
         <h1 className="text-3xl sm:text-4xl text-white">¡Adopta a tu mascota!</h1>
@@ -43,7 +43,6 @@ export default function MascotasAdopcion() {
                 Aquí algunos consejos:
           </p>
           <ul className='text-white text-left py-2'>
-            <li>Asegúrate de investigar sobre la persona, pregunta por referencias o experiencias previas de adopciones.</li>
             <li>Cuando vayas a encontrarte con la persona, elige siempre un lugar público y seguro para conocerse.</li>
             <li>Siempre es mejor ir acompañado cuando vayas a conocer al dueño de la mascota.</li>
             <li>No dudes en hacer todas las preguntas que necesites para asegurarte de que la mascota sea adecuada para ti y tu hogar.</li>
@@ -54,14 +53,14 @@ export default function MascotasAdopcion() {
       </div>
   
       {/* Contenido de mascotas en adopción */}
-      <div className="bg-violet-300 bg-opacity-70 flex mx-auto rounded-lg p-5 flex flex-wrap justify-center gap-4 sm:justify-start md:justify-center lg:justify-start mb-8 mt-10">
+      <div className="bg-violet-300 bg-opacity-70 flex mx-auto rounded-lg p-5 flex flex-wrap justify-center gap-4 sm:justify-start md:justify-center lg:justify-start mb-8 mt-10 ml-auto">
         {isLoading ? (
           <div>Cargando...</div>
         ) : error ? (
           <div>Error: {error}</div>
         ) : (
           mascotas.map((mascota, index) => (
-            <div key={index} className="flex bg-blue-300 w-full sm:w-2/5 mx-auto bg-opacity-70 shadow-md rounded-md overflow-hidden text-white font-semibold sm:mx-2">
+            <div key={index} className="flex  bg-blue-300 w-full sm:w-2/5 mx-auto bg-opacity-70 shadow-md rounded-md overflow-hidden text-white font-semibold sm:mx-2">
               <div className="relative overflow-hidden w-full sm:w-full mx-auto">
                 {mascota.foto ? (
                   <Image

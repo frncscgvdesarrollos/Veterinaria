@@ -361,46 +361,31 @@ body{
 
 /* Media query para dispositivos móviles en modo retrato y tabletas en modo vertical */
 @media only screen and (max-width: 800px) and (orientation: portrait) {
- .element4 {
-  transform: rotateY(-  10deg) rotateX(10deg);
-    margin-left: -30%;
+  .element4 {
+    opacity: 1;
+    margin-left: auto !important; /* Resetear margen izquierdo */
+    transform: rotateY(0deg) rotateX(0deg); /* Anular transformaciones */
+    animation: none !important; /* Anular animación */
   }
+
   .element4:hover {
-      transform: rotateY(0deg) rotateX(0deg); /* Ajuste para el efecto hover */
-      opacity: 1;
-      z-index: 999; /* Ajuste para que esté por encima de los demás elementos */
-      transition: 1s;
-      animation: none;
-      margin-left: 0px !important;
-    }
-  
-  .element {
-    margin-top: 5% ;
+    opacity: 1; /* Mantener opacidad al hacer hover */
   }
 
-  .element4:hover ~ .element {
-    margin-left: 20px !important;
-  }
-  .element4:focus,
-  .element:focus {
-
-    animation: none !important; /* Cambia la animación en dispositivos móviles */
-    transform: none !important; /* Anula cualquier transformación */
-    transition: none !important; /* Anula cualquier transición */
+  .element4::before {
+    transform: rotateY(0deg) rotateX(0deg) rotate3d(1, 1, 1, 0deg); /* Anular transformaciones */
   }
 
-  @keyframes nuevaAnimacion {
-    0% {
-      /* Define los estilos de inicio de la nueva animación */
-      transform: rotateY(0deg) rotate3d(1, 1, 1, 10deg);
-    }
-    50% {
-      /* Define los estilos intermedios de la nueva animación */
-      transform: rotateY(90deg) rotate3d(1, 1, 1, 30deg); /* Gira 90 grados */
-    }
-    100% {
-      /* Define los estilos finales de la nueva animación */
-      transform: rotateY(180deg) rotate3d(1, 1, 1, 70deg); /* Gira 180 grados */
-    }
+  .element4:hover .element3 {
+    margin-right: 0 !important; /* Anular margen derecho al hacer hover */
+  }
+
+  .element4:hover + .element {
+    margin-left: 0 !important; /* Anular margen izquierdo al hacer hover */
+  }
+
+  .element4::before ~ .element {
+    opacity: 1; /* Mantener opacidad de elementos adyacentes */
   }
 }
+
