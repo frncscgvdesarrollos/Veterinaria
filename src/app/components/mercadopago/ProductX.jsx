@@ -18,9 +18,9 @@ export default async function ProductX( formData ) {
           },
         ],
         back_urls: {
-          success: "http://localhost:3000/HomeCliente/Acciones/turneroPeluqueria/pagoExitoso",
-          failure: "http://localhost:3000/HomeCliente/Acciones/turneroPeluqueria/pagoError",
-          pending: "http://localhost:3000/HomeCliente/Acciones/turneroPeluqueria/pagoError",
+          success: "https://magalimartinveterinaria.vercel.app/HomeCliente/Acciones/turneroPeluqueria/pagoExitoso",
+          failure: "https://magalimartinveterinaria.vercel.app/HomeCliente/Acciones/turneroPeluqueria/pagoError",
+          pending: "https://magalimartinveterinaria.vercel.app/HomeCliente/Acciones/turneroPeluqueria/pagoError",
         },
         auto_return: "approved",
         notification_url: "https://magalimartinveterinaria.vercel.app/api/payments",
