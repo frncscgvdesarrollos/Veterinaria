@@ -3,7 +3,7 @@ import {MercadoPagoConfig, Preference} from "mercadopago";
 import { idVentas } from "@/app/firebase";
 import {redirect} from "next/navigation";
 
-const client = new MercadoPagoConfig({accessToken: 'TEST-2354491765614534-033010-27ac3d7283d65defc4fc83b43b7e6ec4-1748147159'});
+const client = new MercadoPagoConfig({accessToken: 'TEST-4732185295999828-021210-74be192e021f74c875fe9bba82f58ec9-1153230629'});
 export default async function ProductX( formData ) {
   const idVenta = new Promise((resolve) => idVentas().then((id) => resolve(id)));
   
@@ -23,7 +23,7 @@ export default async function ProductX( formData ) {
           pending: "http://localhost:3000/HomeCliente/Acciones/turneroPeluqueria/pagoError",
         },
         auto_return: "approved",
-        notification_url: "https://xrdb6q32-3000.brs.devtunnels.ms/api/payments",
+        notification_url: "https://magalimartinveterinaria.vercel.app/api/payments",
       }
     })
     redirect(preference.init_point);
