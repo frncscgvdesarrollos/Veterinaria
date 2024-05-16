@@ -103,6 +103,28 @@ export async function marcarPagoEfectivo(uid) {
     throw new Error("Error al marcar el pago como efectivo: " + error.message);
   }
 }
+export async function marcarPagoMercadoPago(uid){
+  try {
+    // Obtener la referencia a la colección de ventas que coincidan con el userId y estén en curso
+    const ventasRef = collection(db, "ventas");
+    const q = query(ventasRef, where("userId", "==", uid), where("enCurso", "==", true));
+    const querySnapshot = await getDocs(q);
+    
+    // Verificar si hay ventas encontradas
+    if (!querySnapshot.empty) {
+      // Iterar sobre los documentos encontrados (en caso de que hubiera más de uno)
+      querySnapshot.forEach(async (doc) => {
+        // Actualizar el documento para marcar el pago como efectivo
+        await updateDoc(doc.ref, { mp: true });
+        console.log("Pago marcado como efectivo correctamente.");
+      });
+    } else {
+      throw new Error("No se encontró ninguna venta en curso para este usuario.");
+    }
+  } catch (error) {
+    throw new Error("Error al marcar el pago como efectivo: " + error.message);
+  }
+}
 
 
 export async function eliminarVentas() {
