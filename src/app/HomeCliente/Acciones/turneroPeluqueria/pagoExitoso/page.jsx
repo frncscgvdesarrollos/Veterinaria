@@ -2,7 +2,7 @@
 import Link from 'next/link';
 import { UserAuth } from '@/app/context/AuthContext';
 import { useEffect, useState } from 'react';
-import { ventaEnCursoFalse, marcarPagoMercadoPago } from '@/app/firebase';
+import { ventaEnCursoFalse, marcarPagoMercadoPago, confirmarPagos } from '@/app/firebase';
 
 export default function PagoTurnoPeluqueriaExitoso() {
   const { user } = UserAuth();
@@ -14,9 +14,10 @@ export default function PagoTurnoPeluqueriaExitoso() {
     console.log('efecto'+ num);
     num++;
     if (uid) {
-      // Marcar la venta como no en curso y el pago como MercadoPago
+      // Marcar la venta como no en curso, confirmar el pago y marcarlo como MercadoPago
       Promise.all([
         ventaEnCursoFalse(uid), // Marcar la venta como no en curso
+        confirmarPagos(uid), // Confirmar los pagos de los turnos de peluquería
         marcarPagoMercadoPago(uid) // Marcar el pago como MercadoPago
       ])
       .then(() => {
