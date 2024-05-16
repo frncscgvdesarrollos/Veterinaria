@@ -1,9 +1,11 @@
 "use server";
+import { idVentas } from "@/app/firebase";
 import { MercadoPagoConfig, Preference } from "mercadopago";
 import { redirect } from "next/navigation";
 
 
 export default async function ProductosMP(carrito) {
+  const idVenta = new Promise((resolve) => idVentas().then((id) => resolve(id)));
     const client = new MercadoPagoConfig({
         accessToken: process.env.NEXT_PUBLIC_ACCESSTOKEN,
     });
@@ -11,14 +13,14 @@ export default async function ProductosMP(carrito) {
     const preference = await new Preference(client).create({
       items: [
         {
-          id: 0,
-          title: "Compra de Productos Veterinaria",
+          id: (await idVenta),
+          title: "Venta de la tienda",
           quantity: 1,
           unit_price: carrito.total,
         },
       ],
       back_urls: {
-        success: "https://magalimartinveterinaria.vercel.app/HomeCliente/Acciones/MisCompras",
+        success: "https://magalimartinveterinaria.vercel.app/HomeCliente/Acciones/venta",
         failure: "https://magalimartinveterinaria.vercel.app/HomeCliente/Acciones/MisCompras/pagoError",
         pending: "https://magalimartinveterinaria.vercel.app/HomeCliente/Acciones/MisCompras/pagoPendiente",
       },

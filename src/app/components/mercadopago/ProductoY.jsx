@@ -1,24 +1,22 @@
 "use server";
 import {MercadoPagoConfig, Preference} from "mercadopago";
-import { idVentas } from "@/app/firebase";
 import {redirect} from "next/navigation";
 
 const client = new MercadoPagoConfig({accessToken: 'TEST-2354491765614534-033010-27ac3d7283d65defc4fc83b43b7e6ec4-1748147159'});
 export default async function ProductX( formData ) {
-  const idVenta = new Promise((resolve) => idVentas().then((id) => resolve(id)));
-  
+
     const preference = await new Preference(client).create({
       body: {
         items: [
           {
-            id: await idVenta,
+            id: 0,
             title: "peluqueria canina",
             quantity: 1,
-            unit_price: 100,
+            unit_price: 1000,
           },
         ],
         back_urls: {
-          success: "http://localhost:3000/HomeCliente/Acciones/turneroPeluqueria/pagoExitoso",
+          success: "http://localhost:3000/HomeCliente/Acciones/MisTurnos",
           failure: "http://localhost:3000/HomeCliente/Acciones/turneroPeluqueria/pagoError",
           pending: "http://localhost:3000/HomeCliente/Acciones/turneroPeluqueria/pagoError",
         },

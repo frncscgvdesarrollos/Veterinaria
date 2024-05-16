@@ -21,6 +21,182 @@ export  const auth = getAuth(app);
 export const db = getFirestore(app);
 export const storage = getStorage(app)
 
+
+
+export async function idVentas() {
+    try {
+        const q = collection(db, "ventas");
+        const snapshot = await getDocs(q);
+
+        const nuevoID = snapshot.docs.reduce((idMayor, doc) => {
+            const id = doc.data().id;
+            return id > idMayor ? id : idMayor;
+        }, 0) + 1;
+
+        return nuevoID;
+    } catch (error) {
+        console.error("Error al obtener el ID de ventas:", error);
+        throw error;
+    }
+}
+
+
+  
+
+export async function ventaEnCurso(uid) {
+  try {
+    const ventasRef = collection(db, "ventas");
+    const q = query(ventasRef, where("userId", "==", uid), where("enCurso", "==", true));
+    const querySnapshot = await getDocs(q);
+    if (!querySnapshot.empty) {
+      const firstDoc = querySnapshot.docs[0];
+      return { id: firstDoc.id, ...firstDoc.data() };
+    } else {
+      throw new Error("No se encontró ninguna venta en curso para este usuario.");
+    }
+  } catch (error) {
+    throw new Error("Error al obtener la venta en curso: " + error.message);
+  }
+}
+export async function ventaEnCursoFalse(uid) {
+  try {
+    // Obtener la referencia a la colección de ventas que coincidan con el userId y estén en curso
+    const ventasRef = collection(db, "ventas");
+    const q = query(ventasRef, where("userId", "==", uid), where("enCurso", "==", true));
+    const querySnapshot = await getDocs(q);
+    
+    // Verificar si hay ventas encontradas
+    if (!querySnapshot.empty) {
+      // Iterar sobre los documentos encontrados (en caso de que hubiera más de uno)
+      querySnapshot.forEach(async (doc) => {
+        // Actualizar el documento para marcarlo como no en curso
+        await updateDoc(doc.ref, { enCurso: false });
+        console.log("Venta marcada como no en curso correctamente.");
+      });
+    } else {
+      throw new Error("No se encontró ninguna venta en curso para este usuario.");
+    }
+  } catch (error) {
+    throw new Error("Error al marcar la venta como no en curso: " + error.message);
+  }
+}
+
+export async function marcarPagoEfectivo(uid) {
+  try {
+    // Obtener la referencia a la colección de ventas que coincidan con el userId y estén en curso
+    const ventasRef = collection(db, "ventas");
+    const q = query(ventasRef, where("userId", "==", uid), where("enCurso", "==", true));
+    const querySnapshot = await getDocs(q);
+    
+    // Verificar si hay ventas encontradas
+    if (!querySnapshot.empty) {
+      // Iterar sobre los documentos encontrados (en caso de que hubiera más de uno)
+      querySnapshot.forEach(async (doc) => {
+        // Actualizar el documento para marcar el pago como efectivo
+        await updateDoc(doc.ref, { efectivo: true });
+        console.log("Pago marcado como efectivo correctamente.");
+      });
+    } else {
+      throw new Error("No se encontró ninguna venta en curso para este usuario.");
+    }
+  } catch (error) {
+    throw new Error("Error al marcar el pago como efectivo: " + error.message);
+  }
+}
+
+
+export async function eliminarVentas() {
+  const q = query(collection(db, "ventas"));
+  const querySnapshot = await getDocs(q);
+  querySnapshot.forEach((doc) => {
+    deleteDoc(doc.ref);
+  });  
+}
+export async function registroVentaPeluqueria(venta) {
+  const docRef = await addDoc(collection(db, "ventas"), venta);
+  return docRef
+}
+
+export async function calcularVentas() {
+  let total = 0;
+  const querySnapshot = await getDocs(collection(db, "ventas"));
+  querySnapshot.forEach((doc) => {
+    total += doc.data().precio;
+  })
+  return total
+}
+
+
+export async function totalVentas() {
+  const ventas = [];
+  const querySnapshot = await getDocs(collection(db, "ventas"));
+  querySnapshot.forEach((doc) => {
+    ventas.push(doc.data());
+  })
+  return ventas
+}
+export async function actualizarMetodosDePago(ventaId, mp, efectivo, confirmado) {
+  try {
+    const ventaRef = doc(db, 'ventas', ventaId);
+    await updateDoc(ventaRef, {
+      mp: mp,
+      efectivo: efectivo,
+      confirmado: confirmado,
+    });
+    console.log('¡Los métodos de pago se actualizaron correctamente!');
+  } catch (error) {
+    console.error('Error al actualizar métodos de pago:', error);
+    throw new Error('Hubo un error al actualizar los métodos de pago');
+  }
+}
+
+export async function aplicarVacuna(uid, nombre, tipoVacuna) {
+  const mascotaRef = collection(db, "mascotas");
+  const query = query(
+    mascotaRef,
+    where("uid", "==", uid),
+    where("nombre", "==", nombre)
+  );
+
+  try {
+    const mascotaSnapshot = await getDocs(query);
+    if (mascotaSnapshot.empty) {
+      throw new Error("La mascota no existe");
+    }
+
+    const mascotaDoc = mascotaSnapshot.docs[0];
+    const carnetSanitario = mascotaDoc.data().carnetSanitario || [];
+
+    // Buscar la sección correspondiente en el carnet sanitario
+    let seccionCarnet;
+    if (tipoVacuna === "antirrabica") {
+      seccionCarnet = carnetSanitario.find(seccion => seccion.antirrabicas !== undefined);
+    } else if (tipoVacuna === "vacunas") {
+      seccionCarnet = carnetSanitario.find(seccion => seccion.vacunas !== undefined);
+    } else if (tipoVacuna === "desparasitaciones") {
+      seccionCarnet = carnetSanitario.find(seccion => seccion.desparasitaciones !== undefined);
+    }
+
+    // Agregar la vacuna aplicada a la sección correspondiente
+    if (seccionCarnet) {
+      if (!seccionCarnet[tipoVacuna]) {
+        seccionCarnet[tipoVacuna] = [];
+      }
+      seccionCarnet[tipoVacuna].push({ aplicada: new Date() });
+    } else {
+      throw new Error("Sección de carnet sanitario no encontrada");
+    }
+
+    // Actualizar el documento de la mascota con la nueva información del carnet sanitario
+    await updateDoc(mascotaRef, { carnetSanitario });
+
+    return "Vacuna aplicada correctamente";
+  } catch (error) {
+    throw error;
+  }
+}
+
+
 export async function actualizarId() {
   const q = query(collection(db, "productos"));
   const querySnapshot = await getDocs(q);
@@ -38,11 +214,6 @@ export async function actualizarId() {
 
   await batch.commit();
 }
-
-
-
-
-
 
 //Cliente... 
 export async function registrarCliente({ datosCliente }) { // Modificación aquí
@@ -196,7 +367,6 @@ export async function getMisTurnosChekeo(uid) {
   });
   return turnos;
 }
-
 
 export async function sumarTurnoPeluqueria(uid) {
   console.log(uid)
@@ -402,7 +572,6 @@ export async function registroVenta(venta) {
   const docRef = await addDoc(collection(db, "ventas"), venta);
   return docRef
 }
-
 //TURNOS
 export async function registerTurno(registro) {
   const docRef = await addDoc(collection(db, "turnos"), registro);
@@ -465,7 +634,6 @@ export async function getLastTurnoChekeoId() {
   idUltimo++
   return idUltimo
 }
-
 export async function postTurnoPeluqueria (formData) {
   try {
     // Añadir un nuevo documento con los datos del formulario a la colección "turnosPeluqueria"
@@ -502,8 +670,6 @@ export async function getTurnosPeluqueria() {
   console.log(turnos)
   return turnos
 }
-
-
 export async function getPreciosPorTamaño(servicio, tamaño) {
   console.log(servicio, tamaño)
   try {
@@ -535,8 +701,6 @@ export async function getPrecioConsulta() {
     throw new Error('Error al obtener el precio de la consulta veterinaria');
   }
 }
-
-
 export async function getNextTurn(uid) {
   const turnos = [];
   const q = await query(collection(db, "turnosCheckeo"), where("usuarioid", "==", uid));
@@ -598,10 +762,6 @@ export async function verificarCapacidadTurno(selectedDate, selectedTurno) {
     return false; // Error al verificar la capacidad
   }
 }
-
-
-
-
 export async function borrarTodosLosTurnos() {
   const q = query(collection(db, "turnosPeluqueria"));
   const querySnapshot = await getDocs(q);
@@ -609,8 +769,6 @@ export async function borrarTodosLosTurnos() {
     deleteDoc(doc.ref);
   });  
 }
-
-
 export async function avanzarEstadoTurno(id) {
   try {
     // Crear la consulta para obtener el documento del turno con el ID proporcionado
@@ -665,10 +823,6 @@ export async function avanzarEstadoTurno(id) {
     throw error;
   }
 }
-
-
-
-
 export async function getLastTurnoPeluqueriaId() {
   let idUltimo = 0;
   const q = query(collection(db, "turnosPeluqueria"));
@@ -682,10 +836,6 @@ export async function getLastTurnoPeluqueriaId() {
   idUltimo++
   return idUltimo
 }
-
-
-
-
 export async function updateCanil(id, canil) {
   try {
     const q = query(collection(db, "turnosPeluqueria"), where("id", "==", id));
@@ -703,7 +853,6 @@ export async function updateCanil(id, canil) {
     throw error;
   }
 }
-
 //-------------------------------------------------------
 //---------------------------------------------------
 //------------------------------
@@ -734,7 +883,6 @@ export async function createProduct(product) {
     console.error("Error adding document: ", e);
   }
 }
-
 export async function deleteProduct(id) {
   const q = query(collection(db, "productos"), where("id", "==", id));
   const querySnapshot = await getDocs(q);
@@ -742,8 +890,6 @@ export async function deleteProduct(id) {
     deleteDoc(doc.ref)
   })
 }
-
-
 export async function updateProduct(id, product) {
   const q = query(collection(db, "productos"), where("id", "==", id));
   const querySnapshot = await getDocs(q);
@@ -751,10 +897,6 @@ export async function updateProduct(id, product) {
     updateDoc(doc.ref, product)
   })
 }
-
-
-
-
 export async function crearPrecioDeServicio(selectedServicio, precios) {
   // Agrega un documento con un ID específico a la colección "preciosDeServicios"
   try {
@@ -764,8 +906,6 @@ export async function crearPrecioDeServicio(selectedServicio, precios) {
     console.error("Error al crear precio de servicio: ", error);
   }
 }
-
-
 export async function obtenerPrecioPorServicioYTamaño(servicio, tamaño) {
   try {
     const preciosRef = collection(db, 'preciosDeServicios'); // referencia a la colección 'preciosDeServicios'
@@ -785,7 +925,6 @@ export async function obtenerPrecioPorServicioYTamaño(servicio, tamaño) {
     throw error;
   }
 }
-
 // Función para leer un documento de preciosDeServicios por ID
 export async function obtenerPreciosDeServicios() {
   try {
@@ -801,7 +940,6 @@ export async function obtenerPreciosDeServicios() {
     throw error;
   }
 }
-
 // Función para actualizar un documento de preciosDeServicios por ID
 // Función para actualizar un documento de preciosDeServicios por nombre de servicio
 export async function actualizarPrecioDeServicio(nombreServicio, nuevosPrecios) {
@@ -852,11 +990,6 @@ export async function actualizarPrecioDeServicio(nombreServicio, nuevosPrecios) 
     throw error;
   }
 }
-
-
-
-
-
 // Función para eliminar un documento de preciosDeServicios por ID
 export async function eliminarPrecioDeServicio(selectedServicio) {
   // Elimina el documento de la colección "preciosDeServicios" con el ID especificado
@@ -867,13 +1000,6 @@ export async function eliminarPrecioDeServicio(selectedServicio) {
     console.error("Error al eliminar precio de servicio: ", error);
   }
 }
-
-
-
-
-
-
-
 export async function situacionMascota(estadoCivil, id) {
   const q = query(collection(db, "mascotas"), where("id", "==", id));
   const docs = await getDocs(q);

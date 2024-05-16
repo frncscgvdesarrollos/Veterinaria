@@ -1,5 +1,5 @@
 'use client';
-import { useEffect, useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import Image from 'next/image';
 import FormAgregarMascota from '@/app/components/inicio/agregarMascota';
 import { MascotasContext } from '../../context/MascotaContext';
@@ -10,6 +10,7 @@ export default function MisMascotas() {
   const [currentPage, setCurrentPage] = useState(0);
   const [nuevaMascota, setNuevaMascota] = useState(false);
   const [mascotas, setMascotas] = useState([]);
+  const [showModal, setShowModal] = useState(false);
 
   useEffect(() => {
     setMascotas(mascota); // Actualizar mascotas cuando cambie el contexto
@@ -34,6 +35,10 @@ export default function MisMascotas() {
     currentMascota = mascotas[currentPage];
   }
 
+  const toggleModal = () => {
+    setShowModal(!showModal);
+  };
+
   return (
     <div className="container mx-auto p-4 border-2 border-purple-800 rounded-lg">
       <div className="mb-8 flex justify-between items-center bg-purple-200 bg-opacity-70 rounded-lg p-4">
@@ -51,8 +56,8 @@ export default function MisMascotas() {
         <div className="flex flex-col items-center bg-pink-300 bg-opacity-70 rounded-lg p-4">
           {!mascotas || mascotas.length === 0 ? (
             <>
-            <p className="text-gray-600 text-xl p-2 ">No tienes ninguna mascota.</p>
-            <Link href="#Adopciones" className="text-purple-800 bg-opacity-70 rounded-full text-xl p-4 my-4 bg-purple-800 text-yellow-300 mx-auto ">Adoptar. </Link>
+              <p className="text-gray-600 text-xl p-2 ">No tienes ninguna mascota.</p>
+              <Link href="#Adopciones" className="text-purple-800 bg-opacity-70 rounded-full text-xl p-4 my-4 bg-purple-800 text-yellow-300 mx-auto ">Adoptar. </Link>
             </>
           ) : (
             <div className="flex gap-4 relative mb-4">
@@ -82,7 +87,7 @@ export default function MisMascotas() {
                   <p className="text-sm text-gray-600 py-2">Tamaño: {currentMascota ? currentMascota.tamaño : 'Tamaño'}</p>
                   <p className="text-sm text-gray-600 py-2">Raza: {currentMascota ? currentMascota.raza : 'Raza'}</p>
                   <p className="text-sm text-gray-600 py-2">Situación: {currentMascota ? currentMascota.estadoCivil || 'No definida' : 'No definida'}</p>
-                  <button className="bg-purple-800 text-white bg-opacity-70 rounded-full p-2 w-full mt-4">Ver Carnet</button>
+                  <button onClick={toggleModal} className="bg-purple-800 text-white bg-opacity-70 rounded-full p-2 w-full mt-4">Ver Carnet</button>
                 </div>
               </div>
               <button onClick={nextPage} className="bg-purple-800 text-white bg-opacity-70 rounded-full  w-[50px] h-[70px] my-auto cursor-pointer">&#8594;</button>
@@ -90,6 +95,55 @@ export default function MisMascotas() {
           )}
         </div>
       )}
+      {/* Modal para mostrar el carnet sanitario */}
+      {showModal && (
+  <div className="fixed inset-0 bg-black bg-opacity-50 flex justify-center items-center">
+    <div className="bg-white p-6 rounded-lg">
+      {/* Contenido del carnet sanitario */}
+      <h2 className="text-xl font-semibold mb-4">Carnet Sanitario de {currentMascota.nombre}</h2>
+      {/* Renderizado de los datos del carnet sanitario */}
+      <div>
+        <h3 className="font-semibold mb-2">Ultima Antirrábica:</h3>
+        {currentMascota.carnetSanitario && currentMascota.carnetSanitario.antirrabica ? (
+          <ul>
+            {currentMascota.carnetSanitario.antirrabica.map((vacuna, index) => (
+              <li key={index}>{/* Renderizar los detalles de la vacuna antirrábica */}</li>
+            ))}
+          </ul>
+        ) : (
+          <p>No hay información disponible</p>
+        )}
+      </div>
+      <div>
+        <h3 className="font-semibold mb-2">Ultimas Vacunas:</h3>
+        {currentMascota.carnetSanitario && currentMascota.carnetSanitario.vacunas ? (
+          <ul>
+            {currentMascota.carnetSanitario.vacunas.map((vacuna, index) => (
+              <li key={index}>{/* Renderizar los detalles de cada vacuna */}</li>
+            ))}
+          </ul>
+        ) : (
+          <p>No hay información disponible</p>
+        )}
+      </div>
+      <div>
+        <h3 className="font-semibold mb-2">Ultima Desparasitaciones:</h3>
+        {currentMascota.carnetSanitario && currentMascota.carnetSanitario.desparasitaciones ? (
+          <ul>
+            {currentMascota.carnetSanitario.desparasitaciones.map((desparasitacion, index) => (
+              <li key={index}>{/* Renderizar los detalles de cada desparasitación */}</li>
+            ))}
+          </ul>
+        ) : (
+          <p>No hay información disponible</p>
+        )}
+            </div>
+            {/* Botón para cerrar el modal */}
+            <button onClick={toggleModal} className="bg-purple-800 text-white rounded-full p-2 w-full mt-4">Cerrar</button>
+          </div>
+        </div>
+      )}
+
     </div>
   );
 }

@@ -1,13 +1,12 @@
 'use client'
-import { useEffect , useState } from 'react';
+import { useEffect, useState } from 'react';
 import Calendar from 'react-calendar';
 import 'react-calendar/dist/Calendar.css';
 import { MascotasContext } from '../../context/MascotaContext';
 import { UserAuth } from '../../context/AuthContext';
 import { UseClient } from '../../context/ClientContext';
-import { postTurnoPeluqueria, sumarTurnoPeluqueria, getLastTurnoPeluqueriaId, verificarCapacidadTurno , obtenerPrecioPorServicioYTamaño, sumarTurnoPeluqueriaMascota } from '../../firebase';
+import { postTurnoPeluqueria, sumarTurnoPeluqueria, getLastTurnoPeluqueriaId, verificarCapacidadTurno, obtenerPrecioPorServicioYTamaño, sumarTurnoPeluqueriaMascota, registroVentaPeluqueria , idVentas } from '../../firebase';
 import ProductX from '../mercadopago/ProductX.jsx';
-
 
 export default function MyCalendarPeluqueria() {
   const { user } = UserAuth();
@@ -16,8 +15,27 @@ export default function MyCalendarPeluqueria() {
   const { nombre, apellido, direccion, telefono } = datosCliente;
   const { mascota } = MascotasContext();
   const [verificado, setVerificado] = useState(false);
- 
+  const [idVenta, setIdVenta] = useState(0);
 
+  const pedirId = new Promise((resolve, reject) => {
+    idVentas()
+      .then((id) => {
+        resolve(id);
+      })
+      .catch((error) => {
+        reject(error);
+      });
+  });
+  
+  pedirId
+    .then((id) => {
+      setIdVenta(id);
+    })
+    .catch((error) => {
+      console.error('Error al obtener el ID de ventas:', error);
+      alert('Hubo un error al obtener el ID de ventas. Por favor, inténtalo de nuevo.');
+    });
+  
   const [formData, setFormData] = useState({
     id: 0,
     estadoDelTurno: 'confirmar',
@@ -38,69 +56,55 @@ export default function MyCalendarPeluqueria() {
     canilPeluqueria: 0,
   });
 
+  const [venta, setVenta] = useState({
+    enCurso:true,
+    id: idVenta, // Dejar este valor inicializado como 0
+    userId: uid,
+    createdAt: new Date(),
+    nombre: '',
+    apellido: '',
+    direccion: '',
+    telefono: '',
+    precio: 0,
+    productoOservicio: '',
+    categoria:"peluqueria",
+    fecha_turno: new Date(),
+    efectivo: false,
+    mp: false,
+    confirmado: false,
+  });
+
   useEffect(() => {
     if (datosCliente.length > 0) {
-      const { nombre, apellido, direccion, telefono , usuarioid } = datosCliente;
+      const { nombre, apellido, direccion, telefono, usuarioid } = datosCliente;
       setFormData((prevData) => ({
         ...prevData,
         nombre: nombre || '',
         apellido: apellido || '',
         direccion: direccion || '',
         telefono: telefono || '',
-        uid : usuarioid || '',
+        uid: usuarioid || '',
       }));
     }
   }, [datosCliente]);
 
-  const handleDateChange = (newDate) => {
-    const currentDate = new Date();
-    const maxDate = new Date(currentDate.getTime() + (20 * 24 * 60 * 60 * 1000)); // Fecha máxima: 20 días adelante
-    if (newDate < currentDate || newDate > maxDate) {
-      alert('Solo puedes seleccionar fechas hasta 20 días en el futuro a partir de la fecha actual.');
-      return;
-    }
-    setFormData((prevData) => ({
-      ...prevData,
-      selectedDate: newDate,
+  useEffect(() => {
+    // Actualizar el estado de la venta cuando cambia el precio en formData
+    updateVenta();
+  }, [formData.precio , formData.selectedDate]);
+
+  const updateVenta = () => {
+    setVenta((prevVenta) => ({
+      ...prevVenta,
+      precio: formData.precio,
+      nombre: formData.nombre,
+      apellido: formData.apellido,
+      direccion: formData.direccion,
+      telefono: formData.telefono,
+      productoOservicio: formData.selectedServicio,
+      fecha_turno: formData.selectedDate,
     }));
   };
-
-  function handleVerificarClick() {
-    console.log(formData);
-
-    getLastTurnoPeluqueriaId()
-      .then((id) => {
-        const nuevoId = id !== 0 ? id + 1 : 1; // Si el ID es 0, asignamos 1 como nuevo ID
-        setFormData((prevData) => ({
-          ...prevData,
-          id: nuevoId,
-        }));
-        const emptyFields = Object.values(formData).filter((value) => value === '').length;
-        if (emptyFields > 0) {
-          alert('Por favor completa todos los campos.');
-          return Promise.reject(new Error('Campos incompletos'));// valor por defecto textarea
-        }
-
-        return verificarCapacidadTurno(formData.selectedDate, formData.selectedTurno);
-      })
-      .then((result) => {
-        if (!result) {
-          alert('No hay turnos disponibles para esa fecha y turno.');
-          return Promise.reject(new Error('No hay turnos disponibles'));
-        }
-        setVerificado(true);
-        alert('Turno verificado correctamente. Ya puede efectuar el pago.');
-      })
-      .catch((error) => {
-        console.error('Error al registrar el turno:', error);
-        alert('Hubo un error al registrar el turno. Por favor, inténtalo de nuevo.');
-      });
-  };
-
-  function handleFormSubmit(e) {
-    e.preventDefault();
-    return Promise.all([postTurnoPeluqueria(formData), sumarTurnoPeluqueria(uid), sumarTurnoPeluqueriaMascota(uid, formData.selectedPet)]);
-  }
 
   const handleChange = (e) => {
     const { name, value, type, checked } = e.target;
@@ -110,7 +114,6 @@ export default function MyCalendarPeluqueria() {
       [name]: newValue,
     }));
 
-    // Agregar la lógica para cargar el tamaño de la mascota seleccionada
     if (name === 'selectedPet') {
       const selectedPet = mascota.find((pet) => pet.nombre === value);
       if (selectedPet) {
@@ -136,6 +139,65 @@ export default function MyCalendarPeluqueria() {
           // Manejar el error según sea necesario
         });
     }
+  };
+
+  const handleFormSubmit = (e) => {
+    e.preventDefault();
+
+    registroVentaPeluqueria(venta)
+      .then(() => {
+        return Promise.all([postTurnoPeluqueria(formData), sumarTurnoPeluqueria(uid), sumarTurnoPeluqueriaMascota(uid, formData.selectedPet)]);
+      })
+      .then(() => {
+        // Lógica adicional después de postear el turno, si es necesaria
+      })
+      .catch((error) => {
+        console.error('Error al registrar el turno y la venta:', error);
+        alert('Hubo un error al registrar el turno. Por favor, inténtalo de nuevo.');
+      });
+  };
+
+  const handleDateChange = (newDate) => {
+    const currentDate = new Date();
+    const maxDate = new Date(currentDate.getTime() + (20 * 24 * 60 * 60 * 1000));
+    if (newDate < currentDate || newDate > maxDate) {
+      alert('Solo puedes seleccionar fechas hasta 20 días en el futuro a partir de la fecha actual.');
+      return;
+    }
+    setFormData((prevData) => ({
+      ...prevData,
+      selectedDate: newDate,
+    }));
+  };
+
+  const handleVerificarClick = () => {
+    getLastTurnoPeluqueriaId()
+      .then((id) => {
+        const nuevoId = id !== 0 ? id + 1 : 1;
+        setFormData((prevData) => ({
+          ...prevData,
+          id: nuevoId,
+        }));
+        const emptyFields = Object.values(formData).filter((value) => value === '').length;
+        if (emptyFields > 0) {
+          alert('Por favor completa todos los campos.');
+          return Promise.reject(new Error('Campos incompletos'));
+        } else {
+          return verificarCapacidadTurno(formData.selectedDate, formData.selectedTurno);
+        }
+      })
+      .then((result) => {
+        if (!result) {
+          alert('No hay turnos disponibles para esa fecha y turno.');
+          return Promise.reject(new Error('No hay turnos disponibles'));
+        }
+        setVerificado(true); // Asegurarse de que se establece a true
+        alert('Turno verificado correctamente. Ya puede efectuar el pago.');
+      })
+      .catch((error) => {
+        console.error('Error al registrar el turno:', error);
+        alert('Hubo un error al registrar el turno. Por favor, inténtalo de nuevo.');
+      });
   };
 
   const tileDisabled = ({ date, view }) => {
@@ -227,4 +289,5 @@ export default function MyCalendarPeluqueria() {
       </div>
     </div>
   );
+  
 }

@@ -26,6 +26,17 @@ export default function FormAgregarMascota() {
     internacion:false,
     turnosPeluqueria:0,
     turnosConsulta:0,
+    carnetSanitario: [
+      {
+        antirrabicas : []
+      },
+      {
+        vacunas : []
+      },
+      {
+        desparasitaciones: []
+      }
+    ]
   });
   const [mascotaAgregada, setMascotaAgregada] = useState(false);
   const [foto, setFoto] = useState(null);

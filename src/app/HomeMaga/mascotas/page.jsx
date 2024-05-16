@@ -1,6 +1,6 @@
 'use client'
 import React, { useState, useEffect } from 'react';
-import { getMascotas, getClientes } from '@/app/firebase';
+import { getMascotas, getClientes, aplicarVacuna } from '@/app/firebase';
 import Image from 'next/image';
 
 export default function Mascotas() {
@@ -14,7 +14,7 @@ export default function Mascotas() {
 
   useEffect(() => {
     const fetchData = () => {
-      getClientes()
+      return getClientes()
         .then(clientesData => {
           setClientes(clientesData);
           return getMascotas();
@@ -55,6 +55,21 @@ export default function Mascotas() {
     setModalAbierto(false);
   };
 
+  const handleAplicarVacuna = (tipoVacuna) => {
+    aplicarVacuna(mascotaSeleccionada.uid, mascotaSeleccionada.nombre, tipoVacuna)
+      .then(() => {
+        console.log("Vacuna aplicada correctamente.");
+        // Actualizar datos de mascotas después de aplicar la vacuna
+        return getMascotas();
+      })
+      .then(mascotasData => {
+        setMascotas(mascotasData);
+      })
+      .catch(error => {
+        console.error("Error al aplicar la vacuna:", error);
+      });
+  };
+
   return (
     <div className="p-4 md:p-8 bg-purple-50 rounded-lg">
       <div className="mb-4 md:mb-6">
@@ -79,23 +94,23 @@ export default function Mascotas() {
         <p className="text-purple-800">Cargando mascotas...</p>
       ) : (
         <>
-{mascotasEncontradas.length > 0 ? (
-  mascotasEncontradas.map((mascota, index) => (
-    <div key={index} className="bg-purple-200 p-4 mb-4 rounded-lg flex flex-col md:flex-row items-center">
-        <button className="bg-purple-600 text-white px-6 py-2 rounded-lg hover:bg-purple-700 focus:outline-none focus:ring focus:border-purple-500" onClick={() => setMascotasEncontradas([])}>Cerrar</button>
-      <div className="m-auto bg-purple-300 p-4 rounded-lg">
-        <p className="text-purple-800"><span className="font-semibold">Nombre:</span> {mascota.nombre}</p>
-        <p className="text-purple-800"><span className="font-semibold">Raza:</span> {mascota.raza}</p>
-        <p className="text-purple-800"><span className="font-semibold">Tamaño:</span> {mascota.tamaño}</p>
-        <p className="text-purple-800"><span className="font-semibold">Cumpleaños:</span> {mascota.cumpleaños}</p>
-        <p className="text-purple-800"><span className="font-semibold">Cliente:</span> {mascota.uid}</p>
-      </div>
-      <div className="m-auto">
-        <Image src={mascota.foto} alt="fotomascota" width={150} height={100} className='rounded-full'/>
-      </div>
-    </div>
-  ))
-) : null}
+          {mascotasEncontradas.length > 0 ? (
+            mascotasEncontradas.map((mascota, index) => (
+              <div key={index} className="bg-purple-200 p-4 mb-4 rounded-lg flex flex-col md:flex-row items-center">
+                <button className="bg-purple-600 text-white px-6 py-2 rounded-lg hover:bg-purple-700 focus:outline-none focus:ring focus:border-purple-500" onClick={() => setMascotasEncontradas([])}>Cerrar</button>
+                <div className="m-auto bg-purple-300 p-4 rounded-lg">
+                  <p className="text-purple-800"><span className="font-semibold">Nombre:</span> {mascota.nombre}</p>
+                  <p className="text-purple-800"><span className="font-semibold">Raza:</span> {mascota.raza}</p>
+                  <p className="text-purple-800"><span className="font-semibold">Tamaño:</span> {mascota.tamaño}</p>
+                  <p className="text-purple-800"><span className="font-semibold">Cumpleaños:</span> {mascota.cumpleaños}</p>
+                  <p className="text-purple-800"><span className="font-semibold">Cliente:</span> {mascota.uid}</p>
+                </div>
+                <div className="m-auto">
+                  <Image src={mascota.foto} alt="fotomascota" width={150} height={100} className='rounded-full'/>
+                </div>
+              </div>
+            ))
+          ) : null}
 
           <div className="overflow-x-auto bg-purple-200 p-4 rounded-lg">
             <table className="w-full md:w-2/3 mx-auto text-center bg-purple-300 rounded-lg">
@@ -134,16 +149,34 @@ export default function Mascotas() {
         </>
       )}
       {modalAbierto && (
-        <div className="fixed top-0 left-0 w-full h-full bg-black bg-opacity-50 flex justify-center items-center">
-          <div className="bg-white p-8 rounded-lg">
+        <div className="absolute top-14 left-0 w-full h-full flex justify-center items-center bg-black bg-opacity-50">
+          <div className="bg-white rounded-lg max-w-md w-full p-8 mt-10">
             <h2 className="text-2xl font-semibold mb-4 text-purple-800">Detalles de la mascota</h2>
-            <p className="text-purple-800">Nombre: {mascotaSeleccionada.nombre}</p>
-            <p className="text-purple-800">Raza: {mascotaSeleccionada.raza}</p>
-            <p className="text-purple-800">Tamaño: {mascotaSeleccionada.tamaño}</p>
-            <p className="text-purple-800">Cumpleaños: {mascotaSeleccionada.cumpleaños}</p>
-            <p className="text-purple-800">Cliente: {mascotaSeleccionada.uid}</p>
-            <Image src={mascotaSeleccionada.foto} alt="fotomascota" width={150} height={100} className='rounded-full'/>
-            <button className="bg-purple-600 text-white px-4 py-2 rounded-lg mt-4 hover:bg-purple-700 focus:outline-none focus:ring focus:border-purple-500" onClick={cerrarModal}>Cerrar</button>
+            <p className="text-purple-800 mb-2">Nombre: {mascotaSeleccionada.nombre}</p>
+            <p className="text-purple-800 mb-2">Raza: {mascotaSeleccionada.raza}</p>
+            <p className="text-purple-800 mb-2">Tamaño: {mascotaSeleccionada.tamaño}</p>
+            <p className="text-purple-800 mb-2">Cumpleaños: {mascotaSeleccionada.cumpleaños}</p>
+            <p className="text-purple-800 mb-2">Cliente: {mascotaSeleccionada.uid}</p>
+            <p className="text-purple-800 mb-2">Carnet Sanitario:</p>
+            {mascotaSeleccionada.carnetSanitario && mascotaSeleccionada.carnetSanitario.map((seccion, index) => (
+              <div key={index} className="mb-4 bg-purple-200 p-4 rounded-lg">
+                <p className="text-purple-800 mb-2">{Object.keys(seccion)[0]}:</p>
+                <ul className='flex flex-col'>
+                {Object.values(seccion)[0].map((item, i) => (
+                    <li key={i} className="mb-1">
+                      {Object.entries(item).map(([key, value], j) => (
+                        <p key={j} className="text-purple-800 mb-1">{key}: {value}</p>
+                      ))}
+                    </li>
+                  ))}
+
+                </ul>
+                <button onClick={() => handleAplicarVacuna(Object.keys(seccion)[0])} className="bg-purple-600 text-white px-4 py-2 rounded-lg hover:bg-purple-700 focus:outline-none focus:ring focus:border-purple-500 mt-2">Aplicación</button>
+              </div>
+            ))}
+            <div className="flex justify-center mt-4">
+              <button className="bg-purple-600 text-white px-4 py-2 rounded-lg mr-4 hover:bg-purple-700 focus:outline-none focus:ring focus:border-purple-500" onClick={cerrarModal}>Cerrar</button>
+            </div>
           </div>
         </div>
       )}

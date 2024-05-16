@@ -4,6 +4,7 @@ import { UserAuth } from '../context/AuthContext';
 import { getTurnosPeluqueria } from '../firebase'; // Suponiendo que existen funciones para obtener los turnos de peluquería y transporte
 import LlamarA from '../components/admin/llamarA';
 import TurnosParaMañana from '../components/admin/TurnosParaMañana';
+import Caja from './caja/page';
 
 export default function Page() {
     const { user } = UserAuth();
@@ -52,6 +53,7 @@ export default function Page() {
                 <h2 className="text-2xl sm:text-lg font-bold text-cyan-800 mb-4">Llamar para confirmar</h2>
                 <LlamarA />
             </div>
+                <Caja />
             {uid === process.env.NEXT_PUBLIC_ADMIN_UID && 
             <div className="col-span-1 order-first md:order-none bg-white shadow-md rounded-md overflow-hidden p-4 sm:p-6 md:p-8 lg:p-10 bg-gray-100">
                 Caja

@@ -13,18 +13,15 @@ export default function VistaTurnosPeluqueriaVeterinaria() {
         const cargarTurnosPeluqueria = () => {
             getTurnosPeluqueria()
                 .then(turnosPeluqueria => {
-                    const hoy = new Date().toISOString().split('T')[0]; // Obtener la fecha actual en formato YYYY-MM-DD
+                    const hoy = new Date(); // Obtener la fecha y hora actual
                     const turnosActivosHoy = turnosPeluqueria.filter(turno => {
-                        const turnoDate = turno.selectedDate.toDate().toISOString().split('T')[0];
-                        return turnoDate === hoy && turno.estadoDelTurno !== 'finalizado' && turno.estadoDelTurno !== 'cancelado';
+                        return turno.selectedDate.toDate() > hoy && turno.estadoDelTurno === 'confirmado'; // Comparar la fecha y hora completa y el estado
                     });
                     const turnosFinalizadosHoy = turnosPeluqueria.filter(turno => {
-                        const turnoDate = turno.selectedDate.toDate().toISOString().split('T')[0];
-                        return turnoDate === hoy && turno.estadoDelTurno === 'finalizado';
+                        return turno.selectedDate.toDate() <= hoy && turno.estadoDelTurno === 'finalizado'; // Comparar la fecha y hora completa y el estado
                     });
                     const turnosCanceladosHoy = turnosPeluqueria.filter(turno => {
-                        const turnoDate = turno.selectedDate.toDate().toISOString().split('T')[0];
-                        return turnoDate === hoy && turno.estadoDelTurno === 'cancelado';
+                        return turno.selectedDate.toDate() <= hoy && turno.estadoDelTurno === 'cancelado'; // Comparar la fecha y hora completa y el estado
                     });
                     setTurnosActivos(turnosActivosHoy);
                     setTurnosFinalizados(turnosFinalizadosHoy);
