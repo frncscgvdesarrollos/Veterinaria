@@ -54,17 +54,17 @@ export default function Caja() {
     setTotalEfectivo(efectivoTotal);
 
     const peluqueriaTotal = data
-      .filter((item) => item.productoOservicio === "Peluqueria Canina")
+      .filter((item) => item.categoria === "peluqueria")
       .reduce((total, item) => total + item.precio, 0);
     setTotalPeluqueria(peluqueriaTotal);
 
     const veterinariaTotal = data
-      .filter((item) => item.productoOservicio === "Consulta Veterinaria")
+      .filter((item) => item.categoria === "consulta")
       .reduce((total, item) => total + item.precio, 0);
     setTotalVeterinaria(veterinariaTotal);
 
     const tiendaTotal = data
-      .filter((item) => item.productoOservicio === "Venta de la tienda")
+      .filter((item) => item.categoria === "tienda")
       .reduce((total, item) => total + item.precio, 0);
     setTotalTienda(tiendaTotal);
   };
@@ -112,7 +112,7 @@ export default function Caja() {
                 <li className="mb-1">MercadoPago : {item.mp ? "si" : "no"}</li>
                 <li className="mb-1">Efectivo : {item.efectivo ? "si" : "no"}</li>
                 <li className="mb-1">Confirmado : {item.confirmado ? "si" : "no"}</li>
-                <li className="mb-1">productoOservicio : {item.productoOservicio}</li>
+                <li className="mb-1">Categoría : {item.categoria}</li>
               </ul>
             ))}
           </div>

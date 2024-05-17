@@ -2,12 +2,12 @@
 import React, { useState, useEffect } from 'react';
 import Calendar from 'react-calendar';
 import 'react-calendar/dist/Calendar.css';
-import { postTurnoPeluqueria, getClientes, getMascotas, getLastTurnoPeluqueriaId, obtenerPrecioPorServicioYTamaño, verificarCapacidadTurno, borrarTodosLosTurnos, registroVentaPeluqueria } from '../../firebase';
+import { postTurnoPeluqueria, getClientes, getMascotas, getLastTurnoPeluqueriaId, obtenerPrecioPorServicioYTamaño, verificarCapacidadTurno, borrarTodosLosTurnos, registroVentaPeluqueria,idVentas } from '../../firebase';
 import { redirect } from 'next/navigation';
 
 export default function CargarTurnoPmanual() {
   const [formData, setFormData] = useState({
-    id: "turnoManual",
+    id: 0,
     estadoDelTurno: 'confirmar',
     nombre: '',
     apellido: '',
@@ -50,7 +50,11 @@ export default function CargarTurnoPmanual() {
   });
 
   useEffect(() => {
-    // Actualizar el estado de la venta cuando cambia el precio en formData
+    idVentas().then(nuevoId => {
+      setVenta(prevVenta => ({ ...prevVenta, id: nuevoId }));
+    }).catch(error => {
+      console.error('Error al obtener el ID de ventas:', error);
+    });
     updateVenta();
   }, [formData.precio, formData.selectedDate]);
 
@@ -84,7 +88,7 @@ export default function CargarTurnoPmanual() {
     const fetchUltimoTurnoId = () => {
       getLastTurnoPeluqueriaId()
         .then(ultimoTurnoId => {
-          setFormData(prevData => ({ ...prevData, id: ultimoTurnoId.toString() }));
+          setFormData(prevData => ({ ...prevData, id: ultimoTurnoId }));
         })
         .catch(error => {
           console.error('Error al obtener el último ID de turno:', error);
@@ -172,16 +176,45 @@ export default function CargarTurnoPmanual() {
           return;
         }
   
-        registroVentaPeluqueria(venta)
-          .then(() => {
-            alert('Turno y venta registrados correctamente.');
-          })
-          .catch(error => {
-            console.error('Error al registrar la venta:', error);
-            alert('Hubo un error al registrar la venta. Por favor, inténtalo de nuevo.');
-          });
-  
+        // Registra el turno
         postTurnoPeluqueria(formData)
+          .then(() => {
+            alert('Turno registrado correctamente.');
+  
+            // Genera el objeto de venta
+            const ventaData = {
+              enCurso: false,
+              id: venta.id,
+              userId: formData.uid, // Utiliza el userId del cliente si está registrado
+              createdAt: new Date(),
+              nombre: formData.nombre,
+              apellido: formData.apellido,
+              direccion: formData.direccion,
+              telefono: formData.telefono,
+              precio: formData.precio,
+              productoOservicio: formData.selectedServicio,
+              categoria: "peluqueria",
+              fecha_turno: formData.selectedDate,
+              efectivo: true,
+              mp: false,
+              confirmado: false,
+            };
+  
+            // Si el cliente no está registrado, asigna el userId a ''
+            if (!formData.uid) {
+              ventaData.userId = '';
+            }
+  
+            // Registra la venta
+            registroVentaPeluqueria(ventaData)
+              .then(() => {
+                alert('Venta registrada correctamente.');
+              })
+              .catch(error => {
+                console.error('Error al registrar la venta:', error);
+                alert('Hubo un error al registrar la venta. Por favor, inténtalo de nuevo.');
+              });
+          })
           .catch(error => {
             console.error('Error al registrar el turno:', error);
             alert('Hubo un error al registrar el turno. Por favor, inténtalo de nuevo.');
@@ -192,6 +225,7 @@ export default function CargarTurnoPmanual() {
         alert('Hubo un error al verificar la capacidad del turno. Por favor, inténtalo de nuevo.');
       });
   };
+  
   
 
   const handlePetSelection = (petId) => {
@@ -248,7 +282,7 @@ export default function CargarTurnoPmanual() {
 
   const limpiarFormulario = () => {
     setFormData({
-      id: "turnoManual",
+      id: 0,
       estadoDelTurno: 'confirmar',
       nombre: '',
       apellido: '',
@@ -408,6 +442,7 @@ export default function CargarTurnoPmanual() {
       )}
 
       {isExistingClient === false && (
+        <form onSubmit={handleSubmit}>
         <div className="mt-4">
           <label htmlFor="nombre" className="block text-sm font-medium text-gray-700">Nombre</label>
           <input type="text" id="nombre" name="nombre" value={formData.nombre} onChange={handleChange} className="mt-1 p-2 block w-full rounded-md border-gray-300 shadow-sm focus:border-indigo-500 focus:ring focus:ring-indigo-200 focus:ring-opacity-50" />
@@ -510,6 +545,7 @@ export default function CargarTurnoPmanual() {
           <button onClick={() => { setIsExistingClient(null); limpiarFormulario(); }} className="bg-red-500 m-4 text-white px-4 py-2 rounded-md hover:bg-red-600 transition duration-300">Cancelar</button>
 
         </div>
+      </form>
       )}
     </div>
   );

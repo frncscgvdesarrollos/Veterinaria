@@ -373,7 +373,7 @@ export async function getTurnosChekeo2() {
 
 export async function getMisTurnos(uid) {
   const turnos = [];
-  const q = query(collection(db, "turnosPeluqueria"), where("usuarioid", "==", uid));
+  const q = query(collection(db, "turnosPeluqueria"), where("uid", "==", uid));
   const querySnapshot = await getDocs(q);
   querySnapshot.forEach((doc) => {
     turnos.push(doc.data()); // Aquí se obtienen los datos del documento utilizando el método data()
@@ -846,18 +846,24 @@ export async function avanzarEstadoTurno(id) {
   }
 }
 export async function getLastTurnoPeluqueriaId() {
-  let idUltimo = 0;
-  const q = query(collection(db, "turnosPeluqueria"));
-  const querySnapshot = await getDocs(q);
-  querySnapshot.forEach((doc) => {
-    if (doc.data().id > idUltimo) {
-      idUltimo = doc.data().id;
-    }
-  })
-  console.log(idUltimo)
-  idUltimo++
-  return idUltimo
+  try {
+    const q = collection(db, "turnosPeluqueria");
+    const snapshot = await getDocs(q);
+
+    // Obtener el máximo ID existente
+    const maxId = snapshot.docs.reduce((idMayor, doc) => {
+      const id = doc.data().id;
+      return Math.max(id, idMayor);
+    }, 0);
+
+    // Devolver el máximo ID encontrado + 1
+    return maxId + 1;
+  } catch (error) {
+    console.error("Error al obtener el ID de turnoPeluqueria:", error);
+    throw error;
+  }
 }
+
 export async function updateCanil(id, canil) {
   try {
     const q = query(collection(db, "turnosPeluqueria"), where("id", "==", id));
@@ -891,10 +897,8 @@ export async function getProducts() {
   const q = await query(collection(db, "productos"));
   const querySnapshot = await getDocs(q);
   querySnapshot.forEach((doc) => {
-    console.log(doc.data())
     products.push(doc.data());
   })
-  console.log(products)
   return products
 }
 export async function createProduct(product) {
