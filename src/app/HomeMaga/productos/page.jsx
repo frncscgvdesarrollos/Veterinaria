@@ -3,7 +3,7 @@ import React, { useState, useEffect } from 'react';
 import { getProducts, createProduct, deleteProduct, updateProduct, actualizarId } from '@/app/firebase';
 import Image from 'next/image';
 
-export default function Productos() {
+export default function ProductPage() {
   const [products, setProducts] = useState([]);
   const [formData, setFormData] = useState({
     id: 0,
@@ -255,7 +255,7 @@ export default function Productos() {
       {Object.keys(formData).length > 0 && (
         <div className="bg-white rounded-lg shadow-md p-4 mt-4">
           {/* Card que muestra los detalles del producto */}
-          <Image src={formData.imagen} alt="Imagen" className="mb-2" width={200} height={200} style={{ maxWidth: '100%', height: 'auto' }} />
+          <Image src={formData.imagen} alt="Imagen" className="mb-2" style={{ maxWidth: "100%" }} />
           <h2 className="text-xl font-semibold mb-2">{formData.nombre}</h2>
           <p className="text-gray-600 mb-2">{formData.descripcion}</p>
           <p className="text-gray-600 mb-2">Para: {formData.para}</p>

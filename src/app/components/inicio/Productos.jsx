@@ -39,7 +39,7 @@ const CartItem = React.memo(({ item, eliminarDelCarrito }) => {
     );
 });
 
-const Productos = () => {
+export default function Productos() {
     const { user } = UserAuth();
     const uid = user?.uid;
     const { datosCliente } = UseClient();
