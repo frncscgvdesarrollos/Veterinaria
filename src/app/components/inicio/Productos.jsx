@@ -39,6 +39,10 @@ const CartItem = React.memo(({ item, eliminarDelCarrito }) => {
     );
 });
 
+CartItem.displayName = 'CartItem'; // Add this line to provide a display name
+
+
+
 export default function Productos() {
     const { user } = UserAuth();
     const uid = user?.uid;

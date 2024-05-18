@@ -102,10 +102,11 @@ export default function MyCalendarPeluqueria() {
   useEffect(() => {
     // Actualizar el estado de la venta cuando cambia el precio en formData
     updateVenta();
-  }, [formData.precio , formData.selectedDate]);
+  }, [formData.precio, formData.selectedDate, updateVenta]);
+  
 
   
-  const updateVenta = () => {
+  const updateVenta = useCallback(() => {
     setVenta((prevVenta) => ({
       ...prevVenta,
       precio: formData.precio,
@@ -116,7 +117,8 @@ export default function MyCalendarPeluqueria() {
       productoOservicio: formData.selectedServicio,
       fecha_turno: formData.selectedDate,
     }));
-  };
+  }, [formData]);
+  
 
   const handleChange = (e) => {
     const { name, value, type, checked } = e.target;
