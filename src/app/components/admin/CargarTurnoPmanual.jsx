@@ -46,6 +46,7 @@ export default function CargarTurnoPmanual() {
     mp: false,
     confirmado: false,
   });
+  let update = updateVenta();
 
   useEffect(() => {
     idVentas().then(nuevoId => {
@@ -54,7 +55,7 @@ export default function CargarTurnoPmanual() {
       console.error('Error al obtener el ID de ventas:', error);
     });
     updateVenta();
-  }, [formData.precio, formData.selectedDate, updateVenta]); 
+  }, [formData.precio, formData.selectedDate, update]); 
   
 
   const updateVenta = () => {
