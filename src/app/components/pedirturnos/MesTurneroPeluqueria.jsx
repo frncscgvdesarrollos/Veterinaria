@@ -104,6 +104,7 @@ export default function MyCalendarPeluqueria() {
     updateVenta();
   }, [formData.precio , formData.selectedDate]);
 
+  
   const updateVenta = () => {
     setVenta((prevVenta) => ({
       ...prevVenta,
@@ -215,6 +216,11 @@ export default function MyCalendarPeluqueria() {
     const currentDate = new Date();
     return view === 'month' && (date.getDay() === 0 || date.getDay() === 6 || date < currentDate);
   };
+  useEffect(() => {
+    // Actualizar el estado de la venta cuando cambia el precio en formData
+    updateVenta();
+  }, [formData.precio, formData.selectedDate, updateVenta]);
+  
 
   return (
     <div className="container mx-auto p-4 sm:p-6 md:p-8 lg:p-10">
