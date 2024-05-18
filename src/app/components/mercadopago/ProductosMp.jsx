@@ -1,37 +1,36 @@
 "use server";
-import { idVentas } from "@/app/firebase";
-import { MercadoPagoConfig, Preference } from "mercadopago";
+import {MercadoPagoConfig, Preference} from "mercadopago";
 import { redirect } from "next/navigation";
 
-
-export default async function ProductosMP(carrito) {
-  const idVenta = new Promise((resolve) => idVentas().then((id) => resolve(id)));
-    const client = new MercadoPagoConfig({
-        accessToken: process.env.NEXT_PUBLIC_ACCESSTOKEN,
-    });
-    try {
+const client = new MercadoPagoConfig({accessToken: 'TEST-4732185295999828-021210-74be192e021f74c875fe9bba82f58ec9-1153230629'});
+export default async function ProductosMP( precioFinal ) {
+  const precio = precioFinal.precioFinal;
     const preference = await new Preference(client).create({
+      body: {
+        
+
       items: [
         {
-          id: (await idVenta),
+          id: 0,
           title: "Venta de la tienda",
           quantity: 1,
-          unit_price: carrito.total,
+          unit_price: precio,
         },
       ],
       back_urls: {
-        success: "https://magalimartinveterinaria.vercel.app/HomeCliente/Acciones/venta",
-        failure: "https://magalimartinveterinaria.vercel.app/HomeCliente/Acciones/MisCompras/pagoError",
-        pending: "https://magalimartinveterinaria.vercel.app/HomeCliente/Acciones/MisCompras/pagoPendiente",
+        success: "http://localhost:3000/HomeCliente/Acciones/venta/success",
+        failure: "http://localhost:3000/HomeCliente/Acciones/venta/error",
+        pending: "http://localhost:3000//HomeCliente/Acciones/venta/pending",
       },
       auto_return: "approved",
-      notification_url: "https://magalimartinveterinaria.vercel.app/api/paymentsProductos",
+      notification_url: "http://localhost:3000/api/paymentsProductos"
+      }
     });
 
     redirect(preference.init_point);
-    return <p>pago</p>;
-  } catch (error) {
-    console.error(error);
-    throw new Error("Error al crear la preferencia de pago");
-  }
+  return (
+    <div>
+      <p>productoMP</p>
+    </div>
+  )
 }

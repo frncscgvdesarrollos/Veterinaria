@@ -14,7 +14,7 @@ export default async function ProductX( formData ) {
             id: await idVenta,
             title: "peluqueria canina",
             quantity: 1,
-            unit_price: 100,
+            unit_price: formData.precio,
           },
         ],
         back_urls: {

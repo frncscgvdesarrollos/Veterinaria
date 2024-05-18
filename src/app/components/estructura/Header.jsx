@@ -160,9 +160,7 @@ function EmpresaMobileMenu({ isOpen, handleMobileMenuToggle }) {
 
 export default function Header() {
   const { user } = UserAuth();
-
   const uid = user?.uid;
-  console.log(uid);
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
   const [isOpenNow, setIsOpenNow] = useState(false);
 

@@ -63,7 +63,6 @@ export default function MisDatos() {
     if (editingNombre) {
       modificarCampoCliente(datosCliente.usuarioid, 'nombre', nombreNuevo)
         .then(() => {
-          console.log('Nombre actualizado exitosamente.');
           setEditingNombre(false);
         })
         .catch(error => console.error('Error al actualizar nombre:', error));
@@ -72,7 +71,6 @@ export default function MisDatos() {
     if (editingApellido) {
       modificarCampoCliente(datosCliente.usuarioid, 'apellido', apellidoNuevo)
         .then(() => {
-          console.log('Apellido actualizado exitosamente.');
           setEditingApellido(false);
         })
         .catch(error => console.error('Error al actualizar apellido:', error));
@@ -81,7 +79,6 @@ export default function MisDatos() {
     if (editingDireccion) {
       modificarCampoCliente(datosCliente.usuarioid, 'direccion', direccionNueva)
         .then(() => {
-          console.log('Dirección actualizada exitosamente.');
           setEditingDireccion(false);
         })
         .catch(error => console.error('Error al actualizar dirección:', error));
@@ -90,7 +87,6 @@ export default function MisDatos() {
     if (editingTelefono) {
       modificarCampoCliente(datosCliente.usuarioid, 'telefono', telefonoNuevo)
         .then(() => {
-          console.log('Teléfono actualizado exitosamente.');
           setEditingTelefono(false);
         })
         .catch(error => console.error('Error al actualizar teléfono:', error));
@@ -99,7 +95,6 @@ export default function MisDatos() {
     if (editingEsquina) {
       modificarCampoCliente(datosCliente.usuarioid, 'esquina', esquinaNueva)
         .then(() => {
-          console.log('Esquina actualizada exitosamente.');
           setEditingEsquina(false);
         })
         .catch(error => console.error('Error al actualizar esquina:', error));

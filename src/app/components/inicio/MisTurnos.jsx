@@ -17,12 +17,10 @@ export default function MisTurnos() {
       if (uid) {
         getMisTurnos(uid)
           .then(turnosSnapshot => {
-            console.log("turnosSnapshot", turnosSnapshot);
             setTurnosCliente(turnosSnapshot);
           })
           .catch(error => {
             setError('Error al obtener los turnos del cliente');
-            console.error('Error al obtener los turnos del cliente:', error);
           })
           .finally(() => {
             setIsLoading(false);
