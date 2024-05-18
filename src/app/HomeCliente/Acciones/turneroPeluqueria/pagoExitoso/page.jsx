@@ -28,8 +28,8 @@ export default function PagoTurnoPeluqueriaExitoso() {
         console.error("Error al modificar la venta y el pago:", error);
       });
     }
-  }, [uid]);
-
+  }, [uid, num]); // Include num in the dependency array
+  
   return (
     <div>
       <h2>¡Pago exitoso por MercadoPago!</h2>

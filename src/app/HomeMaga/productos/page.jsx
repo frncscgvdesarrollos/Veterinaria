@@ -255,7 +255,7 @@ export default function ProductPage() {
       {Object.keys(formData).length > 0 && (
         <div className="bg-white rounded-lg shadow-md p-4 mt-4">
           {/* Card que muestra los detalles del producto */}
-          <img src={formData.imagen} alt="Imagen" className="mb-2" style={{ maxWidth: "100%" }} />
+          <Image src={formData.imagen} alt="Imagen" className="mb-2" width={200} height={200} style={{ maxWidth: '100%', height: 'auto' }} />
           <h2 className="text-xl font-semibold mb-2">{formData.nombre}</h2>
           <p className="text-gray-600 mb-2">{formData.descripcion}</p>
           <p className="text-gray-600 mb-2">Para: {formData.para}</p>
@@ -294,7 +294,13 @@ export default function ProductPage() {
                   <td className="px-4 py-2">{product.descripcion}</td>
                   <td className="px-4 py-2">{product.categoria}</td>
                   <td className="px-4 py-2">
-                    <Image src={product.imagen} alt={product.nombre} width={64} height={64} className="object-cover" />
+                  <Image
+                      src={product.imagen}
+                      alt={product.nombre}
+                      width={64}
+                      height={64}
+                      className="object-cover"
+                    />
                   </td>
                   <td className="px-4 py-2">{product.precioCompra} / {product.precioVenta}</td>
                   <td className="px-4 py-2">{product.stock}</td>

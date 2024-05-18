@@ -14,7 +14,7 @@ const CartItem = React.memo(({ item, eliminarDelCarrito }) => {
         <tr> 
             <td>
                 <div className="flex items-center">
-                    <img src={item.imagen} alt={item.nombre} className="w-12 h-12 object-cover mr-4 rounded-lg" />
+                    <Image src={item.imagen} alt={item.nombre} width={48} height={48} className="w-12 h-12 object-cover mr-4 rounded-lg" />
                     <div>
                         <p className="font-semibold text-lg">{item.nombre}</p>
                         <p className="text-gray-700">Cantidad: {item.cantidad}</p>
@@ -39,7 +39,7 @@ const CartItem = React.memo(({ item, eliminarDelCarrito }) => {
     );
 });
 
-export default function Productos (){
+const Productos = () => {
     const { user } = UserAuth();
     const uid = user?.uid;
     const { datosCliente } = UseClient();
@@ -47,7 +47,7 @@ export default function Productos (){
     const [filtro, setFiltro] = useState('');
     const [carrito, setCarrito] = useState([]);
     const [mostrarCarrito, setMostrarCarrito] = useState(false);
-    const [compraEnProceso, setCompraEnProceso] = useState(false); // Nuevo estado para controlar la compra
+    const [compraEnProceso, setCompraEnProceso] = useState(false);
     const [currentPage, setCurrentPage] = useState(1);
     const [finalPrice, setFinalPrice] = useState(0);
     const productsPerPage = 5;
@@ -76,7 +76,6 @@ export default function Productos (){
     };
 
     const agregarAlCarrito = producto => {
-        console.log(carrito);
         const index = carrito.findIndex(item => item.id === producto.id);
         if (index !== -1) {
             const nuevoCarrito = [...carrito];
@@ -97,21 +96,17 @@ export default function Productos (){
     };
 
     const handleCompra = () => {
-        const precioFinal = calcularPrecioTotal(); // Obtener el precio total del carrito
+        const precioFinal = calcularPrecioTotal();
         setFinalPrice(precioFinal);
     
         let nuevoIdVenta;
         let nombresProductos;
     
-        // Obtener un nuevo ID de venta
         idVentas()
             .then(id => {
                 nuevoIdVenta = id;
-    
-                // Obtener los nombres de los productos en el carrito
                 nombresProductos = carrito.map(item => item.nombre);
     
-                // Crear un objeto con los detalles de la venta
                 const nuevaVenta = {
                     enCurso: true,
                     id: nuevoIdVenta,
@@ -131,11 +126,9 @@ export default function Productos (){
                     items: carrito.map(item => ({ nombre: item.nombre, cantidad: item.cantidad })),
                 };
     
-                // Registrar la venta en Firestore
                 return registroVentaPeluqueria(nuevaVenta);
             })
             .then(() => {
-                // Restar el stock de cada producto en el carrito secuencialmente
                 return carrito.reduce((promiseChain, producto) => {
                     return promiseChain.then(() => {
                         return restarStockProducto(producto.id, producto.cantidad)
@@ -150,39 +143,26 @@ export default function Productos (){
                 }, Promise.resolve());
             })
             .then(() => {
-                // Limpiar el carrito y actualizar el estado
                 setCompraEnProceso(true);
                 setCarrito([]);
                 setMostrarCarrito(false);
                 console.log('Venta registrada exitosamente');
-    
-                // Mostrar alerta de éxito
                 alert('¡Productos restados del stock correctamente!');
-    
-                // Redirigir al cliente a la página de inicio u otra página relevante
-                // window.location.href = '/'; // Cambia esto según la estructura de tus rutas
             })
             .catch(error => {
                 console.error('Error al procesar la compra:', error);
                 setCompraEnProceso(false);
-    
-                // Mostrar alerta de error para el cliente
                 alert('Error al procesar la compra. Por favor, inténtelo de nuevo más tarde.');
             });
     };
-    
-    
-    
-    
-      useEffect(() => {
-    if (compraEnProceso) {
-        // Aquí podrías hacer algo como redirigir al usuario a otra página después de un tiempo
-        // o mostrar un mensaje de éxito y luego reiniciar la variable compraEnProceso
-        setTimeout(() => {
-            setCompraEnProceso(false); // Reinicia la variable compraEnProceso después de 5 segundos
-        }, 5000); // Reiniciar después de 5 segundos (5000 milisegundos)
-    }
-}, [compraEnProceso]);
+
+    useEffect(() => {
+        if (compraEnProceso) {
+            setTimeout(() => {
+                setCompraEnProceso(false);
+            }, 5000);
+        }
+    }, [compraEnProceso]);
 
     return (
         <div className="container mx-auto px-4 py-8">

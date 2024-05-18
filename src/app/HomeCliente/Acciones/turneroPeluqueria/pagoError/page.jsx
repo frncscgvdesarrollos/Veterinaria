@@ -8,8 +8,8 @@ export default function PagoTurnoPeluqueriaError() {
   const { user } = UserAuth();
   const uid = user?.uid;
   const [ventaTurno, setVentaTurno] = useState(null);
-  let num = 0;
   
+  let num = 0;
   useEffect(() => {
     console.log('efecto'+ num);
     num++;
@@ -34,7 +34,8 @@ export default function PagoTurnoPeluqueriaError() {
           console.error("Error al obtener o modificar la venta:", error);
         });
     }
-  }, [uid]);
+  }, [uid, num]); // Include num in the dependency array
+  
 
   return (
     <div>

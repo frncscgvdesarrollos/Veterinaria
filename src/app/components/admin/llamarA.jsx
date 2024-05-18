@@ -1,4 +1,4 @@
-'use client'
+'use client';
 import React, { useState, useEffect } from 'react';
 import { avanzarEstadoTurno, cancelarTurnoPeluqueria, getTurnosPeluqueria } from '../../firebase';
 
@@ -29,8 +29,7 @@ export default function LlamarA() {
       .catch(error => {
         console.error("Error al obtener los turnos para hoy:", error);
       });
-  } , [turnosParaHoy]);
-  
+  } , [turnosParaHoy, isLoading]); // Agrega isLoading como una dependencia
 
   const confirmarTurno = (id) => {
     avanzarEstadoTurno(id).then(() => {

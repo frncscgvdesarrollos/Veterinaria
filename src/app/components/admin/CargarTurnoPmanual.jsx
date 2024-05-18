@@ -1,4 +1,3 @@
-'use client'
 import React, { useState, useEffect } from 'react';
 import Calendar from 'react-calendar';
 import 'react-calendar/dist/Calendar.css';
@@ -55,7 +54,7 @@ export default function CargarTurnoPmanual() {
       console.error('Error al obtener el ID de ventas:', error);
     });
     updateVenta();
-  }, [formData.precio, formData.selectedDate]);
+  }, [formData.precio, formData.selectedDate]); 
 
   const updateVenta = () => {
     setVenta((prevVenta) => ({
@@ -69,6 +68,8 @@ export default function CargarTurnoPmanual() {
       fecha_turno: formData.selectedDate,
     }));
   };
+
+
 
   useEffect(() => {
     const fetchClientes = () => {
