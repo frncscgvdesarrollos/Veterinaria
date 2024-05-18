@@ -25,7 +25,7 @@ export default async function ProductX( formData ) {
         auto_return: "approved",
         notification_url: "https://magalimartinveterinaria.vercel.app/api/payments",
       }
-    })
+      })
     redirect(preference.init_point);
   return (
     <>  

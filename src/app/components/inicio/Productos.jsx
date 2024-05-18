@@ -1,5 +1,6 @@
+'use client';
 import React, { useState, useEffect } from 'react';
-import { getProducts, registroVentaPeluqueria, idVentas } from '@/app/firebase';
+import { getProducts, registroVentaPeluqueria, idVentas ,restarStockProducto } from '@/app/firebase';
 import Image from 'next/image';
 import { registroVenta } from '@/app/firebase'; // Importa las funciones de Firebase
 import { UserAuth } from '@/app/context/AuthContext';
@@ -94,58 +95,97 @@ export default function Productos (){
     const calcularPrecioTotal = () => {
         return carrito.reduce((total, producto) => total + producto.precioVenta * producto.cantidad, 0);
     };
-    
-    
 
     const handleCompra = () => {
         const precioFinal = calcularPrecioTotal(); // Obtener el precio total del carrito
         setFinalPrice(precioFinal);
-      
-        idVentas()
-          .then(nuevoIdVenta => {
-            const nuevaVenta = {
-              enCurso: true,
-              id: nuevoIdVenta,
-              userId: uid,
-              createdAt: new Date(),
-              nombre: datosCliente?.nombre,
-              apellido: datosCliente?.apellido,
-              direccion: datosCliente?.direccion,
-              telefono: datosCliente?.telefono,
-              precio: precioFinal, // Utilizar el precioFinal calculado
-              productoOservicio: 'producto',
-              categoria: 'tienda',
-              entregado: false,
-              efectivo: false,
-              mp: false,
-              confirmado: false,
-            };
-      
-            registroVentaPeluqueria(nuevaVenta);
-          })
-          .then(() => {
-            setCompraEnProceso(true); // Marcar que la compra está en proceso
-            setCarrito([]); // Limpiar el carrito después de la compra
-            setMostrarCarrito(false); // Ocultar el carrito después de la compra
-            console.log('Venta registrada exitosamente');
-          })
-          .catch(error => {
-            console.error('Error al registrar la venta:', error);
-            setCompraEnProceso(false); // Marcar que la compra ha finalizado (con error)
-          });
-      };
-      useEffect(() => {
-        if (compraEnProceso) {
-            // Aquí podrías hacer algo como redirigir al usuario a otra página después de un tiempo
-            // o mostrar un mensaje de éxito y luego reiniciar la variable compraEnProceso
-            setTimeout(() => {
-                setCompraEnProceso(false); // Reinicia la variable compraEnProceso después de 5 segundos
-            }, 5000); // Reiniciar después de 5 segundos (5000 milisegundos)
-        }
-    }, [compraEnProceso]);
     
+        let nuevoIdVenta;
+        let nombresProductos;
+    
+        // Obtener un nuevo ID de venta
+        idVentas()
+            .then(id => {
+                nuevoIdVenta = id;
+    
+                // Obtener los nombres de los productos en el carrito
+                nombresProductos = carrito.map(item => item.nombre);
+    
+                // Crear un objeto con los detalles de la venta
+                const nuevaVenta = {
+                    enCurso: true,
+                    id: nuevoIdVenta,
+                    userId: uid,
+                    createdAt: new Date(),
+                    nombre: datosCliente?.nombre,
+                    apellido: datosCliente?.apellido,
+                    direccion: datosCliente?.direccion,
+                    telefono: datosCliente?.telefono,
+                    precio: precioFinal,
+                    productoOservicio: 'producto',
+                    categoria: 'tienda',
+                    entregado: false,
+                    efectivo: false,
+                    mp: false,
+                    confirmado: false,
+                    items: carrito.map(item => ({ nombre: item.nombre, cantidad: item.cantidad })),
+                };
+    
+                // Registrar la venta en Firestore
+                return registroVentaPeluqueria(nuevaVenta);
+            })
+            .then(() => {
+                // Restar el stock de cada producto en el carrito secuencialmente
+                return carrito.reduce((promiseChain, producto) => {
+                    return promiseChain.then(() => {
+                        return restarStockProducto(producto.id, producto.cantidad)
+                            .then(() => {
+                                console.log(`Stock restado para ${producto.nombre}`);
+                            })
+                            .catch(error => {
+                                console.error(`Error al restar stock para ${producto.nombre}:`, error);
+                                throw new Error('Error al restar stock de los productos');
+                            });
+                    });
+                }, Promise.resolve());
+            })
+            .then(() => {
+                // Limpiar el carrito y actualizar el estado
+                setCompraEnProceso(true);
+                setCarrito([]);
+                setMostrarCarrito(false);
+                console.log('Venta registrada exitosamente');
+    
+                // Mostrar alerta de éxito
+                alert('¡Productos restados del stock correctamente!');
+    
+                // Redirigir al cliente a la página de inicio u otra página relevante
+                // window.location.href = '/'; // Cambia esto según la estructura de tus rutas
+            })
+            .catch(error => {
+                console.error('Error al procesar la compra:', error);
+                setCompraEnProceso(false);
+    
+                // Mostrar alerta de error para el cliente
+                alert('Error al procesar la compra. Por favor, inténtelo de nuevo más tarde.');
+            });
+    };
+    
+    
+    
+    
+      useEffect(() => {
+    if (compraEnProceso) {
+        // Aquí podrías hacer algo como redirigir al usuario a otra página después de un tiempo
+        // o mostrar un mensaje de éxito y luego reiniciar la variable compraEnProceso
+        setTimeout(() => {
+            setCompraEnProceso(false); // Reinicia la variable compraEnProceso después de 5 segundos
+        }, 5000); // Reiniciar después de 5 segundos (5000 milisegundos)
+    }
+}, [compraEnProceso]);
+
     return (
-        <>
+        <div className="container mx-auto px-4 py-8">
             <div className="w-full flex justify-around items-center mx-auto ">
                 <div className='producto flex '> 
                     <h1 className="text-3xl font-bold text-left mt-8 mb-4 text-purple-800 text-center bg-pink-300 p-2 rounded-lg bg-opacity-50 ml-10 flex ">
@@ -162,7 +202,7 @@ export default function Productos (){
                     <div className="flex items-center">
                         <h1 className="text-3xl font-bold text-purple-800 bg-pink-300 p-2 rounded-lg bg-opacity-50 ml-10">
                             Tienda!
-                        </h1>
+                            </h1>
                     </div>
                     <div className="flex items-center">                        
                         {['Ropa', 'Cuidado', 'Higiene', 'Alimento', 'Juguetes', ''].map(categoria => (
@@ -187,7 +227,6 @@ export default function Productos (){
                         )}
                     </button>
                 </div>
-
                 {mostrarCarrito && (
                     <div className="bg-pink-300 rounded-lg m-2 p-4 bg-opacity-50 flex flex-col justify-center items-center w-full h-full">
                         <h2 className="text-2xl font-semibold mb-4 text-purple-800">Tu pedido!</h2>
@@ -211,7 +250,6 @@ export default function Productos (){
                         </div>
                     </div>
                 )}
-
                 <div className="flex flex-col justify-center items-center">
                     <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 xl:grid-cols-5 gap-6 p-5 rounded-lg container-perspective mx-auto w-full">
                         {currentProducts
@@ -240,11 +278,9 @@ export default function Productos (){
                                     >
                                         Agregar al carrito
                                     </button>
-                                    </div>
+                                </div>
                             ))}
                     </div>
-
-                    {/* Paginación */}
                     <div className="flex justify-center mt-10">
                         <button
                             onClick={() => paginate(currentPage - 1)}
@@ -267,12 +303,12 @@ export default function Productos (){
                 </div>
             </div>
             {compraEnProceso && (
-  <div>
-    compra en proceso
-    <ProductosMP precioFinal={finalPrice} />
-  </div>
-)}
-        </>
+                <div>
+                    compra en proceso
+                    <ProductosMP precioFinal={finalPrice} />
+                </div>
+            )}
+        </div>
     );
 };
 

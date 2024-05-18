@@ -83,11 +83,13 @@ export default function ProductPage() {
 
   function handleChange(e) {
     const { name, value } = e.target;
+    const parsedValue = name === "stock" ? parseInt(value) : value; // Parsear el valor del stock a un número
     setFormData(prevState => ({
       ...prevState,
-      [name]: value
+      [name]: parsedValue
     }));
   }
+  
 
   function handleImageChange(e) {
     const file = e.target.files[0];

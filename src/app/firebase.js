@@ -22,6 +22,22 @@ export const db = getFirestore(app);
 export const storage = getStorage(app)
 
 
+export async function restarStockProducto(id, cantidad) {
+ const q = query(collection(db, "productos"), where("id", "==", id));
+ const querySnapshot = await getDocs(q);
+ querySnapshot.forEach((doc) => {
+   const stockActual = doc.data().stock;
+   if(stockActual < cantidad){
+     throw new Error("No hay suficiente stock disponible para realizar la compra");
+   }
+   const nuevoStock = stockActual - cantidad;
+   updateDoc(doc.ref, { stock: nuevoStock });
+ });
+
+}
+
+
+
 
 export async function idVentas() {
     try {
