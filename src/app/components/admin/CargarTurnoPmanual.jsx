@@ -54,7 +54,8 @@ export default function CargarTurnoPmanual() {
       console.error('Error al obtener el ID de ventas:', error);
     });
     updateVenta();
-  }, [formData.precio, formData.selectedDate]); 
+  }, [formData.precio, formData.selectedDate, updateVenta]); 
+  
 
   const updateVenta = () => {
     setVenta((prevVenta) => ({
