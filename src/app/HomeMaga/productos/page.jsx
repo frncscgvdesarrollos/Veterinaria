@@ -3,7 +3,7 @@ import React, { useState, useEffect } from 'react';
 import { getProducts, createProduct, deleteProduct, updateProduct, actualizarId } from '@/app/firebase';
 import Image from 'next/image';
 
-export default function ProductPage() {
+export default function Productos() {
   const [products, setProducts] = useState([]);
   const [formData, setFormData] = useState({
     id: 0,
