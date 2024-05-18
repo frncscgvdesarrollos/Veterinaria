@@ -2,8 +2,7 @@
 import React, { useState, useEffect } from 'react';
 import Calendar from 'react-calendar';
 import 'react-calendar/dist/Calendar.css';
-import { postTurnoPeluqueria, getClientes, getMascotas, getLastTurnoPeluqueriaId, obtenerPrecioPorServicioYTamaño, verificarCapacidadTurno, borrarTodosLosTurnos, registroVentaPeluqueria,idVentas } from '../../firebase';
-import { redirect } from 'next/navigation';
+import { postTurnoPeluqueria, getClientes, getMascotas, getLastTurnoPeluqueriaId, obtenerPrecioPorServicioYTamaño, verificarCapacidadTurno, borrarTodosLosTurnos, registroVentaPeluqueria, idVentas, sumarTurnoPeluqueria, sumarTurnoPeluqueriaMascota } from '../../firebase';
 
 export default function CargarTurnoPmanual() {
   const [formData, setFormData] = useState({
@@ -14,7 +13,7 @@ export default function CargarTurnoPmanual() {
     direccion: '',
     telefono: '',
     selectedDate: new Date(),
-    selectedTurno: 'mañana',
+    selectedTurno: '',
     selectedPet: '',
     selectedServicio: '',
     tamaño: '',
@@ -142,6 +141,7 @@ export default function CargarTurnoPmanual() {
     if (uid) {
       getMascotas(uid)
         .then(clientMascotas => {
+          // Establecer las mascotas en el estado
           setMascotas(clientMascotas);
           setFormData({
             ...formData,
@@ -151,13 +151,13 @@ export default function CargarTurnoPmanual() {
             telefono: selectedClient.telefono,
             uid: selectedClient.usuarioid
           });
-  
+
           // Actualizar userId en la venta
           setVenta(prevVenta => ({
             ...prevVenta,
             userId: uid
           }));
-          
+
           setIsExistingClient(true);
         })
         .catch(error => {
@@ -165,68 +165,65 @@ export default function CargarTurnoPmanual() {
         });
     }
   };
-  
+
   const handleSubmit = (e) => {
     e.preventDefault();
-  
+
+    if (!formData.uid || !formData.selectedPet) {
+      alert('UID o nombre de la mascota no proporcionado');
+      return;
+    }
+
+    const selectedClient = clientes.find(cliente => `${cliente.nombre} ${cliente.apellido}` === `${formData.nombre} ${formData.apellido}`);
+    const uid = selectedClient?.usuarioid;
+
     verificarCapacidadTurno(formData.selectedDate, formData.selectedTurno)
       .then(capacidadTurno => {
         if (!capacidadTurno) {
           alert('La capacidad para este turno está completa. Por favor, elige otro horario.');
           return;
         }
-  
-        // Registra el turno
-        postTurnoPeluqueria(formData)
-          .then(() => {
-            alert('Turno registrado correctamente.');
-  
-            // Genera el objeto de venta
-            const ventaData = {
-              enCurso: false,
-              id: venta.id,
-              userId: formData.uid, // Utiliza el userId del cliente si está registrado
-              createdAt: new Date(),
-              nombre: formData.nombre,
-              apellido: formData.apellido,
-              direccion: formData.direccion,
-              telefono: formData.telefono,
-              precio: formData.precio,
-              productoOservicio: formData.selectedServicio,
-              categoria: "peluqueria",
-              fecha_turno: formData.selectedDate,
-              efectivo: true,
-              mp: false,
-              confirmado: false,
-            };
-  
-            // Si el cliente no está registrado, asigna el userId a ''
-            if (!formData.uid) {
-              ventaData.userId = '';
-            }
-  
-            // Registra la venta
-            registroVentaPeluqueria(ventaData)
-              .then(() => {
-                alert('Venta registrada correctamente.');
-              })
-              .catch(error => {
-                console.error('Error al registrar la venta:', error);
-                alert('Hubo un error al registrar la venta. Por favor, inténtalo de nuevo.');
-              });
-          })
-          .catch(error => {
-            console.error('Error al registrar el turno:', error);
-            alert('Hubo un error al registrar el turno. Por favor, inténtalo de nuevo.');
-          });
+        return Promise.all([
+          sumarTurnoPeluqueriaMascota(uid, formData.selectedPet),
+          sumarTurnoPeluqueria(uid)
+        ]);
+      })
+      .then(() => postTurnoPeluqueria(formData))
+      .then(() => {
+        alert('Turno registrado correctamente.');
+
+        const ventaData = {
+          enCurso: false,
+          id: venta.id,
+          userId: formData.uid,
+          createdAt: new Date(),
+          nombre: formData.nombre,
+          apellido: formData.apellido,
+          direccion: formData.direccion,
+          telefono: formData.telefono,
+          precio: formData.precio,
+          productoOservicio: formData.selectedServicio,
+          categoria: "peluqueria",
+          fecha_turno: formData.selectedDate,
+          efectivo: true,
+          mp: false,
+          confirmado: false,
+        };
+
+        if (!formData.uid) {
+          ventaData.userId = '';
+        }
+
+        return registroVentaPeluqueria(ventaData);
+      })
+      .then(() => {
+        alert('Venta registrada correctamente.');
       })
       .catch(error => {
-        console.error('Error al verificar la capacidad del turno:', error);
-        alert('Hubo un error al verificar la capacidad del turno. Por favor, inténtalo de nuevo.');
+        console.error('Error al registrar el turno o la venta:', error);
+        alert('Hubo un error al registrar el turno o la venta. Por favor, inténtalo de nuevo.');
       });
   };
-  
-  
 
   const handlePetSelection = (petId) => {
     const selectedPet = mascotas.find(mascota => mascota.id === petId);
@@ -300,25 +297,8 @@ export default function CargarTurnoPmanual() {
       canilPeluqueria: 0,
       uid: ''
     });
-    setVenta({
-      enCurso: false,
-      id: 0,
-      userId: '',
-      createdAt: new Date(),
-      nombre: '',
-      apellido: '',
-      direccion: '',
-      telefono: '',
-      precio: 0,
-      productoOservicio: '',
-      categoria: "peluqueria",
-      fecha_turno: new Date(),
-      efectivo: true,
-      mp: false,
-      confirmado: false,
-    });
   };
-  
+
   return (
     <div className="max-w-md mx-auto p-4 bg-violet-200 rounded-lg shadow-md">
       <h1 className="text-2xl font-bold mb-4 text-purple-800">Cargar Turno</h1>
@@ -350,7 +330,9 @@ export default function CargarTurnoPmanual() {
             <select id="selectedPet" name="selectedPet" value={formData.selectedPet} onChange={handleChange} className="mt-1 p-2 block w-full rounded-md border-gray-300 focus:border-indigo-500 focus:ring focus:ring-indigo-200 focus:ring-opacity-50">
               <option value="">Seleccionar Mascota</option>
               {mascotas.map((mascota, index) => (
-                <option key={index} value={mascota.nombre} onClick={() => handlePetSelection(mascota.id)}>{mascota.nombre}</option>
+                <option key={index} value={mascota.nombre} onClick={() => handlePetSelection(mascota.id)}>
+                  {mascota.nombre}
+                </option>
               ))}
             </select>
           </div>

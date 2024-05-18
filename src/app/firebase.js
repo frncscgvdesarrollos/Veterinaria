@@ -405,6 +405,7 @@ export async function sumarTurnoPeluqueria(uid) {
     console.log(error);
   }
 }
+
 export async function sumarTurnoChekeo(uid) {
   console.log(uid)
   try {
@@ -420,20 +421,32 @@ export async function sumarTurnoChekeo(uid) {
     console.log(error);
   }
 }
-export async function sumarTurnoPeluqueriaMascota(uid) {
+export async function sumarTurnoPeluqueriaMascota(uid, mascota) {
+  if (!uid || !mascota) {
+    console.log("UID o nombre de la mascota no proporcionado");
+    return;
+  }
+
   try {
-    const q = query(collection(db, 'mascotas'), where("uid", "==", uid));
+    const q = query(collection(db, 'mascotas'), where("uid", "==", uid), where("nombre", "==", mascota));
     const querySnapshot = await getDocs(q);
-    querySnapshot.forEach(async (doc) => {
+    const updatePromises = [];
+
+    querySnapshot.forEach((doc) => {
       const suma = doc.data().turnosPeluqueria + 1;
-      await updateDoc(doc.ref, {
+      const updatePromise = updateDoc(doc.ref, {
         'turnosPeluqueria': suma
       });
+      updatePromises.push(updatePromise);
     });
+
+    await Promise.all(updatePromises);
+    console.log("Turnos peluqueria de la mascota sumados correctamente");
   } catch (error) {
     console.log(error);
   }
 }
+
 export async function sumarTurnoCheckeoMascota(uid, mascota) {
   try {
     const q = query(collection(db, 'mascotas'), where("uid", "==", uid));
