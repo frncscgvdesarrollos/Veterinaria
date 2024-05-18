@@ -18,12 +18,12 @@ export default async function ProductosMP( precioFinal ) {
         },
       ],
       back_urls: {
-        success: "http://localhost:3000/HomeCliente/Acciones/venta/success",
-        failure: "http://localhost:3000/HomeCliente/Acciones/venta/error",
-        pending: "http://localhost:3000//HomeCliente/Acciones/venta/pending",
+        success: "https://magalimartinveterinaria.vercel.app/HomeCliente/Acciones/venta/success",
+        failure: "https://magalimartinveterinaria.vercel.app/HomeCliente/Acciones/venta/error",
+        pending: "https://magalimartinveterinaria.vercel.app/HomeCliente/Acciones/venta/pending",
       },
       auto_return: "approved",
-      notification_url: "http://localhost:3000/api/paymentsProductos"
+      notification_url: "https://magalimartinveterinaria.vercel.app/api/paymentsProductos"
       }
     });
 
