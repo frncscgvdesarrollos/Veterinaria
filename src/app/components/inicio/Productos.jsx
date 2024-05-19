@@ -1,11 +1,33 @@
 'use client';
 import React, { useState, useEffect } from 'react';
-import { getProducts, registroVentaPeluqueria, idVentas ,restarStockProducto } from '@/app/firebase';
+import { getProducts, registroVentaPeluqueria, idVentas, restarStockProducto } from '@/app/firebase';
 import Image from 'next/image';
-import { registroVenta } from '@/app/firebase'; // Importa las funciones de Firebase
 import { UserAuth } from '@/app/context/AuthContext';
 import { UseClient } from '@/app/context/ClientContext';
 import ProductosMP from '@/app/components/mercadopago/ProductosMp.jsx';
+
+const useWindowSize = () => {
+  const [windowSize, setWindowSize] = useState({
+    width: undefined,
+    height: undefined,
+  });
+
+  useEffect(() => {
+    const handleResize = () => {
+      setWindowSize({
+        width: window.innerWidth,
+        height: window.innerHeight,
+      });
+    };
+
+    window.addEventListener('resize', handleResize);
+    handleResize();
+
+    return () => window.removeEventListener('resize', handleResize);
+  }, []);
+
+  return windowSize;
+};
 
 const CartItem = React.memo(({ item, eliminarDelCarrito }) => {
     const precioTotal = item.precioVenta * item.cantidad;
@@ -39,9 +61,7 @@ const CartItem = React.memo(({ item, eliminarDelCarrito }) => {
     );
 });
 
-CartItem.displayName = 'CartItem'; // Add this line to provide a display name
-
-
+CartItem.displayName = 'CartItem';
 
 export default function Productos() {
     const { user } = UserAuth();
@@ -55,6 +75,7 @@ export default function Productos() {
     const [currentPage, setCurrentPage] = useState(1);
     const [finalPrice, setFinalPrice] = useState(0);
     const productsPerPage = 5;
+    const windowSize = useWindowSize();
 
     useEffect(() => {
         getProducts()
@@ -171,14 +192,14 @@ export default function Productos() {
 
     return (
         <div className="container mx-auto px-4 py-8">
-            <div className="w-full flex justify-around items-center mx-auto ">
-                <div className='producto flex '> 
-                    <h1 className="text-3xl font-bold text-left mt-8 mb-4 text-purple-800 text-center bg-pink-300 p-2 rounded-lg bg-opacity-50 ml-10 flex ">
+            <div className="w-full flex justify-around items-center mx-auto">
+                <div className='producto flex'>
+                    <h1 className="text-3xl font-bold text-left mt-8 mb-4 text-purple-800 text-center bg-pink-300 p-2 rounded-lg bg-opacity-50 ml-10 flex">
                         Hace tu pedido
                     </h1>
                 </div>
-                <div className='flex flex-col producto absolute top-24 mt-24 hidden md:visible'> 
-                    <h3 className="text-3xl font-bold text-left mt-8 mb-4 text-purple-800 text-center bg-pink-300 p-2 rounded-lg bg-opacity-50 ml-10 ">Y esperalo en tu casa !</h3>
+                <div className='flex flex-col producto absolute top-24 mt-24 hidden md:visible'>
+                    <h3 className="text-3xl font-bold text-left mt-8 mb-4 text-purple-800 text-center bg-pink-300 p-2 rounded-lg bg-opacity-50 ml-10">Y esperalo en tu casa !</h3>
                 </div>
             </div>
 
@@ -187,9 +208,9 @@ export default function Productos() {
                     <div className="flex items-center">
                         <h1 className="text-3xl font-bold text-purple-800 bg-pink-300 p-2 rounded-lg bg-opacity-50 ml-10">
                             Tienda!
-                            </h1>
+                        </h1>
                     </div>
-                    <div className="flex items-center">                        
+                    <div className="flex items-center">
                         {['Ropa', 'Cuidado', 'Higiene', 'Alimento', 'Juguetes', ''].map(categoria => (
                             <button
                                 key={categoria}
@@ -240,8 +261,9 @@ export default function Productos() {
                         {currentProducts
                             .filter(producto => filtro === '' || producto.categoria === filtro)
                             .map((producto, index) => (
-                                <div key={index}
-                                    className="bg-pink-300 border-4 border-yellow-200 rounded-lg p-4 mx-auto element4 element"
+                                <div
+                                    key={index}
+                                    className={`bg-pink-300 border-4 border-yellow-200 rounded-lg p-4 mx-auto ${windowSize.width > 800 ? 'element4 element' : ''}`}
                                 >
                                     <Image
                                         src={producto.imagen}
@@ -296,4 +318,3 @@ export default function Productos() {
         </div>
     );
 };
-

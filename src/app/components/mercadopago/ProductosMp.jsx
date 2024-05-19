@@ -7,8 +7,6 @@ export default async function ProductosMP( precioFinal ) {
   const precio = precioFinal.precioFinal;
     const preference = await new Preference(client).create({
       body: {
-        
-
       items: [
         {
           id: 0,
