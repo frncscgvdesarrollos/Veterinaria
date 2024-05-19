@@ -1,10 +1,11 @@
 'use client'
 import React, { useState, useEffect } from 'react';
-import { getProducts, createProduct, deleteProduct, updateProduct, actualizarId } from '@/app/firebase';
+import { getProducts, createProduct, deleteProduct, updateProduct, actualizarId, totalVentas } from '@/app/firebase'; // Asegúrate de importar totalVentas
 import Image from 'next/image';
 
 export default function ProductPage() {
   const [products, setProducts] = useState([]);
+  const [ventasTienda, setVentasTienda] = useState([]);
   const [formData, setFormData] = useState({
     id: 0,
     para: '',
@@ -22,17 +23,22 @@ export default function ProductPage() {
   const [modal, setModalIsOpen] = useState(false);
 
   useEffect(() => {
-    fetchProducts();
+    fetchProducts().then(() => fetchVentasTienda());
   }, []);
 
   function fetchProducts() {
-    getProducts()
-      .then(productsData => {
-        setProducts(productsData);
+    return getProducts()
+      .then(productsData => setProducts(productsData))
+      .catch(error => console.error('Error fetching products:', error));
+  }
+
+  function fetchVentasTienda() {
+    return totalVentas()
+      .then(ventas => {
+        const ventasTiendaData = ventas.filter(venta => venta.categoria === 'tienda');
+        setVentasTienda(ventasTiendaData);
       })
-      .catch(error => {
-        console.error('Error fetching products:', error);
-      });
+      .catch(error => console.error('Error fetching sales:', error));
   }
 
   function handleCreateProduct() {
@@ -133,6 +139,7 @@ export default function ProductPage() {
   function closeModal() {
     setModalIsOpen(false);
   }
+
   function handleUpdateIds() {
     actualizarId()
       .then(() => {
@@ -313,92 +320,141 @@ export default function ProductPage() {
             </tbody>
           </table>
         </div>
+
+        <div>
+          <h2 className="text-2xl mb-4">Ventas de Tienda</h2>
+          <table className="w-full bg-violet-200 rounded-lg shadow-lg p-4 rounded-lg">
+            <thead >
+              <tr className="bg-violet-200 text-violet-300 bg-violet-500">     
+                <th className="px-4 py-2">ID</th>
+                <th className="px-4 py-2">Nombre</th>
+                <th className="px-4 py-2">Apellido</th>
+                <th className="px-4 py-2">Dirección</th>
+                <th className="px-4 py-2">Teléfono</th>
+                <th className="px-4 py-2">Precio</th>
+                <th className="px-4 py-2">Items</th>
+              </tr>
+            </thead>
+            <tbody className='text-center'>
+              {ventasTienda.map(venta => (
+                <tr key={venta.id} className="border-t border-gray-200">
+                  <td className="px-4 py-2">{venta.id}</td>
+                  <td className="px-4 py-2">{venta.nombre}</td>
+                  <td className="px-4 py-2">{venta.apellido}</td>
+                  <td className="px-4 py-2">{venta.direccion}</td>
+                  <td className="px-4 py-2">{venta.telefono}</td>
+                  <td className="px-4 py-2">{venta.precio}</td>
+                  <td className="px-4 py-2">
+                    <ul>
+                      {venta.items.map((item, index) => (
+                        <li key={index}>
+                          {item.nombre} - Cantidad: {item.cantidad}
+                        </li>
+                      ))}
+                    </ul>
+                  </td>
+                </tr>
+              ))}
+            </tbody>
+          </table>
+        </div>
+        
         {modal &&
           <div className="fixed inset-0 flex items-center justify-center bg-black bg-opacity-50">
             <div className="bg-white rounded-lg p-8">
               <h2 className="text-2xl mb-4 text-center text-gray-700 font-bold uppercase">Editar Producto</h2>
               <form className="bg-violet-200 rounded-lg p-4">
-                <input
-                  type="text"
-                  name="nombre"
-                  placeholder="Nombre"
-                  value={formData.nombre}
-                  onChange={handleChange}
-                  className="rounded-lg mb-2 p-2 block w-full"
-                />
-                <input
-                  type="text"
-                  name="descripcion"
-                  placeholder="Descripción"
-                  value={formData.descripcion}
-                  onChange={handleChange}
-                  className="rounded-lg mb-2 p-2 block w-full"
-                />
-                <select
-                  name="categoria"
-                  value={formData.categoria}
-                  onChange={handleChange}
-                  className="rounded-lg mb-2 p-2 block w-full"
-                  list="categoriaOptions"
-                >
-                  <option value="">Seleccionar Categoría</option>
-                  <option value="alimento">Alimento</option>
-                  <option value="alimento suelto">Alimento Suelto</option>
-                  <option value="paseo">Paseo</option>
-                  <option value="juguetes">Juguetes</option>
-                  <option value="cuidados">Cuidados</option>
-                  <option value="ropa">Ropa</option>
-                </select>
-                <Image
-                  src={formData.imagen ? formData.imagen : '/placeholder-image.png'}
-                  alt={formData.nombre} width={64} height={64}
-                  className="object-cover"
-                />
-                <input
-                  type="file"
-                  name="imagen"
-                  accept="image/*"
-                  onChange={handleImageChange}
-                  className="rounded-lg mb-2 p-2 block w-full"
-                />
-                <input
-                  type="number"
-                  name="precioCompra"
-                  placeholder="Precio de Compra"
-                  value={formData.precioCompra}
-                  onChange={handleChange}
-                  className="rounded-lg mb-2 p-2 block w-full"
-                />
-                <input
-                  type="number"
-                  name="precioVenta"
-                  placeholder="Precio de Venta"
-                  value={formData.precioVenta}
-                  onChange={handleChange}
-                  className="rounded-lg mb-2 p-2 block w-full"
-                />
-                <input
-                  type="number"
-                  name="stock"
-                  placeholder="Stock"
-                  value={formData.stock}
-                  onChange={handleChange}
-                  className="rounded-lg mb-2 p-2 block w-full"
-                />
-                <button
-                  type="button"
-                  onClick={handleUpdateProduct}
-                  className="bg-green-500 text-white px-4 py-2 rounded-lg hover:bg-green-600"
-                >
-                  Actualizar
-                </button>
-                <button
-                  type="button"
-                  onClick={closeModal}
-                  className="bg-red-500 text-white px-4 py-2 rounded-lg hover:bg-red-600 ml-2"
-                >
-                  Cancelar
-                </button>
+              {modal &&
+  <div className="fixed inset-0 flex items-center justify-center bg-black bg-opacity-50">
+    <div className="bg-white rounded-lg p-8">
+      <h2 className="text-2xl mb-4 text-center text-gray-700 font-bold uppercase">Editar Producto</h2>
+      <form className="bg-violet-200 rounded-lg p-4">
+        <input
+          type="text"
+          name="nombre"
+          placeholder="Nombre"
+          value={formData.nombre}
+          onChange={handleChange}
+          className="rounded-lg mb-2 p-2 block w-full"
+        />
+        <input
+          type="text"
+          name="descripcion"
+          placeholder="Descripción"
+          value={formData.descripcion}
+          onChange={handleChange}
+          className="rounded-lg mb-2 p-2 block w-full"
+        />
+        <select
+          name="categoria"
+          value={formData.categoria}
+          onChange={handleChange}
+          className="rounded-lg mb-2 p-2 block w-full"
+          list="categoriaOptions"
+        >
+          <option value="">Seleccionar Categoría</option>
+          <option value="alimento">Alimento</option>
+          <option value="alimento suelto">Alimento Suelto</option>
+          <option value="paseo">Paseo</option>
+          <option value="juguetes">Juguetes</option>
+          <option value="cuidados">Cuidados</option>
+          <option value="ropa">Ropa</option>
+        </select>
+        <Image
+          src={formData.imagen ? formData.imagen : '/placeholder-image.png'}
+          alt={formData.nombre} width={64} height={64}
+          className="object-cover"
+        />
+        <input
+          type="file"
+          name="imagen"
+          accept="image/*"
+          onChange={handleImageChange}
+          className="rounded-lg mb-2 p-2 block w-full"
+        />
+        <input
+          type="number"
+          name="precioCompra"
+          placeholder="Precio de Compra"
+          value={formData.precioCompra}
+          onChange={handleChange}
+          className="rounded-lg mb-2 p-2 block w-full"
+        />
+        <input
+          type="number"
+          name="precioVenta"
+          placeholder="Precio de Venta"
+          value={formData.precioVenta}
+          onChange={handleChange}
+          className="rounded-lg mb-2 p-2 block w-full"
+        />
+        <input
+          type="number"
+          name="stock"
+          placeholder="Stock"
+          value={formData.stock}
+          onChange={handleChange}
+          className="rounded-lg mb-2 p-2 block w-full"
+        />
+        <button
+          type="button"
+          onClick={handleUpdateProduct}
+          className="bg-green-500 text-white px-4 py-2 rounded-lg hover:bg-green-600"
+        >
+          Actualizar
+        </button>
+        <button
+          type="button"
+          onClick={closeModal}
+          className="bg-red-500 text-white px-4 py-2 rounded-lg hover:bg-red-600 ml-2"
+        >
+          Cancelar
+        </button>
+      </form>
+    </div>
+  </div>
+}
+
               </form>
             </div>
           </div>
@@ -407,3 +463,4 @@ export default function ProductPage() {
     </div>
   );
 }
+

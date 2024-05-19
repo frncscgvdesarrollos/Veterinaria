@@ -1062,3 +1062,34 @@ export async function situacionMascota(estadoCivil, id) {
     updateDoc(doc.ref, { estadoCivil: estadoCivil });
   });
 }
+
+
+export async function misCompras(id) {
+  let compras = [];
+  const q = query(collection(db, "mascotas"), where("id", "==", id));
+  const docs = await getDocs(q);
+ docs.forEach(doc => {
+  compras.push(doc.data());
+ });
+ return compras
+}
+
+export const crearOActualizarCliente = async (uid, clienteData) => {
+  try {
+    const clienteRef = query(collection(db, "clientes"), where("usuarioid", "==", uid));
+    const doc = await clienteRef.get();
+
+    if (doc.exists) {
+      // Si el cliente ya existe, actualizar los datos
+      await clienteRef.update(clienteData);
+    } else {
+      // Si el cliente no existe, crearlo
+      await clienteRef.set(clienteData);
+    }
+
+    return true; // Indicar éxito
+  } catch (error) {
+    console.error("Error creating/updating client:", error);
+    throw error; // Relanzar el error para manejarlo en el componente
+  }
+};

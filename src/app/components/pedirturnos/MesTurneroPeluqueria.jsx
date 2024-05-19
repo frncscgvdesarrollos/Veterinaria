@@ -87,6 +87,18 @@ export default function MyCalendarPeluqueria() {
       }));
     }
   }, [datosCliente]);
+  function updateVenta ()  {
+    setVenta((prevVenta) => ({
+      ...prevVenta,
+      precio: formData.precio,
+      nombre: formData.nombre,
+      apellido: formData.apellido,
+      direccion: formData.direccion,
+      telefono: formData.telefono,
+      productoOservicio: formData.selectedServicio,
+      fecha_turno: formData.selectedDate,
+    }));
+  };
   useEffect(() => {
     const fetchUltimoTurnoId = () => {
       getLastTurnoPeluqueriaId()
@@ -99,25 +111,12 @@ export default function MyCalendarPeluqueria() {
     };
     fetchUltimoTurnoId();
   }, []);
-  useEffect(() => {
-    // Actualizar el estado de la venta cuando cambia el precio en formData
-    updateVenta();
-  }, [formData.precio, formData.selectedDate, updateVenta]);
-  
+useEffect(() => {
+  // Actualizar el estado de la venta cuando cambia el precio en formData
+  updateVenta();
+}, [formData.precio, formData.selectedDate ]);
 
-  
-  const updateVenta = useCallback(() => {
-    setVenta((prevVenta) => ({
-      ...prevVenta,
-      precio: formData.precio,
-      nombre: formData.nombre,
-      apellido: formData.apellido,
-      direccion: formData.direccion,
-      telefono: formData.telefono,
-      productoOservicio: formData.selectedServicio,
-      fecha_turno: formData.selectedDate,
-    }));
-  }, [formData]);
+
   
 
   const handleChange = (e) => {

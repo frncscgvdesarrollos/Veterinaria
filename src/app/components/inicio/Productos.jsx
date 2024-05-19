@@ -112,6 +112,7 @@ export default function Productos() {
                 nombresProductos = carrito.map(item => item.nombre);
     
                 const nuevaVenta = {
+                    entrega: "entregar",
                     enCurso: true,
                     id: nuevoIdVenta,
                     userId: uid,

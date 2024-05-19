@@ -3,10 +3,10 @@ import {MercadoPagoConfig, Preference} from "mercadopago";
 import { idVentas } from "@/app/firebase";
 import {redirect} from "next/navigation";
 
-const client = new MercadoPagoConfig({accessToken: 'TEST-4732185295999828-021210-74be192e021f74c875fe9bba82f58ec9-1153230629'});
 export default async function ProductX( formData ) {
   const idVenta = new Promise((resolve) => idVentas().then((id) => resolve(id)));
   
+  const client = new MercadoPagoConfig({accessToken: 'TEST-4732185295999828-021210-74be192e021f74c875fe9bba82f58ec9-1153230629'});
     const preference = await new Preference(client).create({
       body: {
         items: [

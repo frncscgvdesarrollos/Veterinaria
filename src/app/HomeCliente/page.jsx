@@ -8,7 +8,7 @@ import Productos from '../components/inicio/Productos';
 import MascotasAdopcion from '../components/inicio/MascotasAdopcion';
 import { UserAuth } from '../context/AuthContext';
 import { redirect } from 'next/navigation';
-import { clienteExiste } from '../firebase';
+import { clienteExiste, clienteExisteConTerminosTRUE } from '../firebase';
 
 export default function HomeCliente() {
   const { user } = UserAuth();
@@ -39,6 +39,21 @@ export default function HomeCliente() {
             reject(new Error(`No se encontró ningún cliente con el UID proporcionado: ${uid}`));
           }
         })
+        .catch(error => {
+          reject(error);
+        });
+        clienteExisteConTerminosTRUE(uid)
+        .then(cliente => {
+          if (cliente) {
+            resolve(cliente);
+          } else {
+            reject(new Error(`No se encontró ningún cliente con el UID proporcionado: ${uid}`));
+          }
+        })
+        .catch(error => {
+          reject(error);
+        });
+        Promise.all([clienteExiste(uid), clienteExisteConTerminosTRUE(uid)])
         .catch(error => {
           reject(error);
         });
