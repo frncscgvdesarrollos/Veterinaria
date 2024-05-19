@@ -4,13 +4,13 @@ import { UserAuth } from '@/app/context/AuthContext';
 import { useEffect, useState } from 'react';
 import { ventaEnCurso, ventaEnCursoFalse, marcarPagoEfectivo } from '@/app/firebase';
 
-export default function errorPRODUCTO() {
+export default function ErrorProducto() {
   const { user } = UserAuth();
   const uid = user?.uid;
   const [ventaTurno, setVentaTurno] = useState(null);
   
   let num = 0;
-  useEffect(() => {
+   useEffect(() => {
     console.log('efecto'+ num);
     num++;
     if (uid) {
