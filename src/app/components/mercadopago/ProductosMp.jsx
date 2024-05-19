@@ -14,7 +14,7 @@ export default async function ProductosMP( precioFinal ) {
           id: 0,
           title: "Venta de la tienda",
           quantity: 1,
-          unit_price: precio,
+          unit_price: 100 || precio,
         },
       ],
       back_urls: {
