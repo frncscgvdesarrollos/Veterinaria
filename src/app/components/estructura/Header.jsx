@@ -193,6 +193,7 @@ export default function Header() {
     <>
       {uid ? (
         <header className="bg-gray-800 bg-opacity-80  top-0 z-10 flex flex-col items-center px-4 py-2 md:py-4">
+          <span className="text-white text-xl mb-4 bg-red-500">La web esta en prueba no compre ni reserve nada todavia xD attentamente el desarrollador</span>
           <div className="flex justify-between items-center w-full">
             <div className="md:w-auto mr-auto flex items-center justify-center ">
               <Link href="/HomeCliente" >
