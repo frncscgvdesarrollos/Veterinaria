@@ -3,6 +3,7 @@ import { useEffect, useState } from 'react';
 import Veterinaria from '../components/inicio/Veterinaria';
 import MisDatos from '../components/inicio/MisDatos';
 import MisTurnos from '../components/inicio/MisTurnos';
+// import MisCompras from '../components/inicio/MisCompras';
 import DatosMascotas from '../components/inicio/DatosMascotas';
 import Productos from '../components/inicio/Productos';
 import MascotasAdopcion from '../components/inicio/MascotasAdopcion';
@@ -92,6 +93,9 @@ export default function HomeCliente() {
       <div className="mt-20 p-10 mx-auto">
         <Productos />
       </div>
+      {/* <div className="mt-20 p-10 mx-auto">
+        <MisCompras />
+      </div> */}
       <div className="mt-8" id="Adopciones">
         <MascotasAdopcion />
       </div>

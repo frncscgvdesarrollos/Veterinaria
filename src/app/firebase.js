@@ -22,6 +22,17 @@ export const db = getFirestore(app);
 export const storage = getStorage(app)
 
 
+
+export async function misCompras(uid){
+  let compras = [];
+  const q = query(collection(db, "ventas"), where("userId", "==", uid));
+  const querySnapshot = await getDocs(q);
+  querySnapshot.forEach((doc) => {
+    compras.push(doc.data());
+  });
+  return compras;
+}
+
 export async function restarStockProducto(id, cantidad) {
  const q = query(collection(db, "productos"), where("id", "==", id));
  const querySnapshot = await getDocs(q);
@@ -1064,15 +1075,7 @@ export async function situacionMascota(estadoCivil, id) {
 }
 
 
-export async function misCompras(id) {
-  let compras = [];
-  const q = query(collection(db, "mascotas"), where("id", "==", id));
-  const docs = await getDocs(q);
- docs.forEach(doc => {
-  compras.push(doc.data());
- });
- return compras
-}
+
 
 export const crearOActualizarCliente = async (uid, clienteData) => {
   try {

@@ -5,6 +5,7 @@ import Image from 'next/image';
 import { UserAuth } from '@/app/context/AuthContext';
 import { UseClient } from '@/app/context/ClientContext';
 import ProductosMP from '@/app/components/mercadopago/ProductosMp.jsx';
+import MisCompras from './MisCompras';
 
 const useWindowSize = () => {
   const [windowSize, setWindowSize] = useState({
@@ -181,11 +182,12 @@ export default function Productos() {
                 alert('Error al procesar la compra. Por favor, inténtelo de nuevo más tarde.');
             });
     };
-
+    let num = 1;
     useEffect(() => {
-        if (compraEnProceso) {
+        if (compraEnProceso && num === 1) {
             setTimeout(() => {
                 setCompraEnProceso(false);
+                num++;
             }, 5000);
         }
     }, [compraEnProceso]);
@@ -307,6 +309,7 @@ export default function Productos() {
                             Siguiente
                         </button>
                     </div>
+                    <MisCompras />
                 </div>
             </div>
             {compraEnProceso && (
