@@ -194,50 +194,51 @@ export default function Productos() {
 
     return (
         <div className="container mx-auto px-4 py-8">
-            <div className="w-full flex justify-around items-center mx-auto">
+            <div className="w-full flex justify-around items-center mx-auto flex-col md:flex-row">
                 <div className='producto flex'>
-                    <h1 className="text-3xl font-bold text-left mt-8 mb-4 text-purple-800 text-center bg-pink-300 p-2 rounded-lg bg-opacity-50 ml-10 flex">
+                <h1 className="text-3xl font-bold text-left mt-8 mb-4 text-purple-800 text-center bg-pink-300 p-2 rounded-lg bg-opacity-50 md:ml-10">
                         Hace tu pedido
                     </h1>
                 </div>
                 <div className='flex flex-col producto absolute top-24 mt-24 hidden md:visible'>
-                    <h3 className="text-3xl font-bold text-left mt-8 mb-4 text-purple-800 text-center bg-pink-300 p-2 rounded-lg bg-opacity-50 ml-10">Y esperalo en tu casa !</h3>
+                    <h3 className="text-3xl font-bold text-left mt-8 mb-4 text-purple-800 text-center bg-pink-300 p-2 rounded-lg bg-opacity-50 md:ml-10">Y esperalo en tu casa !</h3>
                 </div>
             </div>
 
             <div className="p-4 md:p-8 lg:p-12 bg-violet-200 bg-opacity-50 w-full mx-auto rounded-lg mt-10">
-                <div className="flex justify-between my-20">
-                    <div className="flex items-center">
-                        <h1 className="text-3xl font-bold text-purple-800 bg-pink-300 p-2 rounded-lg bg-opacity-50 ml-10">
+                <div className="flex justify-between my-4 md:my-20 flex-col md:flex-row">
+                    <div className="flex items-center mb-4 md:mb-0">
+                        <h1 className="text-3xl font-bold text-purple-800 bg-pink-300 p-2 rounded-lg bg-opacity-50 md:ml-10 ">
                             Tienda!
                         </h1>
+                        <button
+                        className="text-xl md:text-3xl cursor-pointer mr-4 mx-auto "
+                        onClick={() => setMostrarCarrito(!mostrarCarrito)}
+                    >
+                        📦
+                        {carrito.length > 0 && (
+                            <div className="bg-red-500 text-yellow-500 rounded-full w-6 h-6 flex items-center justify-center absolute top-0 right-0 -mt-2 -mr-2 ">
+                                {carrito.reduce((total, producto) => total + producto.cantidad, 0)}
+                            </div>
+                        )}
+                    </button>
                     </div>
-                    <div className="flex items-center">
+                    <div className="flex flex-wrap justify-center items-center mb-4 md:mb-0">
                         {['Ropa', 'Cuidado', 'Higiene', 'Alimento', 'Juguetes', ''].map(categoria => (
                             <button
                                 key={categoria}
-                                className="text-3xl cursor-pointer mr-4 bg-purple-800 text-white p-2 rounded-lg bg-opacity-50"
+                                className="text-xl md:text-3xl cursor-pointer mr-4 bg-purple-800 text-white p-2 rounded-lg bg-opacity-50 w-[150px] my-10 mx-5"
                                 onClick={() => filtrarProductos(categoria)}
                             >
                                 {categoria || 'Todos'}
                             </button>
                         ))}
                     </div>
-                    <button
-                        className="text-3xl cursor-pointer mr-4 relative"
-                        onClick={() => setMostrarCarrito(!mostrarCarrito)}
-                    >
-                        📦
-                        {carrito.length > 0 && (
-                            <div className="bg-red-500 text-white rounded-full w-6 h-6 flex items-center justify-center absolute top-0 right-0 -mt-2 -mr-2">
-                                {carrito.reduce((total, producto) => total + producto.cantidad, 0)}
-                            </div>
-                        )}
-                    </button>
+
                 </div>
                 {mostrarCarrito && (
                     <div className="bg-pink-300 rounded-lg m-2 p-4 bg-opacity-50 flex flex-col justify-center items-center w-full h-full">
-                        <h2 className="text-2xl font-semibold mb-4 text-purple-800">Tu pedido!</h2>
+                        <h2 className="text-xl md:text-2xl font-semibold mb-4 text-purple-800">Tu pedido!</h2>
                         <div className="overflow-x-auto w-full">
                             <table className="table-auto w-full">
                                 <tbody>
@@ -248,7 +249,7 @@ export default function Productos() {
                             </table>
                         </div>
                         <div className="flex justify-between mt-4 w-full">
-                            <p className="text-lg font-semibold text-purple-800">Total: ${calcularPrecioTotal()}</p>
+                            <p className="text-lg md:text-xl font-semibold text-purple-800">Total: ${calcularPrecioTotal()}</p>
                             <button
                                 className="bg-purple-500 hover:bg-purple-600 text-white font-semibold py-2 px-4 rounded focus:outline-none transition-colors duration-300 ease-in-out"
                                 onClick={() => handleCompra()}

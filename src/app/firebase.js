@@ -1096,3 +1096,11 @@ export const crearOActualizarCliente = async (uid, clienteData) => {
     throw error; // Relanzar el error para manejarlo en el componente
   }
 };
+
+
+
+
+
+
+// Firebase.js
+

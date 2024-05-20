@@ -114,7 +114,7 @@ export default function MyCalendarPeluqueria() {
 useEffect(() => {
   // Actualizar el estado de la venta cuando cambia el precio en formData
   updateVenta();
-}, [formData.precio, formData.selectedDate ]);
+}, [formData.precio, formData.selectedDate , venta ]);
 
 
   

@@ -36,7 +36,8 @@ export default function FormAgregarMascota() {
       {
         desparasitaciones: []
       }
-    ]
+    ],
+    mensajes: []
   });
   const [mascotaAgregada, setMascotaAgregada] = useState(false);
   const [foto, setFoto] = useState(null);
