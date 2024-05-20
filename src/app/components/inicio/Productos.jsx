@@ -9,7 +9,7 @@ import MisCompras from './MisCompras';
 
 const useWindowSize = () => {
   const [windowSize, setWindowSize] = useState({
-    width: undefined,
+    width: 900,
     height: undefined,
   });
 
@@ -33,34 +33,35 @@ const useWindowSize = () => {
 const CartItem = React.memo(({ item, eliminarDelCarrito }) => {
     const precioTotal = item.precioVenta * item.cantidad;
 
+
     return (
-        <tr> 
-            <td>
-                <div className="flex items-center">
-                    <Image src={item.imagen} alt={item.nombre} width={48} height={48} className="w-12 h-12 object-cover mr-4 rounded-lg" />
-                    <div>
-                        <p className="font-semibold text-lg">{item.nombre}</p>
-                        <p className="text-gray-700">Cantidad: {item.cantidad}</p>
-                    </div>
-                </div>
-            </td>
-            <td>
+        <div className="flex flex-col md:flex-col lg:flex-row border-b border-gray-200  p-4 justify-between items-center h-[200px]">
+            <div className="flex-none mr-4">
+                <Image src={item.imagen} alt={item.nombre} width={48} height={48} className="w-12 h-12 object-cover rounded-lg" />
+            </div>
+            <div className="flex flex-col justify-center flex-grow">
+                <p className="font-semibold text-lg">{item.nombre}</p>
+                <p className="text-gray-700">Cantidad: {item.cantidad}</p>
+            </div>
+            <div className="flex-none mr-4">
                 <p className="font-semibold">Precio unitario: ${item.precioVenta}</p>
-            </td>
-            <td>
+            </div>
+            <div className="flex-none mr-4">
                 <p className="font-semibold">Total: ${precioTotal}</p>
-            </td>
-            <td>
+            </div>
+            <div className="flex-none">
                 <button
                     onClick={() => eliminarDelCarrito(item.id)}
-                    className="ml-4 bg-red-500 hover:bg-red-600 text-white font-semibold py-2 px-4 rounded focus:outline-none transition-colors duration-300 ease-in-out"
+                    className="bg-red-400 hover:bg-red-600 text-white font-semibold py-2 px-4 rounded focus:outline-none transition-colors duration-300 ease-in-out"
                 >
                     Eliminar
                 </button>
-            </td>
-        </tr>
+            </div>
+        </div>
     );
-});
+    }
+);
+
 
 CartItem.displayName = 'CartItem';
 
@@ -193,10 +194,10 @@ export default function Productos() {
     }, [compraEnProceso]);
 
     return (
-        <div className="container mx-auto px-4 py-8">
+        <div className="container mx-auto w-full px-4 py-8">
             <div className="w-full flex justify-around items-center mx-auto flex-col md:flex-row">
                 <div className='producto flex'>
-                <h1 className="text-3xl font-bold text-left mt-8 mb-4 text-purple-800 text-center bg-pink-300 p-2 rounded-lg bg-opacity-50 md:ml-10">
+                    <h1 className="text-3xl font-bold text-left mt-8 mb-4 text-purple-800 text-center bg-pink-300 p-2 rounded-lg bg-opacity-50 md:ml-10">
                         Hace tu pedido
                     </h1>
                 </div>
@@ -206,52 +207,55 @@ export default function Productos() {
             </div>
 
             <div className="p-4 md:p-8 lg:p-12 bg-violet-200 bg-opacity-50 w-full mx-auto rounded-lg mt-10">
-                <div className="flex justify-between my-4 md:my-20 flex-col md:flex-row">
-                    <div className="flex items-center mb-4 md:mb-0">
-                        <h1 className="text-3xl font-bold text-purple-800 bg-pink-300 p-2 rounded-lg bg-opacity-50 md:ml-10 ">
+                <div className="flex justify-around items-center my-4 md:my-20 flex-col md:flex-row">
+                    <div className="flex items-center gap-4 mb-4 md:mb-0 mx-auto lg:ml-20">
+                        <h1 className="text-5xl font-bold text-purple-800 bg-pink-300 p-2 rounded-lg bg-opacity-50 md:ml-10 ">
                             Tienda!
                         </h1>
                         <button
-                        className="text-xl md:text-3xl cursor-pointer mr-4 mx-auto "
-                        onClick={() => setMostrarCarrito(!mostrarCarrito)}
-                    >
-                        📦
-                        {carrito.length > 0 && (
-                            <div className="bg-red-500 text-yellow-500 rounded-full w-6 h-6 flex items-center justify-center absolute top-0 right-0 -mt-2 -mr-2 ">
-                                {carrito.reduce((total, producto) => total + producto.cantidad, 0)}
-                            </div>
-                        )}
-                    </button>
+                            className="text-xl md:text-3xl cursor-pointer relative"
+                            onClick={() => setMostrarCarrito(!mostrarCarrito)}
+                        >
+                            📦
+                            {carrito.length > 0 && (
+                                <div className="absolute top-0 right-0 -mt-2 -mr-2">
+                                    <div className="bg-red-500 text-yellow-500 rounded-full w-6 h-6 flex items-center justify-center">
+                                        {carrito.reduce((total, producto) => total + producto.cantidad, 0)}
+                                    </div>
+                                </div>
+                            )}
+                        </button>
                     </div>
-                    <div className="flex flex-wrap justify-center items-center mb-4 md:mb-0">
+                    <div className="flex flex-wrap justify-end items-center mb-4 md:mb-0 w-2/3 mx-auto lg:mr-auto">
                         {['Ropa', 'Cuidado', 'Higiene', 'Alimento', 'Juguetes', ''].map(categoria => (
                             <button
                                 key={categoria}
-                                className="text-xl md:text-3xl cursor-pointer mr-4 bg-purple-800 text-white p-2 rounded-lg bg-opacity-50 w-[150px] my-10 mx-5"
+                                className="text-xl md:text-3xl cursor-pointer mr-4 bg-purple-800 text-white p-2 rounded-lg bg-opacity-50 w-[200px] my-2"
                                 onClick={() => filtrarProductos(categoria)}
                             >
                                 {categoria || 'Todos'}
                             </button>
                         ))}
                     </div>
-
                 </div>
                 {mostrarCarrito && (
-                    <div className="bg-pink-300 rounded-lg m-2 p-4 bg-opacity-50 flex flex-col justify-center items-center w-full h-full">
-                        <h2 className="text-xl md:text-2xl font-semibold mb-4 text-purple-800">Tu pedido!</h2>
+                    <div className="bg-pink-300 rounded-lg m-2 p-4 bg-opacity-50 flex flex-col justify-center  w-2/3 my-10 h-full mx-auto">
+                        <h2 className="text-xl md:text-2xl font-semibold mb-4 text-purple-800">Tu pedido</h2>
                         <div className="overflow-x-auto w-full">
-                            <table className="table-auto w-full">
-                                <tbody>
+                            {carrito.length > 0 ? (
+                                <div className="flex flex-col w-full">
                                     {carrito.map((item, index) => (
                                         <CartItem key={index} item={item} eliminarDelCarrito={eliminarDelCarrito} />
                                     ))}
-                                </tbody>
-                            </table>
+                                </div>
+                            ) : (
+                                <p className="text-lg md:text-xl text-center text-purple-800">Tu carrito está vacío</p>
+                            )}
                         </div>
-                        <div className="flex justify-between mt-4 w-full">
-                            <p className="text-lg md:text-xl font-semibold text-purple-800">Total: ${calcularPrecioTotal()}</p>
+                        <div className="flex flex-col sm:flex-row items-center justify-end w-full mt-4">
+                            <p className="text-lg md:text-xl font-semibold text-purple-800 mb-4 sm:mb-0">Total: ${calcularPrecioTotal()}</p>
                             <button
-                                className="bg-purple-500 hover:bg-purple-600 text-white font-semibold py-2 px-4 rounded focus:outline-none transition-colors duration-300 ease-in-out"
+                                className="bg-yellow-200 hover:bg-purple-600 text-purple-800 font-semibold py-2 px-4 rounded focus:outline-none transition-colors duration-300 ease-in-out mt-4 sm:mt-0 sm:ml-4"
                                 onClick={() => handleCompra()}
                             >
                                 Comprar
@@ -259,34 +263,35 @@ export default function Productos() {
                         </div>
                     </div>
                 )}
-                <div className="flex flex-col justify-center items-center">
-                    <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 xl:grid-cols-5 gap-6 p-5 rounded-lg container-perspective mx-auto w-full">
+                <div className="flex flex-col gap-4 justify-center items-center w-2/3 mx-auto">
+                    <div className="grid grid-cols-1 md:grid-cols-3  xl:grid-cols-5 gap-6 p-5 rounded-lg container-perspective mx-auto w-full">
                         {currentProducts
                             .filter(producto => filtro === '' || producto.categoria === filtro)
                             .map((producto, index) => (
                                 <div
                                     key={index}
-                                    className={`bg-pink-300 border-4 border-yellow-200 rounded-lg p-4 mx-auto ${windowSize.width > 800 ? 'element4 element' : ''}`}
+                                    className={`bg-pink-300 border-4 border-yellow-200 rounded-lg p-4 mx-auto flex flex-col flex-grow ${windowSize.width > 1300 ? 'element4 element' : 'span2'}`}
+                                    style={{ minHeight: '350px' }} // Establece una altura mínima para todas las tarjetas
                                 >
                                     <Image
                                         src={producto.imagen}
                                         alt={producto.nombre}
-                                        width={150}
-                                        height={150}
-                                        className="object-cover mb-4 rounded-lg mx-auto h-[200px] w-full"
+                                        width={200}
+                                        height={200}
+                                        className="object-cover mb-4 rounded-lg mx-auto"
                                     />
-                                    <div className="flex flex-col justify-between h-auto bg-violet-100 rounded-lg p-4 h-[200px]">
+                                    <div className="flex flex-col justify-between h-auto bg-violet-100 rounded-lg p-4">
                                         <div>
-                                            <h2 className="text-lg font-semibold mb-2">{producto.nombre}</h2>
-                                            <p className="text-gray-700 mb-2">Precio: ${producto.precioVenta}</p>
-                                            <p className="text-gray-700 mb-2">Descripción: {producto.descripcion}</p>
+                                            <h2 className="text-lg text-purple-700 font-semibold mb-2">{producto.nombre}</h2>
+                                            <p className="text-purple-500  font-semibold mb-2">ARS${producto.precioVenta}</p>
+                                            <p className="text-purple-700 font-semibold mb-2">{producto.descripcion}</p>
                                         </div>
                                     </div>
                                     <button
                                         onClick={() => agregarAlCarrito(producto)}
-                                        className="bg-purple-500 hover:bg-blue-700 text-white font-semibold py-2 px-4 w-full rounded focus:outline-none"
+                                        className="bg-purple-500 hover:bg-blue-700 text-yellow-200 font-semibold py-2 px-4 w-full rounded focus:outline-none my-2"
                                     >
-                                        Agregar al carrito
+                                          Agregar al carrito
                                     </button>
                                 </div>
                             ))}
@@ -321,4 +326,6 @@ export default function Productos() {
             )}
         </div>
     );
-};
+}
+    
+
