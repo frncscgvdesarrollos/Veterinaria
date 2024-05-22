@@ -1,6 +1,6 @@
 'use client'
 import React, { useState, useEffect } from 'react';
-import { getProducts, createProduct, deleteProduct, updateProduct, actualizarId, totalVentas } from '@/app/firebase'; // Asegúrate de importar totalVentas
+import { getProducts, createProduct, deleteProduct, updateProduct, actualizarId, totalVentas ,cancelarCompraTienda , confirmarCompraTienda } from '@/app/firebase'; // Asegúrate de importar totalVentas
 import Image from 'next/image';
 
 export default function ProductPage() {
@@ -149,6 +149,53 @@ export default function ProductPage() {
         console.error('Error updating IDs:', error);
       });
   }
+
+  function handleConfirmarCompra(id) {
+    console.log('Confirmando compra con ID:', id);
+    return new Promise((resolve, reject) => {
+      if (typeof id === 'number') {
+        confirmarCompraTienda(id)
+          .then(message => {
+            alert(message);
+            window.location.reload();
+            resolve();
+          })
+          .catch(error => {
+            console.error('Error al confirmar la compra:', error);
+            alert('Problema al confirmar la compra');
+            reject(error);
+          });
+      } else {
+        alert('Problema al confirmar la compra: ID no válido');
+        reject(new Error('No se proporcionó un ID válido'));
+      }
+    });
+  }
+  
+  function handleCancelarCompra(id, items) {
+    console.log('Cancelando compra con ID:', id);
+    return new Promise((resolve, reject) => {
+      if (typeof id === 'number') {
+        cancelarCompraTienda(id, items)
+          .then(message => {
+            alert(message);
+            window.location.reload();
+            resolve();
+          })
+          .catch(error => {
+            console.error('Error al cancelar la compra:', error);
+            alert('Problema al cancelar la compra');
+            reject(error);
+          });
+      } else {
+        alert('Problema al cancelar la compra: ID no válido');
+        reject(new Error('No se proporcionó un ID válido'));
+      }
+    });
+  }
+  
+  
+
   
   return (
     <div className="bg-purple-100 min-h-screen">
@@ -332,133 +379,154 @@ export default function ProductPage() {
                 <th className="px-4 py-2">Dirección</th>
                 <th className="px-4 py-2">Teléfono</th>
                 <th className="px-4 py-2">Precio</th>
+                <th className="px-4 py-2">Modo de Pago</th>
+                <th className="px-4 py-2">Estado</th>
                 <th className="px-4 py-2">Items</th>
+                <th className="px-4 py-2">Confirmar</th>
+                <th className="px-4 py-2">Cancelar</th>
               </tr>
             </thead>
             <tbody className='text-center'>
-              {ventasTienda.map(venta => (
-                <tr key={venta.id} className="border-t border-gray-200">
-                  <td className="px-4 py-2">{venta.id}</td>
-                  <td className="px-4 py-2">{venta.nombre}</td>
-                  <td className="px-4 py-2">{venta.apellido}</td>
-                  <td className="px-4 py-2">{venta.direccion}</td>
-                  <td className="px-4 py-2">{venta.telefono}</td>
-                  <td className="px-4 py-2">{venta.precio}</td>
-                  <td className="px-4 py-2">
-                    <ul>
-                      {venta.items.map((item, index) => (
-                        <li key={index}>
-                          {item.nombre} - Cantidad: {item.cantidad}
-                        </li>
-                      ))}
-                    </ul>
-                  </td>
-                </tr>
-              ))}
-            </tbody>
+  {ventasTienda.map(venta => (
+    // Omitir las ventas canceladas (entregar: "cancelado")
+    venta.entregar !== "cancelado" ? (
+      <tr key={venta.id} className="border-t border-gray-200">
+        <td className="px-4 py-2">{venta.id}</td>
+        <td className="px-4 py-2">{venta.nombre}</td>
+        <td className="px-4 py-2">{venta.apellido}</td>
+        <td className="px-4 py-2">{venta.direccion}</td>
+        <td className="px-4 py-2">{venta.telefono}</td>
+        <td className="px-4 py-2">{venta.precio}</td>
+        <td className={`${venta.efectivo ? 'text-red-100 bg-red-500' : 'text-green-100 bg-violet-500'} px-4 py-2`}>{venta.efectivo ? 'Efectivo' : 'Pago con MP'}</td>
+        <td className='px-4 py-2'>{venta.confirmado ? 'Entregar' : 'Confirmar o cancelar'}</td>
+        <td className="px-4 py-2">
+          <ul>
+            {venta.items.map((item, index) => (
+              <li key={index}>
+                {item.nombre} - Cantidad: {item.cantidad}
+              </li>
+            ))}
+          </ul>
+        </td>
+        <td className="px-4 py-2">
+          <button className="w-full my-2 bg-blue-400 text-white px-2 py-1 rounded-lg hover:bg-blue-600" onClick={() => handleConfirmarCompra(venta.id)}>Confirmar Compra</button>
+        </td>
+        <td className="px-4 py-2">
+          <button className='w-full my-2 bg-red-500 text-white px-2 py-1 rounded-lg hover:bg-red-600' onClick={() => handleCancelarCompra(venta.id, venta.items)}>Cancelar Compra</button>
+        </td>
+      </tr>
+    ) : null
+  ))}
+</tbody>
+          </table>
+          <table className="w-full bg-violet-200 rounded-lg shadow-lg p-4 rounded-lg">
+            <tr className="bg-violet-200 text-violet-300 bg-violet-500">
+              <th className="px-4 py-2">Ventas Terminadas</th>
+
+            </tr>
           </table>
         </div>
         
         {modal &&
-          <div className="fixed inset-0 flex items-center justify-center bg-black bg-opacity-50">
-            <div className="bg-white rounded-lg p-8">
-              <h2 className="text-2xl mb-4 text-center text-gray-700 font-bold uppercase">Editar Producto</h2>
-              <form className="bg-violet-200 rounded-lg p-4">
-              {modal &&
-  <div className="fixed inset-0 flex items-center justify-center bg-black bg-opacity-50">
-    <div className="bg-white rounded-lg p-8">
-      <h2 className="text-2xl mb-4 text-center text-gray-700 font-bold uppercase">Editar Producto</h2>
-      <form className="bg-violet-200 rounded-lg p-4">
-        <input
-          type="text"
-          name="nombre"
-          placeholder="Nombre"
-          value={formData.nombre}
-          onChange={handleChange}
-          className="rounded-lg mb-2 p-2 block w-full"
-        />
-        <input
-          type="text"
-          name="descripcion"
-          placeholder="Descripción"
-          value={formData.descripcion}
-          onChange={handleChange}
-          className="rounded-lg mb-2 p-2 block w-full"
-        />
-        <select
-          name="categoria"
-          value={formData.categoria}
-          onChange={handleChange}
-          className="rounded-lg mb-2 p-2 block w-full"
-          list="categoriaOptions"
-        >
-          <option value="">Seleccionar Categoría</option>
-          <option value="alimento">Alimento</option>
-          <option value="alimento suelto">Alimento Suelto</option>
-          <option value="paseo">Paseo</option>
-          <option value="juguetes">Juguetes</option>
-          <option value="cuidados">Cuidados</option>
-          <option value="ropa">Ropa</option>
-        </select>
-        <Image
-          src={formData.imagen ? formData.imagen : '/placeholder-image.png'}
-          alt={formData.nombre} width={64} height={64}
-          className="object-cover"
-        />
-        <input
-          type="file"
-          name="imagen"
-          accept="image/*"
-          onChange={handleImageChange}
-          className="rounded-lg mb-2 p-2 block w-full"
-        />
-        <input
-          type="number"
-          name="precioCompra"
-          placeholder="Precio de Compra"
-          value={formData.precioCompra}
-          onChange={handleChange}
-          className="rounded-lg mb-2 p-2 block w-full"
-        />
-        <input
-          type="number"
-          name="precioVenta"
-          placeholder="Precio de Venta"
-          value={formData.precioVenta}
-          onChange={handleChange}
-          className="rounded-lg mb-2 p-2 block w-full"
-        />
-        <input
-          type="number"
-          name="stock"
-          placeholder="Stock"
-          value={formData.stock}
-          onChange={handleChange}
-          className="rounded-lg mb-2 p-2 block w-full"
-        />
-        <button
-          type="button"
-          onClick={handleUpdateProduct}
-          className="bg-green-500 text-white px-4 py-2 rounded-lg hover:bg-green-600"
-        >
-          Actualizar
-        </button>
-        <button
-          type="button"
-          onClick={closeModal}
-          className="bg-red-500 text-white px-4 py-2 rounded-lg hover:bg-red-600 ml-2"
-        >
-          Cancelar
-        </button>
-      </form>
-    </div>
-  </div>
-}
+            <div className="fixed inset-0 flex items-center justify-center bg-black bg-opacity-50">
+              <div className="bg-white rounded-lg p-8">
+                <h2 className="text-2xl mb-4 text-center text-gray-700 font-bold uppercase">Editar Producto</h2>
+                <form className="bg-violet-200 rounded-lg p-4">
+                {modal &&
+                    <div className="fixed inset-0 flex items-center justify-center bg-black bg-opacity-50">
+                      <div className="bg-white rounded-lg p-8">
+                        <h2 className="text-2xl mb-4 text-center text-gray-700 font-bold uppercase">Editar Producto</h2>
+                        <form className="bg-violet-200 rounded-lg p-4">
+                          <input
+                            type="text"
+                            name="nombre"
+                            placeholder="Nombre"
+                            value={formData.nombre}
+                            onChange={handleChange}
+                            className="rounded-lg mb-2 p-2 block w-full"
+                          />
+                          <input
+                            type="text"
+                            name="descripcion"
+                            placeholder="Descripción"
+                            value={formData.descripcion}
+                            onChange={handleChange}
+                            className="rounded-lg mb-2 p-2 block w-full"
+                          />
+                          <select
+                            name="categoria"
+                            value={formData.categoria}
+                            onChange={handleChange}
+                            className="rounded-lg mb-2 p-2 block w-full"
+                            list="categoriaOptions"
+                          >
+                            <option value="">Seleccionar Categoría</option>
+                            <option value="alimento">Alimento</option>
+                            <option value="alimento suelto">Alimento Suelto</option>
+                            <option value="paseo">Paseo</option>
+                            <option value="juguetes">Juguetes</option>
+                            <option value="cuidados">Cuidados</option>
+                            <option value="ropa">Ropa</option>
+                          </select>
+                          <Image
+                            src={formData.imagen ? formData.imagen : '/placeholder-image.png'}
+                            alt={formData.nombre} width={64} height={64}
+                            className="object-cover"
+                          />
+                          <input
+                            type="file"
+                            name="imagen"
+                            accept="image/*"
+                            onChange={handleImageChange}
+                            className="rounded-lg mb-2 p-2 block w-full"
+                          />
+                          <input
+                            type="number"
+                            name="precioCompra"
+                            placeholder="Precio de Compra"
+                            value={formData.precioCompra}
+                            onChange={handleChange}
+                            className="rounded-lg mb-2 p-2 block w-full"
+                          />
+                          <input
+                            type="number"
+                            name="precioVenta"
+                            placeholder="Precio de Venta"
+                            value={formData.precioVenta}
+                            onChange={handleChange}
+                            className="rounded-lg mb-2 p-2 block w-full"
+                          />
+                          <input
+                            type="number"
+                            name="stock"
+                            placeholder="Stock"
+                            value={formData.stock}
+                            onChange={handleChange}
+                            className="rounded-lg mb-2 p-2 block w-full"
+                          />
+                          <button
+                            type="button"
+                            onClick={handleUpdateProduct}
+                            className="bg-green-500 text-white px-4 py-2 rounded-lg hover:bg-green-600"
+                          >
+                            Actualizar
+                          </button>
+                          <button
+                            type="button"
+                            onClick={closeModal}
+                            className="bg-red-500 text-white px-4 py-2 rounded-lg hover:bg-red-600 ml-2"
+                          >
+                            Cancelar
+                          </button>
+                        </form>
+                      </div>
+                    </div>
+                  }
 
-              </form>
+                </form>
+              </div>
             </div>
-          </div>
-        }
+          }
       </div>
     </div>
   );

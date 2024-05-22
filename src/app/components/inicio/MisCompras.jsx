@@ -1,35 +1,56 @@
+'use client'
 import React, { useState, useEffect } from 'react';
 import { UserAuth } from '../../context/AuthContext';
-import { misCompras } from '@/app/firebase';
+import { cancelarCompraTienda, misCompras } from '@/app/firebase';
 
 // Componente VentaItem.jsx
-
 const VentaItem = ({ venta, formatDate }) => {
-  return (
-<li className="py-4 border-b border-gray-200">
-    <div className="flex flex-col md:flex-row justify-between  items-start">
-        <div className="mb-2 md:mb-0">
+  function handleCancelarCompra(id) {
+    cancelarCompraTienda(id)
+      .then((venta) => {
+        alert('La compra ha sido cancelada');
+        window.location.reload();
+      })
+      .catch(error => {
+        alert('Error al cancelar la compra');
+      });
+  }
+  // Omitir las ventas canceladas (entrega: "cancelado")
+  if (venta.entregar !== "cancelado") {
+    return (
+      <li className="py-4 border-b border-gray-200">
+        <div className="flex flex-col md:flex-row justify-between items-start">
+          <div className="mb-2 md:mb-0">
             <p className="font-bold text-gray-800">{formatDate(venta.createdAt)}</p>
             <p className="text-gray-700">{venta.items[0]?.nombre}</p>
             <p className="text-gray-700">Cantidad: {venta.items[0]?.cantidad}</p>
-            <p className="text-gray-700 mt-2">{venta.efectivo ? 'Pago en efectivo' : 'Pago no efectivo'}</p>
+            <p className="text-gray-700 mt-2">{venta.efectivo ? 'El pedido se cobrara en efectivo' : 'Pago no efectivo'}</p>
             <p className="text-gray-700">{venta.mp ? 'Pago con MercadoPago' : 'No se utilizó MercadoPago'}</p>
-            <p className="text-gray-700">{venta.entrega === 'entregar' ? 'Esperando entrega' : 'En camino'}</p>
-        </div>
-        <div className="flex flex-col items-end">
-            <p className={`px-2 py-1 rounded ${
-                venta.confirmado ? 'bg-green-500 text-white' : 'bg-red-500 text-white'
-            }`}>{venta.confirmado ? 'Confirmado' : 'No confirmado'}</p>
+            <p className="text-gray-700">
+              {venta.entrega === 'entregar'
+                ? 'Esperando entrega'
+                : venta.entrega === 'en camino'
+                ? 'En camino'
+                : null}
+            </p>
+          </div>
+          <div className="flex gap-10 flex-col items-end">
+            <p className={`px-2 py-1 rounded ${venta.confirmado ? 'bg-green-500 text-white' : 'bg-red-500 text-white'}`}>
+              {venta.confirmado ? 'Confirmado' : 'No confirmado'}
+            </p>
             <p className="text-gray-800 mt-4 md:mt-0">Precio Total: ${venta?.precio}</p>
+          <button onClick={() => handleCancelarCompra(venta.id ,venta.items)} className="bg-red-500 hover:bg-red-700 text-white font-bold py-2 px-4 rounded mt-4 md:mt-0">
+            ¡cancelar compra!
+          </button>
+          </div>
         </div>
-    </div>
-</li>
-
-
-
-  );
+      </li>
+    );
+  } else {
+    // Si la venta está cancelada, no se renderiza nada
+    return null;
+  }
 };
-
 
 export default function MisCompras() {
   const { user } = UserAuth();
@@ -37,6 +58,8 @@ export default function MisCompras() {
   const [registrosVenta, setRegistrosVenta] = useState([]);
   const [isLoading, setIsLoading] = useState(true);
   const [error, setError] = useState(null);
+
+
 
   useEffect(() => {
     const fetchRegistrosVenta = () => {
@@ -78,7 +101,9 @@ export default function MisCompras() {
         ) : (
           <ul className="divide-y divide-gray-200">
             {registrosVenta.map((venta, index) => (
-              <VentaItem key={index} venta={venta} formatDate={formatDate} />
+              venta.entrega !== "cancelado" && (
+                <VentaItem key={index} venta={venta} formatDate={formatDate} />
+              )
             ))}
           </ul>
         )}

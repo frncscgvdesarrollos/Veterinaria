@@ -1,6 +1,6 @@
 'use client';
 import React, { useState, useEffect } from 'react';
-import { mascotasEnAdopcion, sendMessage } from '../../firebase'; // Import sendMessage function
+import { mascotasEnAdopcion } from '../../firebase'; // Import sendMessage function
 
 export default function MascotasAdopcion() {
   const [chat, setChat] = useState(false);

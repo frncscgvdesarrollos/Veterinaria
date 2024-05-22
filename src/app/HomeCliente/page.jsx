@@ -77,7 +77,7 @@ export default function HomeCliente() {
   }
 
   return (
-    <div className="min-h-screen flex flex-col p-2 lg:container-perspective mx-auto">
+    <div className="min-h-screen flex flex-col p-2 lg:container-perspective">
       <div className="rounded-lg mb-8 pr-10 w-2/3 lg:w-3/4 mx-auto">
         <Veterinaria />
       </div>
@@ -90,13 +90,13 @@ export default function HomeCliente() {
           <DatosMascotas />
         </div>
       </div>
-      <div className="mt-20 w-[450px] lg:w-3/4 sm:w-3/4 md:w-3/4 lg:w-full mx-auto">
+      <div className="mt-20 w-[450px] lg:w-3/4 mx-auto">
         <Productos />
       </div>
       {/* <div className="mt-20 p-10 mx-auto">
         <MisCompras />
       </div> */}
-      <div className="mt-8" id="Adopciones">
+      <div className="my-8 w-full" id="Adopciones">
         <MascotasAdopcion />
       </div>
     </div>

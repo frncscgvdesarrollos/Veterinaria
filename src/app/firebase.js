@@ -67,9 +67,6 @@ export async function idVentas() {
     }
 }
 
-
-  
-
 export async function ventaEnCurso(uid) {
   try {
     const ventasRef = collection(db, "ventas");
@@ -1098,7 +1095,152 @@ export const crearOActualizarCliente = async (uid, clienteData) => {
 };
 
 
+// @/app/firebase.js
+export async function confirmarCompraTienda(id) {
+  try {
+    const q = query(collection(db, "ventas"), where("id", "==", id));
+    const querySnapshot = await getDocs(q);
+    const docs = querySnapshot.docs;
+    
+    if (docs.length > 0) {
+      const doc = docs[0]; // Solo tomamos el primer documento, asumiendo que hay solo uno con esa ID
+      await updateDoc(doc.ref, { confirmado: true , entregar : "entregar" });
+      return "La compra ha sido confirmada con éxito";
+    } else {
+      throw new Error("No se encontró ningún documento con la ID proporcionada");
+    }
+  } catch (error) {
+    console.error("Error al confirmar la compra:", error);
+    throw error;
+  }
+}
 
+export async function cancelarCompraTienda(id, items) {
+  try {
+    const q = query(collection(db, "ventas"), where("id", "==", id));
+    const querySnapshot = await getDocs(q);
+    const docs = querySnapshot.docs;
+
+    if (docs.length > 0) {
+      const doc = docs[0]; // Solo tomamos el primer documento, asumiendo que hay solo uno con esa ID
+      await updateDoc(doc.ref, { confirmado: false, entrega: "cancelado" });
+
+      // Verificar si hay productos en la compra
+      if (items.length === 0) {
+        throw new Error("No hay productos en la compra");
+      } else {
+        // Actualizar el stock de los productos en la colección "productos"
+        if (Array.isArray(items)) {
+          for (const item of items) {
+            if (item.nombre && item.nombre.trim().length > 0) {
+              const productoQuery = query(
+                collection(db, "productos"),
+                where("nombre", "==", item.nombre)
+              );
+              const productoSnapshot = await getDocs(productoQuery);
+              const productoDocs = productoSnapshot.docs;
+
+              if (productoDocs.length > 0) {
+                const productoDoc = productoDocs[0];
+                const nuevoStock = productoDoc.data().stock + item.cantidad;
+                await updateDoc(productoDoc.ref, { stock: nuevoStock });
+              } else {
+                console.error(
+                  `No se encontró el producto "${item.nombre}" en la colección "productos"`
+                );
+              }
+            } else {
+              console.error("El nombre del producto está vacío");
+            }
+          }
+        } else {
+          // Si `items` no es un array, actualizar el stock para ese único producto
+          if (items.nombre && items.nombre.trim().length > 0) {
+            const productoQuery = query(
+              collection(db, "productos"),
+              where("nombre", "==", items.nombre)
+            );
+            const productoSnapshot = await getDocs(productoQuery);
+            const productoDocs = productoSnapshot.docs;
+
+            if (productoDocs.length > 0) {
+              const productoDoc = productoDocs[0];
+              const nuevoStock = productoDoc.data().stock + items.cantidad;
+              await updateDoc(productoDoc.ref, { stock: nuevoStock });
+            } else {
+              console.error(
+                `No se encontró el producto "${items.nombre}" en la colección "productos"`
+              );
+            }
+          } else {
+            console.error("El nombre del producto está vacío");
+          }
+        }
+      }
+
+      return "La compra ha sido cancelada con éxito";
+    } else {
+      throw new Error("No se encontró ningún documento con la ID proporcionada");
+    }
+  } catch (error) {
+    console.error("Error al cancelar la compra:", error);
+    throw error;
+  }
+}
+
+
+export async function ventasEntregar() {
+  let entregar = [];
+  try {
+    const q = query(collection(db, "ventas"), where("entregar", "==", "entregar"));
+    const querySnapshot = await getDocs(q);
+    querySnapshot.forEach((doc) => {
+      entregar.push(doc.data());
+    });
+    return entregar;
+  } catch (error) {
+    console.error("Error al obtener las ventas:", error);
+    throw error;
+  }
+}
+
+export async function entregarVenta(id) {
+  try {
+    const q = query(collection(db, "ventas"), where("id", "==", id));
+    const querySnapshot = await getDocs(q);
+    const docs = querySnapshot.docs;
+    
+    if (docs.length > 0) {
+      const doc = docs[0]; // Solo tomamos el primer documento, asumiendo que hay solo uno con esa ID
+      await updateDoc(doc.ref, { entregar: "entregado" });
+      return "La venta ha sido confirmada con éxito";
+    } else {
+      throw new Error("No se encontró aquí documento con la ID proporcionada");
+    }
+  } catch (error) {
+    console.error("Error al confirmar la venta:", error);
+    throw error;
+  }
+}
+
+export async function cancelarEntrega(id) { 
+  try {
+    const q = query(collection(db, "ventas"), where("id", "==", id));
+    const querySnapshot = await getDocs(q);
+    const docs = querySnapshot.docs;
+    
+    if (docs.length > 0) {
+      const doc = docs[0]; // Solo tomamos el primer documento, asumiendo que hay solo uno con esa ID
+      await updateDoc(doc.ref, { entregar: "entregado pero no recibido" });
+      return "La venta ha sido confirmada con éxito";
+    } else {
+      throw new Error("No se encontró aquí documento con la ID proporcionada");
+    }
+  } catch (error) {
+    console.error("Error al confirmar la venta:", error);
+    throw error;
+  }
+}
 
 
 

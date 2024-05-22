@@ -12,7 +12,10 @@ export default function RootLayout({ children  }) {
 
   return (
     <html lang="en">
-      <body className='bg-gray-800 w-full'>
+      <head>
+        <meta name="viewport" content="width=device-width, initial-scale=1" />
+      </head>
+      <body className='bg-gray-800 flex flex-col'>
         <AuthContextProvider>
 
               <Header />
