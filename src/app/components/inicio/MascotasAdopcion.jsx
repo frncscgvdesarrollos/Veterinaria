@@ -1,6 +1,7 @@
 'use client';
 import React, { useState, useEffect } from 'react';
 import { mascotasEnAdopcion } from '../../firebase'; // Import sendMessage function
+import Image from 'next/image';
 
 export default function MascotasAdopcion() {
   const [chat, setChat] = useState(false);
@@ -58,10 +59,11 @@ export default function MascotasAdopcion() {
               <div key={index} className="flex bg-blue-300 w-full sm:w-2/5 mx-auto bg-opacity-70 shadow-md rounded-md overflow-hidden text-white font-semibold sm:mx-2">
                 <div className="relative overflow-hidden w-full sm:w-full mx-auto">
                   {mascota.foto ? (
-                    <img
+                    <Image
                       className="object-cover w-full h-48 sm:h-56 md:h-64"
                       src={mascota.foto}
                       alt={`Foto de ${mascota.nombre}`}
+                      width={500} height={50}
                     />
                   ) : (
                     <div className="bg-violet-300 w-full h-48 sm:h-56 md:h-64 flex items-center justify-center">
