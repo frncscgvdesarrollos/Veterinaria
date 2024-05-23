@@ -1243,6 +1243,23 @@ export async function cancelarEntrega(id) {
 }
 
 
-
+export async function borrarRegistroVenta(id) {
+  try {
+    const q = query(collection(db, "ventas"), where("id", "==", id));
+    const querySnapshot = await getDocs(q);
+    const docs = querySnapshot.docs;
+    
+    if (docs.length > 0) {
+      const doc = docs[0]; // Solo tomamos el primer documento, asumiendo que hay solo uno con esa ID
+      await deleteDoc(doc.ref);
+      return "La venta ha sido borrada con exito";
+    } else {
+      throw new Error("No se encontró aquí documento con la ID proporcionada");
+    }
+  } catch (error) {
+    console.error("Error al borrar la venta:", error);
+    throw error;
+  }
+}
 // Firebase.js
 

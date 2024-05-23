@@ -96,7 +96,6 @@ export default function TransporteHome() {
     <div className="bg-purple-200 p-4 sm:p-6 md:p-8 lg:p-10 rounded-lg">
       <h1 className="text-3xl font-bold underline text-center mb-6">Transporte</h1>
       
-      <div className="overflow-x-auto">
         <h1 className="text-xl font-bold">Turno mañana</h1>
         <table className="min-w-full divide-y divide-gray-200">
           <thead className="bg-gray-50">
@@ -153,9 +152,9 @@ export default function TransporteHome() {
             ))}
           </tbody>
         </table>
-      </div>
 
-      <div className="overflow-x-auto">
+
+
         <h1 className="text-xl font-bold">Turno tarde</h1>
         <table className="min-w-full divide-y divide-gray-200">
           <thead className="bg-gray-50">
@@ -212,9 +211,9 @@ export default function TransporteHome() {
             ))}
           </tbody>
         </table>
-      </div>
 
-      <div className="overflow-x-auto">
+
+
         <h1 className="text-xl font-bold">Ventas a Entregar</h1>
         <table className="min-w-full divide-y divide-gray-200">
           <thead className="bg-gray-50">
@@ -229,8 +228,8 @@ export default function TransporteHome() {
             </tr>
           </thead>
           <tbody className="bg-white divide-y divide-gray-200">
-            {ventas.map(venta => (
-              <tr key={venta.id} className={venta.id % 2 === 0 ? 'bg-green-100' : 'bg-yellow-100'}>
+            {ventas.map((venta, index) => (
+              <tr key={index} className={index % 2 === 0 ? 'bg-green-100' : 'bg-yellow-100'}>
                 <td className="px-6 py-4 whitespace-nowrap">{venta.nombre}</td>
                 <td className="px-6 py-4 whitespace-nowrap">
                   {venta.items.map((item, index) => (
@@ -254,6 +253,6 @@ export default function TransporteHome() {
           </tbody>
         </table>
       </div>
-    </div>
+
   );
 }

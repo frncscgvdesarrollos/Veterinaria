@@ -1,6 +1,6 @@
 'use client'
 import React, { useState, useEffect } from 'react';
-import { getProducts, createProduct, deleteProduct, updateProduct, actualizarId, totalVentas ,cancelarCompraTienda , confirmarCompraTienda } from '@/app/firebase'; // Asegúrate de importar totalVentas
+import { getProducts, createProduct, deleteProduct, updateProduct, actualizarId, totalVentas ,cancelarCompraTienda , confirmarCompraTienda, borrarRegistroVenta } from '@/app/firebase';
 import Image from 'next/image';
 
 export default function ProductPage() {
@@ -89,7 +89,7 @@ export default function ProductPage() {
 
   function handleChange(e) {
     const { name, value } = e.target;
-    const parsedValue = name === "stock" ? parseInt(value) : value; // Parsear el valor del stock a un número
+    const parsedValue = name === "stock" ? parseInt(value) : value;
     setFormData(prevState => ({
       ...prevState,
       [name]: parsedValue
@@ -195,6 +195,17 @@ export default function ProductPage() {
   }
   
   
+  function handleEliminarVenta(id) {
+    borrarRegistroVenta(id)
+    .then(() => {
+      alert('Registro de venta eliminado correctamente');
+      window.location.reload();
+    })
+    .catch(error => {
+      console.error('Error al eliminar el registro de venta:', error);
+      alert('Error al eliminar el registro de venta');
+    });
+  }
 
   
   return (
@@ -308,7 +319,6 @@ export default function ProductPage() {
           <div className="mx-auto bg-pink-300  bg-opacity-70 p-10 rounded-lg p-4 mb-4 w-1/3 element4">
       {Object.keys(formData).length > 0 && (
         <div className="bg-white rounded-lg shadow-md p-4 mt-4">
-          {/* Card que muestra los detalles del producto */}
           <Image src={formData.imagen} alt="Imagen" className="mb-2" style={{ maxWidth: "100%" }} />
           <h2 className="text-xl font-semibold mb-2">{formData.nombre}</h2>
           <p className="text-gray-600 mb-2">{formData.descripcion}</p>
@@ -326,7 +336,6 @@ export default function ProductPage() {
         )}
         </div>
 
-        <div className='overflow-x-auto'>
           <table className="w-full bg-violet-200 rounded-lg shadow-lg p-4 rounded-lg">
             <thead >
               <tr className="bg-violet-200 text-violet-300 bg-violet-500">     
@@ -341,8 +350,8 @@ export default function ProductPage() {
               </tr>
             </thead>
             <tbody className='text-center'>
-              {products.map(product => (
-                <tr key={product.id} className="border-t border-gray-200">
+              {products.map((product, index) => (
+                <tr key={index} className="border-t border-gray-200">
                   <td className="px-4 py-2">{product.id}</td>
                   <td className="px-4 py-2">{product.nombre}</td>
                   <td className="px-4 py-2">{product.descripcion}</td>
@@ -366,9 +375,9 @@ export default function ProductPage() {
               ))}
             </tbody>
           </table>
-        </div>
 
-        <div>
+
+
           <h2 className="text-2xl mb-4">Ventas de Tienda</h2>
           <table className="w-full bg-violet-200 rounded-lg shadow-lg p-4 rounded-lg">
             <thead >
@@ -387,10 +396,10 @@ export default function ProductPage() {
               </tr>
             </thead>
             <tbody className='text-center'>
-  {ventasTienda.map(venta => (
+  {ventasTienda.map((venta , index) => (
     // Omitir las ventas canceladas (entregar: "cancelado")
-    venta.entregar !== "cancelado" ? (
-      <tr key={venta.id} className="border-t border-gray-200">
+    venta.entrega != "cancelado" ? (
+      <tr key={index} className="border-t border-gray-200">
         <td className="px-4 py-2">{venta.id}</td>
         <td className="px-4 py-2">{venta.nombre}</td>
         <td className="px-4 py-2">{venta.apellido}</td>
@@ -419,13 +428,61 @@ export default function ProductPage() {
   ))}
 </tbody>
           </table>
-          <table className="w-full bg-violet-200 rounded-lg shadow-lg p-4 rounded-lg">
-            <tr className="bg-violet-200 text-violet-300 bg-violet-500">
-              <th className="px-4 py-2">Ventas Terminadas</th>
+                
+ 
+ 
+ 
+                <table className="table-auto w-full my-10">         
+                    <thead className='bg-violet-500 text-white'>
+                      <tr>
+                        <th className="px-4 py-2">ID</th>
+                        <th className="px-4 py-2">Nombre</th>
+                        <th className="px-4 py-2">Apellido</th>
+                        <th className="px-4 py-2">Dirección</th>
+                        <th className="px-4 py-2">Teléfono</th>
+                        <th className="px-4 py-2">Precio</th>
+                        <th className="px-4 py-2">Modo de Pago</th>
+                        <th className="px-4 py-2">Estado</th>
+                        <th className="px-4 py-2">Items</th>
+                        <th className="px-4 py-2">Borrar registro</th>
+                        </tr>
+                  </thead>
+                  <tbody>
+                      {ventasTienda.map((venta , index) => (
+                        venta.entrega === "cancelado" && (
+                                <tr key={index}>
+                            <td className="border px-4 py-2">{venta.id}</td>
+                            <td className="border px-4 py-2">{venta.nombre}</td>
+                            <td className="border px-4 py-2">{venta.apellido}</td>
+                            <td className="border px-4 py-2">{venta.direccion}</td>
+                            <td className="border px-4 py-2">{venta.telefono}</td>
+                            <td className="border px-4 py-2">{venta.precio}</td>
+                            <td className="border px-4 py-2">{venta.efectivo? 'Efectivo' : 'Pago con MP'}</td>
+                            <td className="border px-4 py-2">Cancelado</td>
+                            <td className="border px-4 py-2">
+                              {venta.items.map(item => (
+                                <div key={item.id}>{item.nombre}</div>
+                              ))}
+                            </td>
+                            <td className="border px-4 py-2">
+                              <button className="bg-red-500 hover:bg-red-700 text-white font-bold py-2 px-4 rounded" onClick={() => handleEliminarVenta(venta.id)}>
+                                Borrar registro
+                              </button>
+                            </td>
+              </tr>
+            )
+          ))}
+        </tbody>
+      </table>
 
-            </tr>
-          </table>
-        </div>
+
+
+
+
+
+
+
+
         
         {modal &&
             <div className="fixed inset-0 flex items-center justify-center bg-black bg-opacity-50">
@@ -468,11 +525,14 @@ export default function ProductPage() {
                             <option value="cuidados">Cuidados</option>
                             <option value="ropa">Ropa</option>
                           </select>
-                          <Image
-                            src={formData.imagen ? formData.imagen : '/placeholder-image.png'}
-                            alt={formData.nombre} width={64} height={64}
-                            className="object-cover"
-                          />
+                          <datalist id="categoriaOptions">
+                            <option value="alimento">Alimento</option>
+                            <option value="alimento suelto">Alimento Suelto</option>
+                            <option value="paseo">Paseo</option>
+                            <option value="juguetes">Juguetes</option>
+                            <option value="cuidados">Cuidados</option>
+                            <option value="ropa">Ropa</option>
+                          </datalist>
                           <input
                             type="file"
                             name="imagen"
@@ -482,17 +542,9 @@ export default function ProductPage() {
                           />
                           <input
                             type="number"
-                            name="precioCompra"
-                            placeholder="Precio de Compra"
-                            value={formData.precioCompra}
-                            onChange={handleChange}
-                            className="rounded-lg mb-2 p-2 block w-full"
-                          />
-                          <input
-                            type="number"
-                            name="precioVenta"
-                            placeholder="Precio de Venta"
-                            value={formData.precioVenta}
+                            name="precio"
+                            placeholder="Precio"
+                            value={formData.precio}
                             onChange={handleChange}
                             className="rounded-lg mb-2 p-2 block w-full"
                           />
@@ -511,19 +563,17 @@ export default function ProductPage() {
                           >
                             Actualizar
                           </button>
-                          <button
-                            type="button"
-                            onClick={closeModal}
-                            className="bg-red-500 text-white px-4 py-2 rounded-lg hover:bg-red-600 ml-2"
-                          >
+                          <button onClick={closeModal} className="bg-red-500 text-white px-4 py-2 rounded-lg hover:bg-red-600 ml-2">
                             Cancelar
                           </button>
                         </form>
                       </div>
                     </div>
                   }
-
                 </form>
+                <button onClick={closeModal} className="bg-red-500 text-white px-4 py-2 rounded-lg hover:bg-red-600 ml-2">
+                  Cerrar
+                </button>
               </div>
             </div>
           }
@@ -531,4 +581,3 @@ export default function ProductPage() {
     </div>
   );
 }
-

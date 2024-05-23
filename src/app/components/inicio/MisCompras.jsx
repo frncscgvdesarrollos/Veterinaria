@@ -6,7 +6,7 @@ import { cancelarCompraTienda, misCompras } from '@/app/firebase';
 // Componente VentaItem.jsx
 const VentaItem = ({ venta, formatDate }) => {
   function handleCancelarCompra(id) {
-    cancelarCompraTienda(id)
+    cancelarCompraTienda(id , venta.items)
       .then((venta) => {
         alert('La compra ha sido cancelada');
         window.location.reload();
