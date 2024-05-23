@@ -1,11 +1,22 @@
 'use client';
 import React, { useState, useEffect } from 'react';
-import { mascotasEnAdopcion } from '../../firebase'; // Import sendMessage function
+import { mascotasEnAdopcion, postular } from '../../firebase'; // Import sendMessage function
 import Image from 'next/image';
+import { UserAuth } from '@/app/context/AuthContext';
+import { UseClient } from '@/app/context/ClientContext';
 
 export default function MascotasAdopcion() {
-  const [chat, setChat] = useState(false);
-  const [uid2, setUid2] = useState(null);
+  const {user} = UserAuth();
+  const uid = user?.uid;
+  const {datosCliente} = UseClient();
+  const { nombre , apellido , telefono  } = datosCliente;
+  const info = {
+    uid,
+    nombre,
+    apellido,
+    telefono
+  }
+  console.log(datosCliente);
   const [mascotas, setMascotas] = useState([]);
   const [isLoading, setIsLoading] = useState(true);
   const [error, setError] = useState(null);
@@ -30,16 +41,18 @@ export default function MascotasAdopcion() {
     fetchData();
   }, []);
 
-  const chatear = (uid) => {
-    setChat(true);
-    setUid2(uid);
-  }
+
 
   // Function to handle sending message
-  const handleSendMessage = (message) => {
-    sendMessage(uid2, message, 'userID1') // Call sendMessage function with parameters
-      .then(() => console.log('Message sent'))
-      .catch(error => console.error('Error sending message:', error));
+  const handlePostular = (infoPostulante , nombreMascota , uidMascota) => {
+    postular(infoPostulante , nombreMascota , uidMascota)
+    .then(() => {
+      alert('Tu postulación ha sido enviada');
+      window.location.reload();
+    })
+    .catch(error => {
+      console.error('Error al enviar el mensaje:', error);
+    });
   }
 
   return (
@@ -81,8 +94,8 @@ export default function MascotasAdopcion() {
                   {mascota.cumpleaños && (
                     <p className="text-base text-gray-600 mb-2">Cumpleaños: {mascota.cumpleaños}</p>
                   )}
-                  <button className="bg-purple-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded" onClick={() => chatear(mascota.uid)}>
-                    Contactar
+                  <button className="bg-purple-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded" onClick={() => handlePostular(info, mascota.nombre , mascota.uid)}>
+                    Postular !
                   </button>
                 </div>
               </div>

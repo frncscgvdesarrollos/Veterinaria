@@ -1263,3 +1263,30 @@ export async function borrarRegistroVenta(id) {
 }
 // Firebase.js
 
+export async function postular(info, nombreMascota, uidMascota) {
+  try {
+      // Referencia a la colección de mascotas
+      const mascotasRef = collection(db, "mascotas");
+      
+      // Crear una consulta para encontrar la mascota específica
+      const q = query(mascotasRef, where("uid", "==", uidMascota), where("nombre", "==", nombreMascota));
+      
+      // Ejecutar la consulta
+      const querySnapshot = await getDocs(q);
+
+      // Verificar si la consulta devolvió algún documento
+      if (!querySnapshot.empty) {
+          // Obtener el primer documento de la consulta (asumiendo que hay uno solo que coincide con uid y nombre)
+          const doc = querySnapshot.docs[0];
+          
+          // Actualizar el array de postulantes empujando el nuevo info
+          await updateDoc(doc.ref, {
+              postulantes: arrayUnion(info)
+          });
+      } else {
+          console.log("No se encontró la mascota con los criterios especificados.");
+      }
+  } catch (error) {
+      console.error("Error actualizando los postulantes: ", error);
+  }
+}

@@ -21,6 +21,7 @@ export default function FormAgregarMascota() {
     nombre: '',
     foto: '',
     estadoCivil: '',
+    postulantes: [],
     info: 'Tiene algun problema de salud?',
     cumpleaños: '',
     internacion:false,
@@ -43,11 +44,12 @@ export default function FormAgregarMascota() {
   const [foto, setFoto] = useState(null);
 
   const handleInputChange = (event) => {
-    const { name, value } = event.target;
+    const { name, value } = event.target;    
     setNuevaMascota({
       ...nuevaMascota,
       [name]: value
     });
+
   };
 
   const handleFileChange = (event) => {

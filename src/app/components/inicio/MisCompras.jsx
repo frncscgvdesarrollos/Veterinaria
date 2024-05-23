@@ -22,8 +22,8 @@ const VentaItem = ({ venta, formatDate }) => {
         <div className="flex flex-col md:flex-row justify-between items-start">
           <div className="mb-2 md:mb-0">
             <p className="font-bold text-gray-800">{formatDate(venta.createdAt)}</p>
-            <p className="text-gray-700">{venta.items[0]?.nombre}</p>
-            <p className="text-gray-700">Cantidad: {venta.items[0]?.cantidad}</p>
+            <p className="text-gray-700">{venta.nombre}</p>
+            <p className="text-gray-700">Cantidad: {venta.cantidad}</p>
             <p className="text-gray-700 mt-2">{venta.efectivo ? 'El pedido se cobrara en efectivo' : 'Pago no efectivo'}</p>
             <p className="text-gray-700">{venta.mp ? 'Pago con MercadoPago' : 'No se utilizó MercadoPago'}</p>
             <p className="text-gray-700">

@@ -40,10 +40,10 @@ const CartItem = React.memo(({ item, eliminarDelCarrito }) => {
       </div>
       <div className="flex flex-col justify-center flex-grow">
         <p className="font-semibold text-lg">{item.nombre}</p>
-        <p className="text-gray-700">Cantidad: {item.cantidad}</p>
+        <p className="text-gray-700 font-semibold mr-4">Cantidad: {item.cantidad}</p>
       </div>
       <div className="flex-none mr-4">
-        <p className="font-semibold">Precio unitario: ${item.precioVenta}</p>
+        <p className="font-semibold">C/U: ${item.precioVenta}</p>
       </div>
       <div className="flex-none mr-4">
         <p className="font-semibold">Total: ${precioTotal}</p>
@@ -200,7 +200,7 @@ const DesktopProductos = ({ productos, filtro, currentPage, productsPerPage, win
       </div>
     </div>
 
-    <div className="p-4 md:p-8 lg:p-12 bg-violet-200 bg-opacity-50 w-full mx-auto rounded-lg mt-10">
+    <div className="p-4 md:p-8 lg:p-12 bg-violet-200 bg-opacity-50 w-full mx-auto rounded-lg mt-5">
       <div className="flex justify-around items-center my-4 md:my-20 flex-col md:flex-row">
         <div className="flex items-center gap-10 mb-4 md:mb-0 mx-auto lg:ml-20">
           <h1 className="text-5xl p-5 font-bold text-purple-800 bg-pink-300 p-2 rounded-lg bg-opacity-50 md:ml-10 ">
@@ -220,15 +220,16 @@ const DesktopProductos = ({ productos, filtro, currentPage, productsPerPage, win
             )}
           </button>
         </div>
-        <div className="flex flex-wrap justify-end gap-10 items-center mb-4 md:mb-0 w-2/3 mx-auto lg:mr-auto filtro">
-          <button onClick={() => filtrarProductos('')} className='text-yellow-200 bg-purple-500 hover:bg-purple-700 font-semibold py-2 px-4 rounded focus:outline-none'>Todos</button>
-          <button onClick={() => filtrarProductos('ropa')} className='text-yellow-200 bg-purple-500 hover:bg-purple-700 font-semibold py-2 px-4 rounded focus:outline-none'>Ropa</button>
-          <button onClick={() => filtrarProductos('juguetes')} className='text-yellow-200 bg-purple-500 hover:bg-purple-700 font-semibold py-2 px-4 rounded focus:outline-none'>Juguetes</button>
-          <button onClick={() => filtrarProductos('comida')} className='text-yellow-200 bg-purple-500 hover:bg-purple-700 font-semibold py-2 px-4 rounded focus:outline-none'>Comida</button>
-        </div>
       </div>
+
+        <div className="flex flex-col lg:flex-row justify-space-between  md:mb-0 w-full mx-auto -mt-10">
+          <button onClick={() => filtrarProductos('')} className=' w-2/3 m-2 text-yellow-200 bg-purple-500 hover:bg-purple-700 font-semibold py-2 px-4 rounded focus:outline-none'>Todos</button>
+          <button onClick={() => filtrarProductos('ropa')} className='  w-2/3  m-2 text-yellow-200 bg-purple-500 hover:bg-purple-700 font-semibold py-2 px-4 rounded focus:outline-none'>Ropa</button>
+          <button onClick={() => filtrarProductos('juguetes')} className='  w-2/3 m-2  text-yellow-200 bg-purple-500 hover:bg-purple-700 font-semibold py-2 px-4 rounded focus:outline-none'>Juguetes</button>
+          <button onClick={() => filtrarProductos('comida')} className=' w-2/3 m-2 text-yellow-200 bg-purple-500 hover:bg-purple-700 font-semibold py-2 px-4 rounded focus:outline-none'>Comida</button>
+        </div>
       {mostrarCarrito && (
-        <div className="bg-pink-300 rounded-lg m-2 p-4 bg-opacity-50 flex flex-col justify-center  w-2/3 my-10 h-full mx-auto">
+        <div className="bg-pink-300 rounded-lg m-2 p-4 bg-opacity-50 flex flex-col justify-center  w-2/3 my-10 h-full mx-auto ">
           <h2 className="text-xl md:text-2xl font-semibold mb-4 text-purple-800">Tu pedido</h2>
           <div className="overflow-x-auto w-full">
             {carrito.length > 0 ? (
@@ -252,14 +253,14 @@ const DesktopProductos = ({ productos, filtro, currentPage, productsPerPage, win
           </div>
         </div>
       )}
-      <div className="grid grid-cols-1 md:grid-cols-3 xl:grid-cols-5 gap-6 p-5 rounded-lg container-perspective mx-auto w-full">
+      <div className={`grid grid-cols-1 md:grid-cols-1 xl:grid-cols-5 gap-6 p-2 rounded-lg container-perspective mx-auto w-full productos ${mostrarCarrito? "productosmargin" : null}`}>
         {productos
           .filter(producto => (filtro === '' || producto.categoria === filtro) && producto.stock > 0)
           .slice((currentPage - 1) * productsPerPage, currentPage * productsPerPage)
           .map((producto) => (
             <div
               key={producto.id}
-              className={`bg-pink-300 border-4 border-yellow-200 rounded-lg p-4 mx-auto flex flex-col gap-4 flex-grow ${windowSize.width > 1300 ? 'element4 element' : 'span2'}`}
+              className={`w-2/3 bg-pink-300 border-4 mt-10  border-yellow-200 rounded-lg p-2 mx-auto flex flex-col gap-4 flex-grow ${windowSize.width > 1300 ? 'element4 element' : 'span2'}`}
               style={{ minHeight: '350px' }}
             >
               <Image
