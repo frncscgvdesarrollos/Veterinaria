@@ -120,11 +120,11 @@ export default function MisDatos() {
               {!editingApellido && <button className="text-sm ml-2 text-blue-500" onClick={handleEditApellido}>Editar</button>}
             </p>
             <p className="text-lg mb-2">
-              <span className="font-semibold">Dirección:</span> {editingDireccion ? <input type="text" value={direccionNueva} onChange={(e) => handleDireccionChange(e.target.value)} /> : direccion} 
+              <span className="font-semibold">🏠Dirección:</span> {editingDireccion ? <input type="text" value={direccionNueva} onChange={(e) => handleDireccionChange(e.target.value)} /> : direccion} 
               {!editingDireccion && <button className="text-sm ml-2 text-blue-500" onClick={handleEditDireccion}>Editar</button>}
             </p>
             <p className="text-lg mb-2">
-              <span className="font-semibold">Teléfono:</span> {editingTelefono ? <input type="text" value={telefonoNuevo} onChange={(e) => handleTelefonoChange(e.target.value)} /> : telefono} 
+              <span className="font-semibold">📲Teléfono:</span> {editingTelefono ? <input type="text" value={telefonoNuevo} onChange={(e) => handleTelefonoChange(e.target.value)} /> : telefono} 
               {!editingTelefono && <button className="text-sm ml-2 text-blue-500" onClick={handleEditTelefono}>Editar</button>}
             </p>
             <p className="text-lg mb-2">

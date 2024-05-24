@@ -1,6 +1,6 @@
 import { initializeApp } from "firebase/app";
 import { getAuth  } from "firebase/auth";
-import { getFirestore , collection, addDoc , getDocs, getDoc ,setDoc,  deleteDoc ,query, where, doc , updateDoc, arrayUnion , orderBy, limit ,writeBatch } from "firebase/firestore";
+import { getFirestore , collection, addDoc , getDocs, getDoc ,setDoc,  deleteDoc ,query, where, doc , updateDoc, arrayUnion , orderBy, limit ,writeBatch ,arrayRemove} from "firebase/firestore";
 import { getStorage , ref,  uploadBytes, getDownloadURL, getBytes  } from "firebase/storage";
 
 //--------------configuracion de firebase 
@@ -1288,5 +1288,61 @@ export async function postular(info, nombreMascota, uidMascota) {
       }
   } catch (error) {
       console.error("Error actualizando los postulantes: ", error);
+  }
+}
+
+export async function rechazarPostulante(info, nombreMascota, uidMascota) {
+  try {
+      // Referencia a la colección de mascotas
+      const mascotasRef = collection(db, "mascotas");
+      
+      // Crear una consulta para encontrar la mascota específica
+      const q = query(mascotasRef, where("uid", "==", uidMascota), where("nombre", "==", nombreMascota));
+      
+      // Ejecutar la consulta
+      const querySnapshot = await getDocs(q);
+
+      // Verificar si la consulta devolvió：
+      if (!querySnapshot.empty) {
+          // Obtener el primer documento de la consulta (asumiendo que hay uno solo que coincide con uid y nombre)    
+          const doc = querySnapshot.docs[0];
+          
+          // Actualizar el array de postulantes empujando el nuevo info
+          await updateDoc(doc.ref, {
+              postulantes: arrayRemove(info)
+          });
+      } else {
+          console.log("No se encontró la mascota con los criterios especificados.");
+      }
+  } catch (error) {
+      console.error("Error actualizando los postulantes: ", error);
+  }
+}
+
+export async function confirmarAdopcion(info, nombreMascota, uidMascota) {
+  try {
+      // Referencia a la colección de mascotas
+      const mascotasRef = collection(db, "mascotas");
+      
+      // Crear una consulta para encontrar la mascota específica
+      const q = query(mascotasRef, where("uid", "==", uidMascota), where("nombre", "==", nombreMascota));
+      
+      // Ejecutar la consulta
+      const querySnapshot = await getDocs(q);
+
+      // Verificar si la consulta devolvió：
+      if (!querySnapshot.empty) {
+          // Obtener el primer documento de la consulta (asumiendo que hay uno solo que coincide con uid y nombre)    
+          const doc = querySnapshot.docs[0];
+          
+          // Actualizar el array de postulantes empujando el nuevo info
+          await updateDoc(doc.ref, {
+              adoptantes: arrayUnion(info)
+          });
+      } else {
+          console.log("No se encontró la mascota con los criterios especificados.");
+      } 
+  } catch (error) {
+      console.error("Error actualizando los adoptantes: ", error);
   }
 }
