@@ -125,7 +125,7 @@ export default function MyCalendarPeluqueria() {
 
   useEffect(function () {
     updateVenta();
-  }, [formData.precio, formData.selectedDate]);
+  } );
 
   const handleChange = function (e) {
     const { name, value, type, checked } = e.target;

@@ -58,7 +58,7 @@ export default function TransporteHome() {
     }
 
     handleVentas();
-  }, [isLoading]);
+  }, [isLoading , ventas]);
 
   const handleEstadoUpdate = (id, estadoActual) => {
     let proximoEstado;
