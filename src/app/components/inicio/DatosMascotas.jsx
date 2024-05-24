@@ -80,7 +80,7 @@ export default function MisMascotas() {
   
 
   return (
-    <div className="container mx-auto p-4 border-2 border-purple-800 rounded-lg">
+    <div className="w-[300px] mx-auto p-4 border-2 border-purple-800 rounded-lg">
       <div className="mb-8 flex flex-col md:flex-row justify-between items-center bg-purple-200 bg-opacity-70 rounded-lg p-4">
         <h2 className="text-2xl font-bold text-purple-800 mb-2">Tus Mascotas</h2>
         <button onClick={toggleNuevaMascota} className="bg-purple-800 text-violet-100 bg-opacity-70 rounded-full p-2">
@@ -102,26 +102,28 @@ export default function MisMascotas() {
             </>
           ) : (
             <div className="flex flex-col md:flex-row gap-4 relative mb-4">
+              <button onClick={nextPage} className="ml-auto bg-purple-800 text-white bg-opacity-70 rounded-full w-2/3 h-12 md:w-14 md:h-14 my-auto ">
+              Siguiente mascota✨
+              </button>
               <div className="bg-violet-500 bg-opacity-70 rounded-lg overflow-hidden mt-4 flex flex-col items-center">
-                <div className="relative w-full mx-auto">
+                <div className="relative w-[200px] mx-auto  h-auto">
                   {currentMascota && currentMascota.foto ? (
                     <div>
-                      <div className="relative" style={{ width: '365px', height: '365px' }}>
-                        <Image
+
+                      <Image
+                          width={200}
+                          height={200}
                           src={currentMascota.foto}
                           alt={`Foto de ${currentMascota.nombre}`}
-                          layout='fill'
-                          objectFit='cover'
                           loading='lazy'
                         />
                       </div>
-                    </div>
                   ) : (
                     <div className="bg-gray-300 w-full h-48 flex items-center justify-center">
                       <p className="text-gray-600 text-lg">Foto no disponible</p>
                     </div>
                   )}
-                  <div className="absolute bottom-0 left-0 bg-purple-900 bg-opacity-75 text-white p-2 w-full">
+                  <div className="absolute bottom-0 left-0 bg-purple-500 bg-opacity-75 text-white p-2 w-full">
                     <h2 className="text-lg font-semibold">{currentMascota ? currentMascota.nombre : 'Nombre de la mascota'}</h2>
                   </div>
                 </div>
@@ -155,9 +157,6 @@ export default function MisMascotas() {
                   <button onClick={toggleModal} className="bg-purple-800 text-white bg-opacity-70 rounded-full p-2 w-full mt-4">Ver Carnet</button>
                 </div>
               </div>
-              <button onClick={nextPage} className="bg-purple-800 text-white bg-opacity-70 rounded-full w-12 h-12 md:w-14 md:h-14 my-auto">
-              ✨
-              </button>
 
             </div>
           )}

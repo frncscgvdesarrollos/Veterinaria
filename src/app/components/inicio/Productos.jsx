@@ -95,11 +95,11 @@ const MobileProductos = ({ productos, filtro, currentPage, productsPerPage, wind
             )}
           </button>
         </div>
-        <div className="flex flex-wrap justify-end gap-10 items-center mb-4 md:mb-0 w-2/3 mx-auto lg:mr-auto filtro">
-          <button onClick={() => filtrarProductos('')} className='text-yellow-200 bg-purple-500 hover:bg-purple-700 font-semibold py-2 px-4 rounded focus:outline-none'>Todos</button>
-          <button onClick={() => filtrarProductos('ropa')} className='text-yellow-200 bg-purple-500 hover:bg-purple-700 font-semibold py-2 px-4 rounded focus:outline-none'>Ropa</button>
-          <button onClick={() => filtrarProductos('juguetes')} className='text-yellow-200 bg-purple-500 hover:bg-purple-700 font-semibold py-2 px-4 rounded focus:outline-none'>Juguetes</button>
-          <button onClick={() => filtrarProductos('comida')} className='text-yellow-200 bg-purple-500 hover:bg-purple-700 font-semibold py-2 px-4 rounded focus:outline-none'>Comida</button>
+        <div className="flex flex-wrap justify-end gap-10 items-center mb-4 md:mb-0 w-2/3 mx-auto lg:mr-auto filtro container-perspective">
+          <button onClick={() => filtrarProductos('')} className='text-yellow-200 w-full bg-purple-500 hover:bg-purple-700 element2 font-semibold py-2 px-4 rounded focus:outline-none'>Todos</button>
+          <button onClick={() => filtrarProductos('ropa')} className='text-yellow-200 w-full bg-purple-500 element hover:bg-purple-700 font-semibold py-2 px-4 rounded focus:outline-none'>Ropa</button>
+          <button onClick={() => filtrarProductos('juguetes')} className='text-yellow-200  element2 w-full bg-purple-500 hover:bg-purple-700 font-semibold py-2 px-4 rounded focus:outline-none'>Juguetes</button>
+          <button onClick={() => filtrarProductos('comida')} className='text-yellow-200  w-full element bg-purple-500 hover:bg-purple-700 font-semibold py-2 px-4 rounded focus:outline-none'>Comida</button>
         </div>
       </div>
       {mostrarCarrito && (
