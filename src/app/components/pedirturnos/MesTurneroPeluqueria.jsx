@@ -5,7 +5,7 @@ import 'react-calendar/dist/Calendar.css';
 import { MascotasContext } from '../../context/MascotaContext';
 import { UserAuth } from '../../context/AuthContext';
 import { UseClient } from '../../context/ClientContext';
-import { postTurnoPeluqueria, sumarTurnoPeluqueria, getLastTurnoPeluqueriaId, verificarCapacidadTurno, obtenerPrecioPorServicioYTamaño, sumarTurnoPeluqueriaMascota, registroVentaPeluqueria , idVentas } from '../../firebase';
+import { postTurnoPeluqueria, sumarTurnoPeluqueria, getLastTurnoPeluqueriaId, verificarCapacidadTurno, obtenerPrecioPorServicioYTamaño, sumarTurnoPeluqueriaMascota, registroVentaPeluqueria, idVentas } from '../../firebase';
 import ProductX from '../mercadopago/ProductX.jsx';
 
 export default function MyCalendarPeluqueria() {
@@ -17,25 +17,25 @@ export default function MyCalendarPeluqueria() {
   const [verificado, setVerificado] = useState(false);
   const [idVenta, setIdVenta] = useState(0);
 
-  const pedirId = new Promise((resolve, reject) => {
+  const pedirId = new Promise(function (resolve, reject) {
     idVentas()
-      .then((id) => {
+      .then(function (id) {
         resolve(id);
       })
-      .catch((error) => {
+      .catch(function (error) {
         reject(error);
       });
   });
-  
+
   pedirId
-    .then((id) => {
+    .then(function (id) {
       setIdVenta(id);
     })
-    .catch((error) => {
+    .catch(function (error) {
       console.error('Error al obtener el ID de ventas:', error);
       alert('Hubo un error al obtener el ID de ventas. Por favor, inténtalo de nuevo.');
     });
-  
+
   const [formData, setFormData] = useState({
     id: 0,
     estadoDelTurno: 'confirmar',
@@ -57,8 +57,10 @@ export default function MyCalendarPeluqueria() {
   });
 
   const [venta, setVenta] = useState({
-    enCurso:true,
-    id: idVenta, // Dejar este valor inicializado como 0
+    entrega: null,
+    entregado: null,
+    enCurso: true,
+    id: idVenta,
     userId: uid,
     createdAt: new Date(),
     nombre: '',
@@ -66,134 +68,154 @@ export default function MyCalendarPeluqueria() {
     direccion: '',
     telefono: '',
     precio: 0,
-    productoOservicio: '',
-    categoria:"peluqueria",
+    productoOservicio: 'servicio',
+    categoria: "peluqueria",
     fecha_turno: new Date(),
     efectivo: false,
     mp: false,
     confirmado: false,
+    items: [],
   });
 
-  useEffect(() => {
+  useEffect(function () {
     if (datosCliente.length > 0) {
       const { nombre, apellido, direccion, telefono, usuarioid } = datosCliente;
-      setFormData((prevData) => ({
-        ...prevData,
-        nombre: nombre || '',
-        apellido: apellido || '',
-        direccion: direccion || '',
-        telefono: telefono || '',
-        uid: usuarioid || '',
-      }));
+      setFormData(function (prevData) {
+        return {
+          ...prevData,
+          nombre: nombre || '',
+          apellido: apellido || '',
+          direccion: direccion || '',
+          telefono: telefono || '',
+          uid: usuarioid || '',
+        };
+      });
     }
   }, [datosCliente]);
 
-  function updateVenta ()  {
-    setVenta((prevVenta) => ({
-      ...prevVenta,
-      precio: formData.precio,
-      nombre: formData.nombre,
-      apellido: formData.apellido,
-      direccion: formData.direccion,
-      telefono: formData.telefono,
-      productoOservicio: formData.selectedServicio,
-      fecha_turno: formData.selectedDate,
-    }));
-  };
+  function updateVenta() {
+    setVenta(function (prevVenta) {
+      return {
+        ...prevVenta,
+        precio: formData.precio,
+        nombre: formData.nombre,
+        apellido: formData.apellido,
+        direccion: formData.direccion,
+        telefono: formData.telefono,
+        productoOservicio: formData.selectedServicio,
+        fecha_turno: formData.selectedDate,
+      };
+    });
+  }
 
-  useEffect(() => {
-    const fetchUltimoTurnoId = () => {
+  useEffect(function () {
+    function fetchUltimoTurnoId() {
       getLastTurnoPeluqueriaId()
-        .then(ultimoTurnoId => {
-          setFormData(prevData => ({ ...prevData, id: ultimoTurnoId }));
+        .then(function (ultimoTurnoId) {
+          setFormData(function (prevData) {
+            return { ...prevData, id: ultimoTurnoId };
+          });
         })
-        .catch(error => {
+        .catch(function (error) {
           console.error('Error al obtener el último ID de turno:', error);
         });
-    };
+    }
     fetchUltimoTurnoId();
   }, []);
-useEffect(() => {
-  // Actualizar el estado de la venta cuando cambia el precio en formData
-  updateVenta();
-}, [formData.precio, formData.selectedDate , venta ]);
 
+  useEffect(function () {
+    updateVenta();
+  }, [formData.precio, formData.selectedDate]);
 
-  
-
-  const handleChange = (e) => {
+  const handleChange = function (e) {
     const { name, value, type, checked } = e.target;
     const newValue = type === 'checkbox' ? checked : value;
-    setFormData((prevData) => ({
-      ...prevData,
-      [name]: newValue,
-    }));
+    setFormData(function (prevData) {
+      return {
+        ...prevData,
+        [name]: newValue,
+      };
+    });
 
     if (name === 'selectedPet') {
-      const selectedPet = mascota.find((pet) => pet.nombre === value);
+      const selectedPet = mascota.find(function (pet) {
+        return pet.nombre === value;
+      });
       if (selectedPet) {
-        setFormData((prevData) => ({
-          ...prevData,
-          tamaño: selectedPet.tamaño,
-        }));
+        setFormData(function (prevData) {
+          return {
+            ...prevData,
+            tamaño: selectedPet.tamaño,
+          };
+        });
       }
     }
 
-    // Agregar lógica para obtener el precio del servicio y tamaño seleccionados
     if (name === 'selectedServicio' && formData.tamaño !== '') {
       obtenerPrecioPorServicioYTamaño(value, formData.tamaño)
-        .then((precio) => {
+        .then(function (precio) {
           console.log('Precio del servicio y tamaño:', precio);
-          setFormData((prevData) => ({
-            ...prevData,
-            precio: precio,
-          }));
+          setFormData(function (prevData) {
+            return {
+              ...prevData,
+              precio: precio,
+            };
+          });
         })
-        .catch((error) => {
+        .catch(function (error) {
           console.error('Error al obtener el precio del servicio y tamaño:', error);
-          // Manejar el error según sea necesario
         });
     }
   };
 
-  const handleFormSubmit = (e) => {
+  const handleFormSubmit = function (e) {
     e.preventDefault();
 
     registroVentaPeluqueria(venta)
-      .then(() => {
-        return Promise.all([postTurnoPeluqueria(formData), sumarTurnoPeluqueria(uid), sumarTurnoPeluqueriaMascota(uid, formData.selectedPet)]);
+      .then(function () {
+        return Promise.all([
+          postTurnoPeluqueria(formData),
+          sumarTurnoPeluqueria(uid),
+          sumarTurnoPeluqueriaMascota(uid, formData.selectedPet)
+        ]);
       })
-      .then(() => {
+      .then(function () {
         // Lógica adicional después de postear el turno, si es necesaria
       })
-      .catch((error) => {
+      .catch(function (error) {
         console.error('Error al registrar el turno y la venta:', error);
         alert('Hubo un error al registrar el turno. Por favor, inténtalo de nuevo.');
       });
   };
 
-  const handleDateChange = (newDate) => {
+  const handleDateChange = function (newDate) {
     const currentDate = new Date();
     const maxDate = new Date(currentDate.getTime() + (20 * 24 * 60 * 60 * 1000));
     if (newDate < currentDate || newDate > maxDate) {
       alert('Solo puedes seleccionar fechas hasta 20 días en el futuro a partir de la fecha actual.');
       return;
     }
-    setFormData((prevData) => ({
-      ...prevData,
-      selectedDate: newDate,
-    }));
+    setFormData(function (prevData) {
+      return {
+        ...prevData,
+        selectedDate: newDate,
+      };
+    });
   };
 
-  const handleVerificarClick = () => {
+  const handleVerificarClick = function () {
     getLastTurnoPeluqueriaId()
-      .then((id) => {
+      .then(function (id) {
         const nuevoId = id !== 0 ? id + 1 : 1;
-        setFormData((prevData) => ({
-          ...prevData,
-          id: nuevoId,
-        }));
-        const emptyFields = Object.values(formData).filter((value) => value === '').length;
+        setFormData(function (prevData) {
+          return {
+            ...prevData,
+            id: nuevoId,
+          };
+        });
+        const emptyFields = Object.values(formData).filter(function (value) {
+          return value === '';
+        }).length;
         if (emptyFields > 0) {
           alert('Por favor completa todos los campos.');
           return Promise.reject(new Error('Campos incompletos'));
@@ -201,29 +223,28 @@ useEffect(() => {
           return verificarCapacidadTurno(formData.selectedDate, formData.selectedTurno);
         }
       })
-      .then((result) => {
+      .then(function (result) {
         if (!result) {
           alert('No hay turnos disponibles para esa fecha y turno.');
           return Promise.reject(new Error('No hay turnos disponibles'));
         }
-        setVerificado(true); // Asegurarse de que se establece a true
+        setVerificado(true);
         alert('Turno verificado correctamente. Ya puede efectuar el pago.');
       })
-      .catch((error) => {
+      .catch(function (error) {
         console.error('Error al registrar el turno:', error);
         alert('Hubo un error al registrar el turno. Por favor, inténtalo de nuevo.');
       });
   };
 
-  const tileDisabled = ({ date, view }) => {
+  const tileDisabled = function ({ date, view }) {
     const currentDate = new Date();
     return view === 'month' && (date.getDay() === 0 || date.getDay() === 6 || date < currentDate);
   };
-  useEffect(() => {
-    // Actualizar el estado de la venta cuando cambia el precio en formData
+
+  useEffect(function () {
     updateVenta();
-  }, [formData.precio, formData.selectedDate, updateVenta]);
-  
+  }, [formData.precio, formData.selectedDate]);
 
   return (
     <div className="container mx-auto p-4 sm:p-6 md:p-8 lg:p-10">
@@ -241,11 +262,13 @@ useEffect(() => {
               <option value={''}>Selecciona tu mascota</option>
               {mascota &&
                 mascota.length > 0 &&
-                mascota.map((mascotaItem, index) => (
-                  <option key={index} value={mascotaItem.nombre}>
-                    {mascotaItem.nombre}
-                  </option>
-                ))}
+                mascota.map(function (mascotaItem, index) {
+                  return (
+                    <option key={index} value={mascotaItem.nombre}>
+                      {mascotaItem.nombre}
+                    </option>
+                  );
+                })}
             </select>
           </div>
           <div>
@@ -297,17 +320,16 @@ useEffect(() => {
             />
           </div>
           <button
-            onClick={() => handleVerificarClick()}
+            onClick={handleVerificarClick}
             className="w-full bg-blue-500 hover:bg-blue-700 text-white py-2 px-4 mt-4 rounded-md"
           >
             Verificar Turno
           </button>
           {verificado ? (
             <ProductX formData={{ formData: formData }} />
-          ): null}
+          ) : null}
         </form>
       </div>
     </div>
   );
-  
 }
