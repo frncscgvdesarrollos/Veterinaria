@@ -109,7 +109,6 @@ export default function MisMascotas() {
                 <div className="relative w-[200px] mx-auto  h-auto">
                   {currentMascota && currentMascota.foto ? (
                     <div>
-
                       <Image
                           width={200}
                           height={200}
@@ -123,19 +122,19 @@ export default function MisMascotas() {
                       <p className="text-gray-600 text-lg">Foto no disponible</p>
                     </div>
                   )}
-                  <div className="absolute bottom-0 left-0 bg-purple-500 bg-opacity-75 text-white p-2 w-full">
+                  <div className="absolute bottom-0 left-0 bg-purple-500 bg-opacity-75 text-white p-2">
                     <h2 className="text-lg font-semibold">{currentMascota ? currentMascota.nombre : 'Nombre de la mascota'}</h2>
                   </div>
                 </div>
                 <div className="p-4 w-full">
                   <p className="text-sm text-gray-600 py-2">Tamaño: {currentMascota ? currentMascota.tamaño : 'Tamaño'}</p>
                   <p className="text-sm text-gray-600 py-2">Raza: {currentMascota ? currentMascota.raza : 'Raza'}</p>
-                  <p className="text-sm text-gray-600 py-2">Esta: {currentMascota ? currentMascota.estadoCivil : 'Edad'}</p>
-                  <p className="text-sm text-gray-600 py-2">Total de Postulantes: {totalPostulantes}</p>
+                  <p className="text-sm text-gray-600 py-2">Esta: {currentMascota ? currentMascota.estadoCivil : null}</p>
+                  <p className="text-sm text-gray-600 py-2">{currentMascota.estadoCivil === 'En adopción' ? <span>Tiene {currentMascota.postulantes.length()} postulantes</span> : null}</p>
                       <div className="p-4 adoptantes mx-auto">
                         {currentMascota.estadoCivil === "En adopción" ? 
                           currentMascota.postulantes?.slice(firstVisiblePostulant, firstVisiblePostulant + 1).map((postulante , index) => (
-                            <div key={index} className="p-4 mx-auto bg-pink-500 rounded-lg my-2 w-[300px]">
+                            <div key={index} className="p-4 mx-auto bg-pink-500 rounded-lg my-2 w-[200px]">
                               <h3 className="text-2xl text-gray-300">Postulante</h3>
                               <div className='flex flex-col w-full'>
                                 <div className='flex flex-col '>
@@ -147,9 +146,9 @@ export default function MisMascotas() {
                               <button className='text-white bg-red-600 border-white border-2  rounded-full p-2 w-full mt-4' onClick={() => handleRechazo(postulante.uid)}>Rechazar 🛑</button>
                               </div>
                               </div>
-                              <button className='text-white bg-opacity-70 rounded-full p-2 w-full' onClick={nextPostulant}>
-  🐾Siguiente🐾
-</button>
+                              <button className='text-white bg-purple-800 bg-opacity-70 rounded-full p-2 w-full' onClick={nextPostulant}>
+                                  Siguiente🐾
+                            </button>
                             </div>
                           ))
                           : <p>No hay postulantes para esta mascota</p>}
