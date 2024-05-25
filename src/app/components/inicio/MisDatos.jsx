@@ -102,7 +102,7 @@ export default function MisDatos() {
   }
 
   return (
-    <div className="bg-violet-200 p-4  items-center  h-auto rounded-lg  ">
+    <div className="bg-violet-200 p-4  items-center  h-auto rounded-lg mx-auto w-[360px] md:w-[500px]  ">
       <div className="flex justify-around rounded-lg  ">
       <h1 className="text-3xl text-purple-800 font-bold my-auto text-gray-900">Mis datos</h1>
       <button className="bg-violet-500 hover:bg-blue-600 text-white px-4 py-2 my-auto rounded-lg" onClick={() => setDatos(!datos)}>Ver mis datos</button>

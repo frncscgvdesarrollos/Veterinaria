@@ -34,7 +34,7 @@ const CartItem = React.memo(({ item, eliminarDelCarrito }) => {
   const precioTotal = item.precioVenta * item.cantidad;
 
   return (
-    <div className="flex flex-col md:flex-col lg:flex-row border-b border-gray-200 p-4 justify-between items-center h-[200px]">
+    <div className="flex w-full flex-col md:flex-col lg:flex-row border-b border-gray-200 p-4 justify-between items-center h-[200px]">
       <div className="flex-none mr-4">
         <Image src={item.imagen} alt={item.nombre} width={48} height={48} className="w-12 h-12 object-cover rounded-lg" />
       </div>
@@ -63,7 +63,7 @@ const CartItem = React.memo(({ item, eliminarDelCarrito }) => {
 CartItem.displayName = 'CartItem';
 
 const MobileProductos = ({ productos, filtro, currentPage, productsPerPage, windowSize, carrito, mostrarCarrito, setMostrarCarrito, agregarAlCarrito, eliminarDelCarrito, calcularPrecioTotal, handleCompra, compraEnProceso, finalPrice, paginate, totalPages }) => (
-  <div className="container mx-auto w-[360px] px-4 py-8">
+  <div className=" mx-auto w-full py-8">
     <div className="w-full flex justify-around items-center mx-auto flex-col md:flex-row">
       <div className='producto flex'>
         <h1 className="text-3xl font-bold text-left mt-8 mb-4 text-purple-800 text-center bg-pink-300 p-2 rounded-lg bg-opacity-50 md:ml-10">
@@ -75,7 +75,7 @@ const MobileProductos = ({ productos, filtro, currentPage, productsPerPage, wind
       </div>
     </div>
 
-    <div className="p-4 md:p-8 lg:p-12 bg-violet-200 bg-opacity-50 w-full mx-auto rounded-lg mt-10">
+    <div className="p-4 md:p-8 lg:p-12 bg-violet-200 bg-opacity-50 w-full rounded-lg mt-10">
       <div className="flex justify-around items-center my-4 md:my-20 flex-col md:flex-row">
         <div className="flex items-center gap-4 mb-4 md:mb-0 mx-auto lg:ml-20">
           <h1 className="text-5xl p-5 font-bold text-purple-800 bg-pink-300 p-2 rounded-lg bg-opacity-50 md:ml-10 ">

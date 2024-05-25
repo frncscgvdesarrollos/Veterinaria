@@ -62,14 +62,14 @@ export default function MascotasAdopcion() {
       </div>
 
       <div className="p-5 bg-purple-500 mt-5 bg-opacity-50 rounded-lg mx-auto w-full flex flex-col sm:flex-row">
-        <div className="bg-violet-300 bg-opacity-70 flex mx-auto rounded-lg p-5 flex flex-wrap justify-center gap-4 sm:justify-start md:justify-center lg:justify-start mb-8 mt-10 ml-auto">
+        <div className="bg-violet-300 bg-opacity-70 flex mx-auto rounded-lg p-5 flex flex-wrap justify-center gap-4 sm:justify-start md:justify-center lg:justify-start mb-8 mt-10 ml-auto md:w-[1500px]" >
           {isLoading ? (
             <div>Cargando...</div>
           ) : error ? (
             <div>Error: {error}</div>
           ) : (
             mascotas.map((mascota, index) => (
-              <div key={index} className="flex bg-blue-300 w-full sm:w-2/5 mx-auto bg-opacity-70 shadow-md rounded-md overflow-hidden text-white font-semibold sm:mx-2">
+              <div key={index} className="flex w-full bg-blue-300 w-full md:w-[45%] mx-auto bg-opacity-70 shadow-md rounded-md overflow-hidden text-white font-semibold sm:mx-2">
                 <div className="relative overflow-hidden w-full sm:w-full mx-auto">
                   {mascota.foto ? (
                     <Image

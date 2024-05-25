@@ -77,12 +77,12 @@ export default function HomeCliente() {
   }
 
   return (
-    <div className="min-h-screen flex flex-col p-2 lg:container-perspective">
+    <div className="min-h-screen flex flex-col p-2 lg:container-perspective mx-auto">
       <div className="rounded-lg mb-8 pr-10 w-2/3 lg:w-3/4 mx-auto">
         <Veterinaria />
       </div>
       <div className="flex flex-col lg:flex-row lg:w-3/4 lg:mx-auto gap-10 mb-8 container-perspective lg:ml-28 lg:mt-20">
-        <div className={`w-[360px] mx-auto lg:w-2/3 p-3 lg:p-5 element2 mx-auto ${isMobile ? 'h-auto' : 'h-[300px] lg:h-[400px]'} rounded-lg bg-violet-100 bg-opacity-50 flex flex-col gap-4 my-10 lg:my-0`}>
+        <div className={`w-[360px] md:mr-10 lg:w-2/3 p-3 lg:p-5 element2 mx-auto ${isMobile ? 'h-auto' : 'h-[300px] lg:h-[400px]'} rounded-lg bg-violet-100 bg-opacity-50 flex flex-col gap-4 my-10 lg:my-0`}>
           <MisDatos />
           <MisTurnos />
         </div>
