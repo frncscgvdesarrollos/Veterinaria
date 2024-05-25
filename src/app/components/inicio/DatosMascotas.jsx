@@ -161,8 +161,6 @@ export default function MisMascotas() {
                           ))
                           : <p>No hay postulantes para esta mascota</p>}
                       </div>
-
-                  <button onClick={toggleModal} className="bg-lime-600 text-white bg-opacity-70 rounded-full p-2 w-full my-4">Ver Carnet</button>
      
                 </div>
               </div>
