@@ -12,12 +12,13 @@ export default function PrecioPeluqueria() {
     'BañoCorteHigienico',
     'BañoCorteHigienicoPelar',
     'BañoCorteHigienicoCepillado',
-    'BañoCorteHigienicoCorte'
+    'BañoCorteHigienicoCorte',
+    'ConsultaVeterinaria'
   ]); // Aquí deberías tener los nombres de los servicios
   const [precios, setPrecios] = useState([]);
   const [modalOpen, setModalOpen] = useState(false);
   const [precioSeleccionado, setPrecioSeleccionado] = useState(null);
-  const [nuevoPrecio, setNuevoPrecio] = useState({ toy: '', mediano: '', grande: '', gigante: '' });
+  const [nuevoPrecio, setNuevoPrecio] = useState({ toy: '', mediano: '', grande: '', gigante: '', precio:'' });
   const [selectedServicio, setSelectedServicio] = useState('');
   const [error, setError] = useState(null);
 
@@ -157,13 +158,16 @@ return(
           {precios.map((precio, index) => (
             <tr key={index} className="text-center bg-violet-100">
               <td className="border px-4 py-2">{servicios[index]}</td>
-              <td className="border px-4 py-2">{precio.toy}</td>
+              <td className="border px-4 py-2">{precio.toy || precio.precio }</td>
               <td className="border px-4 py-2">{precio.mediano}</td>
               <td className="border px-4 py-2">{precio.grande}</td>
               <td className="border px-4 py-2">{precio.gigante}</td>
+              {precio.precio? null :
               <td className="border px-4 py-2">
+              
                 <button className="bg-blue-500 text-white px-4 py-2 rounded mr-2" onClick={() => abrirModal(precio)}>Actualizar</button>
               </td>
+}
             </tr>
           ))}
         </tbody>
@@ -172,11 +176,6 @@ return(
   </div>
 
   {modalOpen && (
-    <div className="fixed z-10 inset-0 overflow-y-auto">
-      <div className="flex items-center justify-center min-h-screen bg-gray-500 bg-opacity-75">
-        <div className="fixed inset-0 transition-opacity" aria-hidden="true">
-          <div className="absolute inset-0 bg-gray-500 opacity-75"></div>
-        </div>
 
         <div className="bg-white rounded-lg overflow-hidden shadow-xl w-full sm:max-w-lg">
           <div className="p-4">
@@ -236,8 +235,6 @@ return(
             </div>
           </div>
         </div>
-      </div>
-    </div>
   )}
 </>
 )
