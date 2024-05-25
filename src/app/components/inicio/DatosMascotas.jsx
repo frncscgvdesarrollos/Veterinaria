@@ -146,15 +146,17 @@ export default function MisMascotas() {
                         {currentMascota.estadoCivil === "En adopción" ? 
                           currentMascota.postulantes?.slice(firstVisiblePostulant, firstVisiblePostulant + 1).map((postulante , index) => (
                             <div key={index} className="p-4 mx-auto bg-pink-500 rounded-lg my-2 w-full">
-                              <h3 className="text-2xl text-gray-300">Postulante</h3>
+                                <span className='bg-red-500 relative  p-2 bg-opacity-70 text-white rounded-full w-[10px] h-[10px]'>Postulante {index + 1} / {totalPostulantes}.</span>
                               <div className='flex flex-col w-full'>
-                                <div className='flex flex-col '>
-                              <p className="text-xl text-gray-300 py-2">{postulante.nombre} {postulante.apellido}</p>
-                              <p className="text-xl text-gray-300 py-2">Tel: {postulante.telefono}</p>
+                                <div className='flex flex-col  gap-2'>
+                              <p className="text-sm md:text-xl text-gray-300 py-2 w-full bg-orange-500 rounded-lg text-left">
+                                {postulante.nombre} {postulante.apellido}</p>
+                              <p className="text-sm md:text-xl text-gray-300 py-2 w-full bg-orange-500 rounded-lg text-left pl-4" >Tel: {postulante.telefono}</p>
                               </div>
                               <div className='flex flex-col'>
-                              <button className="bg-violet-400  border-white border-2 text-white bg-opacity-40 rounded-full p-2 w-full my-4 " onClick={() => handleAdopcion(postulante.uid)}>¡Aceptar Adopción! 🥳</button>
-                              <button className='text-white bg-red-600 border-white border-2  rounded-full p-2 w-full mt-4' onClick={() => handleRechazo(postulante.uid)}>Rechazar postulante 🛑</button>
+                              <button className="text-sm bg-violet-400  border-white border-2 text-white bg-opacity-40 rounded-full p-2 w-full my-4 " onClick={() => handleAdopcion(postulante.uid)}>¡Aceptar Adopción! 🥳</button>
+                              <button className='text-sm rounded-lg text-white bg-red-600 border-white border-2  rounded-full p-2 w-full mt-4' onClick={() => handleRechazo(postulante.uid)}>Rechazar postulante 🛑</button>
+                              <button className="w-full text-sm rounded-lg md:w-[200px] md:ml-40 bg-orange-300 text-purple-500 bg-opacity-90 rounded-lg h-12 font-bold my-4" onClick={nextPostulant} >Siguiente Postulante</button>
                               </div>
                               </div>
                             </div>

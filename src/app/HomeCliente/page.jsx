@@ -90,7 +90,7 @@ export default function HomeCliente() {
           <DatosMascotas />
         </div>
       </div>
-      <div className="mt-20 w-[450px] lg:w-3/4 mx-auto">
+      <div className="mt-20 w-[360px] lg:w-3/4 mx-auto">
         <Productos />
       </div>
       {/* <div className="mt-20 p-10 mx-auto">

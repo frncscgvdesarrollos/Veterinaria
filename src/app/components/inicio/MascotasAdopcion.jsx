@@ -100,7 +100,7 @@ export default function MascotasAdopcion() {
           )}
          </div>
       </div>
-      <p className="text-center text-red-500 bg-yellow-200 bg-opacity-50 py-4">Esta es nuestro granito de arena para facilitar las adopciones de mascotas. La veterinaria no se responsabiliza por usuarios maliciosos.</p>
+      <marquee behavior="scroll" className="text-center text-red-500 bg-yellow-200 bg-opacity-50 p-4 rounded-lg my-10 underline">Este es nuestro granito de arena para facilitar las adopciones de mascotas. La veterinaria no se responsabiliza por usuarios maliciosos.</marquee>
     </div>
   );
 }
