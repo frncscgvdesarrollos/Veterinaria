@@ -63,7 +63,7 @@ const CartItem = React.memo(({ item, eliminarDelCarrito }) => {
 CartItem.displayName = 'CartItem';
 
 const MobileProductos = ({ productos, filtro, currentPage, productsPerPage, windowSize, carrito, mostrarCarrito, setMostrarCarrito, agregarAlCarrito, eliminarDelCarrito, calcularPrecioTotal, handleCompra, compraEnProceso, finalPrice, paginate, totalPages }) => (
-  <div className="border border-gray-200 b-solid w-[360px]  py-8">
+  <div className="w-[360px]  py-8">
     <div className="w-full flex justify-around items-center mx-auto flex-col md:flex-row">
       <div className='producto flex'>
         <h1 className="text-3xl font-bold text-left mt-8 mb-4 text-purple-800 text-center bg-pink-300 p-2 rounded-lg bg-opacity-50 md:ml-10">

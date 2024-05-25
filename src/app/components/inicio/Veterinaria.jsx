@@ -4,7 +4,7 @@ import Link from 'next/link';
 
 export default function Veterinaria() {
   return (
-    <div className='mx-auto'>
+    <div className='md:mx-auto'>
       <div className='w-full sm:w-full flex flex-col sm:flex-row items-center gap-20 container mx-auto md:mt-10 lg:mt-10'>
         <div className='flex flex-col sm:flex-row justify-between gap-8 w-full mx-auto container-perspective'>
           <div className='w-[360px] mt-20 mx-auto sm:w-full md:w-[350px] p-5 sm:p-10 border-4 border-violet-200 rounded-lg bg-pink-200 h-full bg-opacity-80 md:ml-10 lg:ml-10 element2'>
