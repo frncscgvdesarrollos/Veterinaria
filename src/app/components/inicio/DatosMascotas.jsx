@@ -173,52 +173,62 @@ export default function MisMascotas() {
       )}
       {/* Modal para mostrar el carnet sanitario */}
       {showModal && (
-        <div className="fixed inset-0 bg-black bg-opacity-50 flex justify-center items-center">
-          <div className="bg-white p-6 rounded-lg w-full max-w-md">
-            {/* Contenido del carnet sanitario */}
-            <h2 className="text-xl font-semibold mb-4">Carnet Sanitario de {currentMascota.nombre}</h2>
-            {/* Renderizado de los datos del carnet sanitario */}
-            <div>
-              <h3 className="font-semibold mb-2">Ultima Antirrábica:</h3>
-              {currentMascota.carnetSanitario && currentMascota.carnetSanitario.antirrabica ? (
-                <ul>
-                  {currentMascota.carnetSanitario.antirrabica.map((vacuna, index) => (
-                    <li key={index}>{/* Renderizar los detalles de la vacuna antirrábica */}</li>
-                  ))}
-                </ul>
-              ) : (
-                <p>No hay información disponible</p>
-              )}
-            </div>
-            <div>
-              <h3 className="font-semibold mb-2">Ultimas Vacunas:</h3>
-              {currentMascota.carnetSanitario && currentMascota.carnetSanitario.vacunas ? (
-                <ul>
-                  {currentMascota.carnetSanitario.vacunas.map((vacuna, index) => (
-                    <li key={index}>{/* Renderizar los detalles de cada vacuna */}</li>
-                  ))}
-                </ul>
-              ) : (
-                <p>No hay información disponible</p>
-              )}
-            </div>
-            <div>
-              <h3 className="font-semibold mb-2">Ultima Desparasitaciones:</h3>
-              {currentMascota.carnetSanitario && currentMascota.carnetSanitario.desparasitaciones ? (
-                <ul>
-                  {currentMascota.carnetSanitario.desparasitaciones.map((desparasitacion, index) => (
-                    <li key={index}>{/* Renderizar los detalles de cada desparasitación */}</li>
-                  ))}
-                </ul>
-              ) : (
-                <p>No hay información disponible</p>
-              )}
-            </div>
-            {/* Botón para cerrar el modal */}
-            <button onClick={toggleModal} className="bg-purple-800 text-white rounded-full p-2 w-full mt-4">Cerrar</button>
-          </div>
-        </div>
-      )}
+  <div className="fixed inset-0 bg-black bg-opacity-50 flex justify-center items-center">
+    <div className="bg-white p-6 rounded-lg w-full max-w-md">
+      {/* Contenido del carnet sanitario */}
+      <h2 className="text-xl font-semibold mb-4">Carnet Sanitario de {currentMascota.nombre}</h2>
+      {/* Renderizado de los datos del carnet sanitario */}
+      <div>
+        <h3 className="font-semibold mb-2">Ultima Antirrábica:</h3>
+        {currentMascota.carnetSanitario && currentMascota.carnetSanitario.some(item => item.tipo === "antirrabica") ? (
+          <ul>
+            {currentMascota.carnetSanitario.filter(item => item.tipo === "antirrabica").map((vacuna, index) => (
+              <li key={index}>
+                {/* Renderizar los detalles de la vacuna antirrábica */}
+                <p>Fecha: {new Date(vacuna.fecha).toLocaleDateString()}</p>
+              </li>
+            ))}
+          </ul>
+        ) : (
+          <p>No hay información disponible</p>
+        )}
+      </div>
+      <div>
+        <h3 className="font-semibold mb-2">Ultimas Vacunas:</h3>
+        {currentMascota.carnetSanitario && currentMascota.carnetSanitario.some(item => item.tipo === "vacunas") ? (
+          <ul>
+            {currentMascota.carnetSanitario.filter(item => item.tipo === "vacunas").map((vacuna, index) => (
+              <li key={index}>
+                {/* Renderizar los detalles de cada vacuna */}
+                <p>Fecha: {new Date(vacuna.fecha).toLocaleDateString()}</p>
+              </li>
+            ))}
+          </ul>
+        ) : (
+          <p>No hay información disponible</p>
+        )}
+      </div>
+      <div>
+        <h3 className="font-semibold mb-2">Ultima Desparasitaciones:</h3>
+        {currentMascota.carnetSanitario && currentMascota.carnetSanitario.find(item => item.tipo === "desparacitaciones") ? (
+          <ul>
+            {currentMascota.carnetSanitario.filter(item => item.tipo === "desparacitaciones").map((desparasitacion, index) => (
+              <li key={index}>
+                {/* Renderizar los detalles de cada desparasitación */}
+                <p>Fecha: {new Date(desparasitacion.fecha).toLocaleDateString()}</p>
+              </li>
+            ))}
+          </ul>
+        ) : (
+          <p>No hay información disponible</p>
+        )}
+      </div>
+      {/* Botón para cerrar el modal */}
+      <button onClick={toggleModal} className="bg-purple-800 text-white rounded-full p-2 w-full mt-4">Cerrar</button>
+    </div>
+  </div>
+)}
+
     </div>
   );
 }

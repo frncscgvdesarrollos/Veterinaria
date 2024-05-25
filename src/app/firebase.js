@@ -196,52 +196,32 @@ export async function actualizarMetodosDePago(ventaId, mp, efectivo, confirmado)
   }
 }
 
-export async function aplicarVacuna(uid, nombre, tipoVacuna) {
-  const mascotaRef = collection(db, "mascotas");
-  const query = query(
-    mascotaRef,
-    where("uid", "==", uid),
-    where("nombre", "==", nombre)
-  );
-
+export async function aplicarVacuna(tipo, fecha, uidMascota, nombreMascota) {
   try {
-    const mascotaSnapshot = await getDocs(query);
-    if (mascotaSnapshot.empty) {
-      throw new Error("La mascota no existe");
-    }
+    // Crear una consulta para encontrar la mascota específica
+    const q = query(collection(db, "mascotas"), where("uid", "==", uidMascota), where("nombre", "==", nombreMascota));
 
-    const mascotaDoc = mascotaSnapshot.docs[0];
-    const carnetSanitario = mascotaDoc.data().carnetSanitario || [];
+    // Ejecutar la consulta
+    const querySnapshot = await getDocs(q);
 
-    // Buscar la sección correspondiente en el carnet sanitario
-    let seccionCarnet;
-    if (tipoVacuna === "antirrabica") {
-      seccionCarnet = carnetSanitario.find(seccion => seccion.antirrabicas !== undefined);
-    } else if (tipoVacuna === "vacunas") {
-      seccionCarnet = carnetSanitario.find(seccion => seccion.vacunas !== undefined);
-    } else if (tipoVacuna === "desparasitaciones") {
-      seccionCarnet = carnetSanitario.find(seccion => seccion.desparasitaciones !== undefined);
-    }
+    // Verificar si la consulta devolvió resultados
+    if (!querySnapshot.empty) {
+      // Obtener el primer documento de la consulta (asumiendo que hay uno solo que coincide con uid y nombre)
+      const doc = querySnapshot.docs[0];
 
-    // Agregar la vacuna aplicada a la sección correspondiente
-    if (seccionCarnet) {
-      if (!seccionCarnet[tipoVacuna]) {
-        seccionCarnet[tipoVacuna] = [];
-      }
-      seccionCarnet[tipoVacuna].push({ aplicada: new Date() });
+      // Actualizar el documento de la mascota agregando una nueva vacuna al carnetSanitario
+      await updateDoc(doc.ref, {
+        carnetSanitario: arrayUnion({ tipo: tipo, fecha: fecha })
+      });
+
+      console.log("Vacuna aplicada correctamente.");
     } else {
-      throw new Error("Sección de carnet sanitario no encontrada");
+      console.log("No se encontró la mascota con los criterios especificados.");
     }
-
-    // Actualizar el documento de la mascota con la nueva información del carnet sanitario
-    await updateDoc(mascotaRef, { carnetSanitario });
-
-    return "Vacuna aplicada correctamente";
   } catch (error) {
-    throw error;
+    console.error("Error aplicando la vacuna: ", error);
   }
 }
-
 
 export async function actualizarId() {
   const q = query(collection(db, "productos"));

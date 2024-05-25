@@ -24,7 +24,7 @@ export default function Mascotas() {
           setIsLoading(false);
         })
         .catch(error => {
-          console.error('Error fetching data:', error);
+          console.error('Error al obtener datos:', error);
         });
     };
 
@@ -56,7 +56,11 @@ export default function Mascotas() {
   };
 
   const handleAplicarVacuna = (tipoVacuna) => {
-    aplicarVacuna(mascotaSeleccionada.uid, mascotaSeleccionada.nombre, tipoVacuna)
+    // Generar la fecha actual
+    const fechaVacuna = new Date();
+  
+    // Aplicar la vacuna con la fecha correcta
+    aplicarVacuna(tipoVacuna, fechaVacuna.getTime(), mascotaSeleccionada.uid, mascotaSeleccionada.nombre)
       .then(() => {
         console.log("Vacuna aplicada correctamente.");
         // Actualizar datos de mascotas después de aplicar la vacuna
@@ -69,6 +73,7 @@ export default function Mascotas() {
         console.error("Error al aplicar la vacuna:", error);
       });
   };
+  
 
   return (
     <div className="p-4 md:p-8 bg-purple-50 rounded-lg">
@@ -113,15 +118,16 @@ export default function Mascotas() {
           ) : null}
 
           <div className="overflow-x-auto bg-purple-200 p-4 rounded-lg">
-            <table className="w-full md:w-2/3 mx-auto text-center bg-purple-300 rounded-lg">
+            <table className="w-full mx-auto text-center bg-purple-300 rounded-lg">
               <thead className="text-xl">
                 <tr>
                   <th className="px-4 py-2 text-purple-800">Nombre</th>
                   <th className="px-4 py-2 text-purple-800">Raza</th>
                   <th className="px-4 py-2 text-purple-800">Tamaño</th>
                   <th className="px-4 py-2 text-purple-800">Cumpleaños</th>
-                  <th className="px-4 py-2 text-purple-800">Cliente</th>
                   <th className="px-4 py-2 text-purple-800">Foto</th>
+                  <th className="px-4 py-2 text-purple-800">Cortes totales</th>
+                  <th className='px-4 py-2 text-purple-800'>Consultas totales</th>
                 </tr>
               </thead>
               <tbody>
@@ -130,7 +136,6 @@ export default function Mascotas() {
                     <td className="px-4 py-2 text-purple-800">{mascota.nombre}</td>
                     <td className="px-4 py-2 text-purple-800">{mascota.raza}</td>
                     <td className="px-4 py-2 text-purple-800">{mascota.tamaño}</td>
-                    <td className="px-4 py-2 text-purple-800">{mascota.cumpleaños}</td>
                     <td className="px-4 py-2 text-purple-800">{mascota.uid}</td>
                     <td className="px-4 py-2">
                       <Image
@@ -141,6 +146,8 @@ export default function Mascotas() {
                         className="rounded-full"
                       />
                     </td>
+                    <td  className="px-4 py-2 text-purple-800">{mascota.turnosPeluqueria}	</td>
+                    <td className='px-4 py-2 text-purple-800'> {mascota.turnosConsulta}</td>
                   </tr>
                 ))}
               </tbody>
@@ -149,37 +156,65 @@ export default function Mascotas() {
         </>
       )}
       {modalAbierto && (
-        <div className="absolute top-14 left-0 w-full h-full flex justify-center items-center bg-black bg-opacity-50">
+        <div className=" w-full h-full flex justify-center items-center bg-black bg-opacity-50">
           <div className="bg-white rounded-lg max-w-md w-full p-8 mt-10">
             <h2 className="text-2xl font-semibold mb-4 text-purple-800">Detalles de la mascota</h2>
             <p className="text-purple-800 mb-2">Nombre: {mascotaSeleccionada.nombre}</p>
             <p className="text-purple-800 mb-2">Raza: {mascotaSeleccionada.raza}</p>
             <p className="text-purple-800 mb-2">Tamaño: {mascotaSeleccionada.tamaño}</p>
-            <p className="text-purple-800 mb-2">Cumpleaños: {mascotaSeleccionada.cumpleaños}</p>
             <p className="text-purple-800 mb-2">Cliente: {mascotaSeleccionada.uid}</p>
             <p className="text-purple-800 mb-2">Carnet Sanitario:</p>
-            {mascotaSeleccionada.carnetSanitario && mascotaSeleccionada.carnetSanitario.map((seccion, index) => (
-              <div key={index} className="mb-4 bg-purple-200 p-4 rounded-lg">
-                <p className="text-purple-800 mb-2">{Object.keys(seccion)[0]}:</p>
-                <ul className='flex flex-col'>
-                {Object.values(seccion)[0].map((item, i) => (
-                    <li key={i} className="mb-1">
-                      {Object.entries(item).map(([key, value], j) => (
-                        <p key={j} className="text-purple-800 mb-1">{key}: {value}</p>
-                      ))}
-                    </li>
-                  ))}
+  
+        <div className='flex flex-col justify-evenly items-center p-4'>
+          <h2 className='text-2xl font-semibold'>APLICAR</h2>
+          <div className='flex justify-center items-center gap-5 my-5'>
+        <button className=' w-1/3 bg-red-500 p-2 rounded-lg text-sm ' onClick={()=>handleAplicarVacuna("antirrabica")}>ANTIRRABICA</button>
+        <button className=' w-1/3 bg-green-500 p-2 rounded-lg text-sm' onClick={()=>handleAplicarVacuna("vacunas")}>VACUNA</button>
+        <button className='w-2/3 bg-blue-500 p-2 rounded-lg text-sm' onClick={()=> handleAplicarVacuna("desparacitaciones")}>DESPARACITACION</button>
+        </div>
+        </div>
+        {mascotaSeleccionada.carnetSanitario && mascotaSeleccionada.carnetSanitario.length > 0 ? (
+  mascotaSeleccionada.carnetSanitario.map((seccion, index) => (
+    <div key={index} className="mb-4 bg-purple-200 p-4 rounded-lg">
+      <div>
+        {seccion.tipo === "antirrabica" && (
+          <>
+            <p className="text-purple-800"><span className="font-semibold">Tipo:</span> Antirrábica</p>
+            <p>Fecha: {new Date(seccion.fecha).toLocaleDateString()}</p>
+          </>
+        )}
+      </div>
+      <div>
+        {seccion.tipo === "vacunas" && (
+          <>
+            <p className="text-purple-800"><span className="font-semibold">Tipo:</span> Vacuna</p>
+            <p>Fecha: {new Date(seccion.fecha).toLocaleDateString()}</p>
+          </>
+        )}
+      </div>
+      <div>
+        {seccion.tipo === "desparacitaciones" && (
+          <>
+            <p className="text-purple-800"><span className="font-semibold">Tipo:</span> Desparasitación</p>
+            <p>Fecha: {new Date(seccion.fecha).toLocaleDateString()}</p>
+          </>
+        )}
+      </div>
+    </div>
+  ))
+) : (
+  <p className="text-purple-800">No hay información en el carnet sanitario.</p>
+)}
 
-                </ul>
-                <button onClick={() => handleAplicarVacuna(Object.keys(seccion)[0])} className="bg-purple-600 text-white px-4 py-2 rounded-lg hover:bg-purple-700 focus:outline-none focus:ring focus:border-purple-500 mt-2">Aplicación</button>
-              </div>
-            ))}
+
+
             <div className="flex justify-center mt-4">
               <button className="bg-purple-600 text-white px-4 py-2 rounded-lg mr-4 hover:bg-purple-700 focus:outline-none focus:ring focus:border-purple-500" onClick={cerrarModal}>Cerrar</button>
             </div>
           </div>
         </div>
       )}
-    </div>
-  );
-}
+      </div>
+    );
+  }
+  
