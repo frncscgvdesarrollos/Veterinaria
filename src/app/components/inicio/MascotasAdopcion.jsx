@@ -61,22 +61,22 @@ export default function MascotasAdopcion() {
         <h1 className="text-3xl sm:text-4xl text-white">¡Adopta a tu mascota!</h1>
       </div>
 
-      <div className="p-5 bg-purple-500 mt-5 bg-opacity-50 rounded-lg mx-auto w-full flex flex-col sm:flex-row">
-        <div className="bg-violet-300 bg-opacity-70 flex mx-auto rounded-lg p-5 flex flex-wrap justify-center gap-4 sm:justify-start md:justify-center lg:justify-start mb-8 mt-10 ml-auto md:w-[1500px]" >
+      <div className="p-5 bg-purple-500 mt-5 bg-opacity-50 rounded-lg mx-auto w-full flex flex-col sm:flex-row items-center">
+        <div className="bg-violet-300 bg-opacity-70 flex mx-auto rounded-lg p-5 flex flex-wrap justify-center items-center gap-4 sm:justify-start md:justify-center lg:justify-start mb-8 mt-10 ml-auto md:w-[1500px]" >
           {isLoading ? (
             <div>Cargando...</div>
           ) : error ? (
             <div>Error: {error}</div>
           ) : (
             mascotas.map((mascota, index) => (
-              <div key={index} className="flex w-full bg-blue-300 w-full md:w-[45%] mx-auto bg-opacity-70 shadow-md rounded-md overflow-hidden text-white font-semibold sm:mx-2">
+              <div key={index} className="flex w-full bg-blue-300 w-full md:w-[360px] items-center justify-center ml-auto mx-auto bg-opacity-70 shadow-md rounded-md overflow-hidden text-white font-semibold sm:mx-2">
                 <div className="relative overflow-hidden w-full sm:w-full mx-auto">
                   {mascota.foto ? (
                     <Image
                       className="object-cover w-full h-48 sm:h-56 md:h-64"
                       src={mascota.foto}
                       alt={`Foto de ${mascota.nombre}`}
-                      width={500} height={50}
+                      width={500} height={500}
                     />
                   ) : (
                     <div className="bg-violet-300 w-full h-48 sm:h-56 md:h-64 flex items-center justify-center">
@@ -87,14 +87,11 @@ export default function MascotasAdopcion() {
                     <p className="text-lg font-semibold">{mascota.nombre}</p>
                   </div>
                 </div>
-                <div className="p-4">
+                <div className="p-4 w-full flex flex-col mt-auto">
                   <p className="text-base text-gray-600 mb-2">Edad: {mascota.edad}</p>
                   <p className="text-base text-gray-600 mb-2">Castrado: {mascota.castrado ? "Sí" : "No"}</p>
                   <p className="text-base text-gray-600 mb-2">Info: {mascota.info}</p>
-                  {mascota.cumpleaños && (
-                    <p className="text-base text-gray-600 mb-2">Cumpleaños: {mascota.cumpleaños}</p>
-                  )}
-                  <button className="bg-purple-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded" onClick={() => handlePostular(info, mascota.nombre , mascota.uid)}>
+                  <button className="bg-purple-500 mt-auto hover:bg-blue-700 text-white font-bold py-2 px-4 rounded" onClick={() => handlePostular(info, mascota.nombre , mascota.uid)}>
                     Postular !
                   </button>
                 </div>

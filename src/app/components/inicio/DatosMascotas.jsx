@@ -80,10 +80,10 @@ export default function MisMascotas() {
   
 
   return (
-    <div className="w-[300px] md:w-[400px] lg:w-[500px] mx-auto p-4 border-2 border-purple-800 rounded-lg">
-      <div className="mb-8 flex flex-col w-full justify-between items-center bg-purple-200 bg-opacity-70 rounded-lg p-4">
+    <div className="w-[320px] md:w-[400px] lg:w-[500px] mx-auto p-4  bg-opacity-10 rounded-lg">
+      <div className="mb-8 flex flex-col md:flex-row w-full justify-between items-center bg-purple-200 bg-opacity-70 rounded-lg p-4">
         <h2 className="text-2xl font-bold text-purple-800 mb-2">Tus Mascotas</h2>
-        <button onClick={toggleNuevaMascota} className="bg-purple-800 text-violet-100 bg-opacity-70 rounded-full p-2">
+        <button onClick={toggleNuevaMascota} className="bg-purple-800 text-violet-100 bg-opacity-70 rounded-lg p-2">
           Agregar mascota
         </button>
       </div>
@@ -94,22 +94,21 @@ export default function MisMascotas() {
         </div>
       ) : (
         
-        <div className="flex flex-col items-center bg-pink-300 bg-opacity-70 rounded-lg p-4">
+        <div className="flex flex-col items-center bg-purple-300 bg-opacity-70 rounded-lg p-4">
           {!mascotas || mascotas.length === 0 ? (
             <>
               <p className="text-gray-600 text-xl p-2">No tienes ninguna mascota.</p>
               <Link href="#Adopciones" className="text-purple-800 bg-opacity-70 rounded-full text-xl p-4 my-4 bg-purple-800 text-yellow-300 mx-auto">Adoptar</Link>
-              <button onClick={prevPage} className="bg-purple-800 text-white bg-opacity-70 rounded-full w-12 h-12 md:w-14 md:h-14 my-auto">&#8592;</button>
             </>
           ) : (
-            <div className="flex flex-col gap-4 relative mb-4">
+            <div className="flex flex-col gap-4 relative mb-4 w-[200px] md:w-[350px] lg:w-[450px]">
               <div className="bg-violet-500 bg-opacity-70 rounded-lg overflow-hidden mt-4 flex flex-col items-center">
                 <div className="relative w-[200px] md:w-[300px] lg:w-[400px] mx-auto  h-auto">
-                          <button onClick={nextPage} className="ml-auto bg-purple-300 text-white bg-opacity-70 rounded-lg w-full h-12 mx-auto my-4">
-                          Siguiente mascota✨
-                          </button>
+                              <button className='text-white bg-purple-800 bg-opacity-70 rounded-full p-2 w-full' onClick={nextPostulant}>
+                                  Siguiente🐾
+                            </button>
                   {currentMascota && currentMascota.foto ? (
-                    <div className="w-[200px] md:w-[300px] lg:w-[400px] h-48">
+                    <div className="w-[200px] md:w-[400px] lg:w-[400px] h-48">
                       <Image
                           src={currentMascota.foto}
                           alt={`Foto de ${currentMascota.nombre}`}
@@ -123,13 +122,26 @@ export default function MisMascotas() {
                     </div>
                   )}
                   <div className="absolute w-full bottom-0 left-0 bg-purple-500 bg-opacity-75 text-white p-2">
-                    <h2 className="text-lg font-semibold w-full text-center">{currentMascota ? currentMascota.nombre : 'Nombre de la mascota'}</h2>
+                    <h2 className="text-lg font-semibold w-full text-center text-purple-200">{currentMascota ? currentMascota.nombre : 'Nombre de la mascota'}</h2>
                   </div>
                 </div>
-                <div className="p-4 w-full">
-                  <p className="text-sm text-gray-600 py-2">Tamaño: {currentMascota ? currentMascota.tamaño : 'Tamaño'}</p>
-                  <p className="text-sm text-gray-600 py-2">Raza: {currentMascota ? currentMascota.raza : 'Raza'}</p>
-                  <p className="text-sm text-gray-600 py-2">Esta: {currentMascota ? currentMascota.estadoCivil : null}</p>
+                <div className="p-4 w-full ">
+                  <hr></hr>
+                  <div className=' flex flex-col'>
+                  <div>
+                  <p className="text-xl text-violet-900 font-semibold py-2">Tamaño: {currentMascota ? currentMascota.tamaño : 'Tamaño'}</p>
+                  <p className="text-xl text-violet-900 font-semibold py-2">Raza: {currentMascota ? currentMascota.raza : 'Raza'}</p>
+                  <p className="text-xl text-violet-900 font-semibold  py-2">Esta: {currentMascota ? currentMascota.estadoCivil : null}</p>
+                  </div>
+                  <hr></hr>
+                  <div>
+                          <button onClick={toggleModal} className="bg-lime-600 text-white bg-opacity-70 rounded-full p-2 w-full my-4">Ver Carnet</button>
+                          <button onClick={nextPage} className="w-full md:w-[200px] md:ml-52 bg-purple-300 text-purple-500 bg-opacity-70 rounded-lg h-12 font-bold  my-4">
+                          Siguiente mascota✨
+                          </button>
+                          </div>
+                          <hr></hr>
+                          </div>
                       <div className="p-4 adoptantes mx-auto">
                         {currentMascota.estadoCivil === "En adopción" ? 
                           currentMascota.postulantes?.slice(firstVisiblePostulant, firstVisiblePostulant + 1).map((postulante , index) => (
@@ -141,20 +153,17 @@ export default function MisMascotas() {
                               <p className="text-xl text-gray-300 py-2">Tel: {postulante.telefono}</p>
                               </div>
                               <div className='flex flex-col'>
-                              <button className="bg-violet-600  border-white border-2 text-white bg-opacity-70 rounded-full p-2 w-full my-4 " onClick={() => handleAdopcion(postulante.uid)}>¡Aceptar Adopción! 🥳</button>
-                              <button className='text-white bg-red-600 border-white border-2  rounded-full p-2 w-full mt-4' onClick={() => handleRechazo(postulante.uid)}>Rechazar 🛑</button>
+                              <button className="bg-violet-400  border-white border-2 text-white bg-opacity-40 rounded-full p-2 w-full my-4 " onClick={() => handleAdopcion(postulante.uid)}>¡Aceptar Adopción! 🥳</button>
+                              <button className='text-white bg-red-600 border-white border-2  rounded-full p-2 w-full mt-4' onClick={() => handleRechazo(postulante.uid)}>Rechazar postulante 🛑</button>
                               </div>
                               </div>
                             </div>
                           ))
                           : <p>No hay postulantes para esta mascota</p>}
                       </div>
-                      <>
-                  <button onClick={toggleModal} className="bg-purple-800 text-white bg-opacity-70 rounded-full p-2 w-full my-4">Ver Carnet</button>
-                              <button className='text-white bg-purple-800 bg-opacity-70 rounded-full p-2 w-full' onClick={nextPostulant}>
-                                  Siguiente🐾
-                            </button>
-                            </>
+
+                  <button onClick={toggleModal} className="bg-lime-600 text-white bg-opacity-70 rounded-full p-2 w-full my-4">Ver Carnet</button>
+     
                 </div>
               </div>
 
