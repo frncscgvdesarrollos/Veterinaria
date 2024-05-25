@@ -7,7 +7,7 @@ export default function Veterinaria() {
     <div className='md:mx-auto'>
       <div className='w-full sm:w-full flex flex-col sm:flex-row items-center gap-20 container mx-auto md:mt-10 lg:mt-10'>
         <div className='flex flex-col sm:flex-row justify-between gap-8 w-full mx-auto container-perspective'>
-          <div className='w-[360px] mt-20 mx-auto sm:w-full md:w-[350px] p-5 sm:p-10 border-4 border-violet-200 rounded-lg bg-pink-200 h-full bg-opacity-80 md:ml-10 lg:ml-10 element2'>
+          <div className='w-full mt-20 mx-auto sm:w-full md:w-[350px] py-5 sm:p-10 border-4 border-violet-200 rounded-lg bg-pink-200 h-full bg-opacity-80 md:ml-10 lg:ml-10 element2'>
             <div className='w-full flex sm:w-32 md:w-auto mb-2 rounded-full overflow-hidden mx-auto'>
               <Image src="/vete2.jpg" alt="veterinaria" width={200} height={200} className='scale-100 rounded-lg mx-auto mt-2' />
             </div>
@@ -23,7 +23,7 @@ export default function Veterinaria() {
             <Image src="/vete3.jpg" alt="veterinaria" width={400} height={400} className='imagenVeterinaria rounded-lg m-auto p-4  mb-10' />
             <Image src="/vete4.jpg" alt="veterinaria" width={400} height={400} className='imagenVeterinaria rounded-lg m-auto p-4 mb-10' />
           </div>
-          <div className='w-[360px] mx-auto lg:h-full sm:w-full md:w-[350px] p-5 sm:p-10 border border-4 border-blue-200 rounded-lg bg-cyan-200 bg-opacity-80  md:mt-52 md:mr-10 element'>
+          <div className='w-full lg:h-full sm:w-full md:w-[350px] py-5 sm:p-10 border border-4 border-blue-200 rounded-lg bg-cyan-200 bg-opacity-80  md:mt-52 md:mr-10 element'>
             <div className='w-full flex sm:w-32 md:w-auto mb-2 rounded-full overflow-hidden mx-auto'>
               <Image src="/salchi2.jpg" alt="veterinaria" width={200} height={200} className=' scale-100 rounded-lg mx-auto mt-2' />
             </div>

@@ -1321,28 +1321,36 @@ export async function rechazarPostulante(info, nombreMascota, uidMascota) {
 
 export async function confirmarAdopcion(info, nombreMascota, uidMascota) {
   try {
-      // Referencia a la colección de mascotas
-      const mascotasRef = collection(db, "mascotas");
-      
-      // Crear una consulta para encontrar la mascota específica
-      const q = query(mascotasRef, where("uid", "==", uidMascota), where("nombre", "==", nombreMascota));
-      
-      // Ejecutar la consulta
-      const querySnapshot = await getDocs(q);
+    // Referencia a la colección de mascotas
+    const mascotasRef = collection(db, "mascotas");
 
-      // Verificar si la consulta devolvió：
-      if (!querySnapshot.empty) {
-          // Obtener el primer documento de la consulta (asumiendo que hay uno solo que coincide con uid y nombre)    
-          const doc = querySnapshot.docs[0];
-          
-          // Actualizar el array de postulantes empujando el nuevo info
-          await updateDoc(doc.ref, {
-              adoptantes: arrayUnion(info)
-          });
-      } else {
-          console.log("No se encontró la mascota con los criterios especificados.");
-      } 
+    // Crear una consulta para encontrar la mascota específica
+    const q = query(mascotasRef, where("uid", "==", uidMascota), where("nombre", "==", nombreMascota));
+
+    // Ejecutar la consulta
+    const querySnapshot = await getDocs(q);
+
+    // Verificar si la consulta devolvió resultados
+    if (!querySnapshot.empty) {
+      // Obtener el primer documento de la consulta (asumiendo que hay uno solo que coincide con uid y nombre)
+      const doc = querySnapshot.docs[0];
+
+      // Actualizar el documento de la mascota
+      await updateDoc(doc.ref, {
+        estadoCivil: "Adoptado", // Actualizar el estado civil a "adoptado"
+        uid: info.uid, // Actualizar el UID con el del adoptante
+        postulantes: [],
+        internacion:false,
+        turnosPeluqueria:0,
+        turnosConsulta:0,
+        adoptoPorLaPagina: true,
+      });
+      
+      console.log("Mascota actualizada correctamente.");
+    } else {
+      console.log("No se encontró la mascota con los criterios especificados.");
+    }
   } catch (error) {
-      console.error("Error actualizando los adoptantes: ", error);
+    console.error("Error actualizando los adoptantes: ", error);
   }
 }
