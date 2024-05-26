@@ -1351,12 +1351,97 @@ export async function adoptoPorLaPagina() {
 }
 
 
+// Crear una promoción
+// Crear una promoción
+export function createPromotion(promotion) {
+  return new Promise((resolve, reject) => {
+    try {
+      // Obtener los detalles completos de los productos
+      const products = promotion.productos.map(product => ({
+        id: product.id,
+        nombre: product.nombre,
+        imagen: product.imagen,
+        precio: product.precioVenta,
+        stock: product.stock,
+        categoria: product.categoria,
 
-export async function createPromotion(promotion) { 
+        // Agrega más propiedades según sea necesario
+      }));
+
+      // Construir el objeto de promoción con productos completos
+      const promotionData = {
+        ...promotion,
+        productos: products,
+      };
+
+      // Guardar la promoción en la base de datos
+      const docRef = addDoc(collection(db, "promociones"), promotionData);
+      console.log("Document written with ID: ", docRef.id);
+      resolve();
+    } catch (e) {
+      console.error("Error adding document: ", e);
+      reject(e);
+    }
+  });
+}
+
+
+// Obtener todas las promociones
+export function getPromotions() {
+  return new Promise((resolve, reject) => {
+    const promociones = [];
+    const q = query(collection(db, "promociones"));
+    getDocs(q)
+      .then((querySnapshot) => {
+        querySnapshot.forEach((doc) => {
+          const data = doc.data();
+          data.id = doc.id;
+          promociones.push(data);
+        });
+        resolve(promociones);
+      })
+      .catch((error) => {
+        console.error("Error fetching promotions:", error);
+        reject(error);
+      });
+  });
+}
+
+// Actualizar una promoción
+export async function updatePromotion(id, updatedPromotion) {
   try {
-    const docRef = await addDoc(collection(db, "promociones"), promotion);
-    console.log("Document written with ID: ", docRef.id);
+    const promotionDoc = doc(db, "promociones", id);
+    await updateDoc(promotionDoc, updatedPromotion);
+    console.log("Document updated with ID: ", id);
   } catch (e) {
-    console.error("Error adding document: ", e);
+    console.error("Error updating document: ", e);
+  }
+}
+
+// Eliminar una promoción
+export async function deletePromotion(id) {
+  try {
+    const promotionDoc = doc(db, "promociones", id);
+    await deleteDoc(promotionDoc);
+    console.log("Document deleted with ID: ", id);
+  } catch (e) {
+    console.error("Error deleting document: ", e);
+  }
+}
+
+export async function togglePromotion(id) {
+  try {
+    const promotionDocRef = doc(db, "promociones", id);
+    const promotionDocSnap = await getDoc(promotionDocRef);
+
+    if (promotionDocSnap.exists()) {
+      const currentStatus = promotionDocSnap.data().activa;
+      await updateDoc(promotionDocRef, { activa: !currentStatus });
+      console.log("Document updated with ID: ", id);
+    } else {
+      console.error("No such document!");
+    }
+  } catch (error) {
+    console.error("Error updating document: ", error);
   }
 }
