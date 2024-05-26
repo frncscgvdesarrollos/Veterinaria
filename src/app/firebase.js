@@ -1334,3 +1334,29 @@ export async function confirmarAdopcion(info, nombreMascota, uidMascota) {
     console.error("Error actualizando los adoptantes: ", error);
   }
 }
+
+export async function adoptoPorLaPagina() {
+  let mascotasAdoptadas = [];
+
+  const q = query(collection(db, "mascotas"), where("adoptoPorLaPagina", "==", true));
+
+  const querySnapshot = await getDocs(q);
+
+  querySnapshot.forEach((doc) => {
+    const data = doc.data();
+    mascotasAdoptadas.push(data);
+  });
+
+  return mascotasAdoptadas;
+}
+
+
+
+export async function createPromotion(promotion) { 
+  try {
+    const docRef = await addDoc(collection(db, "promociones"), promotion);
+    console.log("Document written with ID: ", docRef.id);
+  } catch (e) {
+    console.error("Error adding document: ", e);
+  }
+}

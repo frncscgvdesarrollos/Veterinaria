@@ -267,9 +267,8 @@ export default function ProductPage() {
               className="rounded-lg mb-2 p-2 block w-full"
             >
               <option value="">Seleccionar Categoría</option>
-              <option value="alimento">Alimento</option>
-              <option value="alimento suelto">Alimento Suelto</option>
-              <option value="paseo">Paseo</option>
+              <option value="comida">Alimento</option>
+
               <option value="juguetes">Juguetes</option>
               <option value="cuidados">Cuidados</option>
               <option value="ropa">Ropa</option>
@@ -319,7 +318,7 @@ export default function ProductPage() {
           <div className="mx-auto bg-pink-300  bg-opacity-70 p-10 rounded-lg p-4 mb-4 w-1/3 element4">
       {Object.keys(formData).length > 0 && (
         <div className="bg-white rounded-lg shadow-md p-4 mt-4">
-          <Image src={formData.imagen} alt="Imagen" className="mb-2" style={{ maxWidth: "100%" }} />
+          <Image src={formData.imagen} alt="Imagen" className="mb-2" style={{ maxWidth: "100%" }}  width={200} height={200}/>
           <h2 className="text-xl font-semibold mb-2">{formData.nombre}</h2>
           <p className="text-gray-600 mb-2">{formData.descripcion}</p>
           <p className="text-gray-600 mb-2">Para: {formData.para}</p>
@@ -474,16 +473,7 @@ export default function ProductPage() {
           ))}
         </tbody>
       </table>
-
-
-
-
-
-
-
-
-
-        
+       
         {modal &&
             <div className="fixed inset-0 flex items-center justify-center bg-black bg-opacity-50">
               <div className="bg-white rounded-lg p-8">
@@ -518,17 +508,13 @@ export default function ProductPage() {
                             list="categoriaOptions"
                           >
                             <option value="">Seleccionar Categoría</option>
-                            <option value="alimento">Alimento</option>
-                            <option value="alimento suelto">Alimento Suelto</option>
-                            <option value="paseo">Paseo</option>
-                            <option value="juguetes">Juguetes</option>
+                            <option value="comida">Alimento</option>
+                                <option value="juguetes">Juguetes</option>
                             <option value="cuidados">Cuidados</option>
                             <option value="ropa">Ropa</option>
                           </select>
                           <datalist id="categoriaOptions">
-                            <option value="alimento">Alimento</option>
-                            <option value="alimento suelto">Alimento Suelto</option>
-                            <option value="paseo">Paseo</option>
+                            <option value="comida">Alimento</option>
                             <option value="juguetes">Juguetes</option>
                             <option value="cuidados">Cuidados</option>
                             <option value="ropa">Ropa</option>
