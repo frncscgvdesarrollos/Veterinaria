@@ -63,7 +63,7 @@ export default function TurnosParaMañana() {
             }
             getTurnos();
             handleTurnos();
-        }, []);
+        }, [verMasTurnos]);
         
 
     return (
