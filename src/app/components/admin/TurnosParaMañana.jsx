@@ -63,7 +63,7 @@ export default function TurnosParaMañana() {
     useEffect(() => {
         getTurnos();
         handleTurnos();
-    }, [getTurnos, handleTurnos]);
+    });
     
 
     return (
