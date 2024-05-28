@@ -63,7 +63,8 @@ export default function TurnosParaMañana() {
     useEffect(() => {
         getTurnos();
         handleTurnos();
-    }, []);
+    }, [getTurnos, handleTurnos]);
+    
 
     return (
         <div className="m-4 container mx-auto bg-violet-100 p-4 rounded-lg">

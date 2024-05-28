@@ -238,8 +238,9 @@ export default function Page() {
 <div key={promotion.id} className='flex flex-col mb-4 p-6 bg-white rounded-lg shadow-lg'>
   <h2 className='text-2xl font-bold mb-2'>{promotion.nombre}</h2>
   <div className='flex w-full items-center justify-around mx-auto rounded-lg bg-slate-200 bg-opacity-50 border-4 border-gray-900'>
-    <Image className='mx-auto' src={promotion.productos[0].imagen} alt={promotion.nombre} width={200} height={200} className='mb-4' />
-    <Image className='mx-auto' src={promotion.productos[1].imagen} alt={promotion.nombre} width={200} height={200} className='mb-4' />
+  <Image className='mx-auto mb-4' src={promotion.productos[0].imagen} alt={promotion.nombre} width={200} height={200} />
+<Image className='mx-auto mb-4' src={promotion.productos[1].imagen} alt={promotion.nombre} width={200} height={200} />
+
   </div>
   <p className='mb-2'>{promotion.descripcion}</p>
   <div className='flex justify-between items-center'>
