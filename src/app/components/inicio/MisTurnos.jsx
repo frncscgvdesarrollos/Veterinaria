@@ -53,7 +53,7 @@ export default function MisTurnos() {
       ) : error ? (
         <div>Error: {error}</div>
       ) : (
-        <div className="flex flex-col gap-4 ">
+        <div className="flex flex-col gap-4 rounded-lg ">
           {turnosNoFinalizados.length > 0 && (
             <div className="max-h-96 overflow-y-auto">
               <h2 className="text-xl font-semibold mb-2">Turnos pendientes</h2>
@@ -92,11 +92,11 @@ export default function MisTurnos() {
                 {expanded ? 'Ocultar turnos adicionales' : `Mostrar ${turnosNoFinalizados.length - 1} turnos adicionales`}
               </button>
               {expanded && (
-                <div className="bg-violet-300 rounded-lg p-2 h-auto flex flex-col gap-4">
+                <div className="bg-violet-300 rounded-lg p-2 h-auto flex flex-col gap-4 ">
                   {turnosNoFinalizados.slice(1).map((turno, index) => (
-                    <div key={index + 1} className="mb-4 h-auto">
+                    <div key={index + 1} className="mb-4 rounded-lg p-2">
                       <h2 className="text-xl font-semibold mb-2">{formatDate(turno.selectedDate)}</h2>
-                      <ul>
+                      <ul className='rounded-lg'>
                         <li className="mb-2">
                           <strong className='text-lg'>Mascota:</strong> {turno.selectedPet}
                         </li>
