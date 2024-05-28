@@ -2,8 +2,11 @@ import React, { useState, useEffect } from 'react';
 import Calendar from 'react-calendar';
 import 'react-calendar/dist/Calendar.css';
 import { postTurnoPeluqueria, getClientes, getMascotas, getLastTurnoPeluqueriaId, obtenerPrecioPorServicioYTamaño, verificarCapacidadTurno, borrarTodosLosTurnos, registroVentaPeluqueria, idVentas, sumarTurnoPeluqueria, sumarTurnoPeluqueriaMascota } from '../../firebase';
+import { UserAuth } from '@/app/context/AuthContext';
 
 export default function CargarTurnoPmanual() {
+  const { user } = UserAuth();
+  const uidMaga = user?.uid;
   const [formData, setFormData] = useState({
     id: 0,
     estadoDelTurno: 'confirmar',
@@ -21,7 +24,7 @@ export default function CargarTurnoPmanual() {
     precio: 0,
     info: '',
     canilPeluqueria: 0,
-    uid: ''
+    uid: uidMaga
   });
 
   const [clientes, setClientes] = useState([]);
