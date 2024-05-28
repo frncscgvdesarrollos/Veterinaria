@@ -343,9 +343,6 @@ export default function Productos() {
     setCurrentPage(pageNumber);
   };
 
-  const filtrarProductos = categoria => {
-    setFiltro(categoria);
-  };
 
   const agregarAlCarrito = producto => {
     if (producto.stock < 1) {
@@ -428,6 +425,10 @@ export default function Productos() {
       });
   };
 
+  const filtrarProductos = categoria => {
+    setFiltro(categoria);
+  };
+
   return (
     <div>
       {windowSize.width > 768 ? (
@@ -448,6 +449,7 @@ export default function Productos() {
           finalPrice={finalPrice}
           paginate={paginate}
           totalPages={totalPages}
+          filtrarProductos={filtrarProductos} // Añadir aquí
         />
       ) : (
         <MobileProductos
@@ -467,6 +469,7 @@ export default function Productos() {
           finalPrice={finalPrice}
           paginate={paginate}
           totalPages={totalPages}
+          filtrarProductos={filtrarProductos} // Y también aquí
         />
       )}
     </div>

@@ -100,19 +100,20 @@ export default function ProductPage() {
   function handleImageChange(e) {
     const file = e.target.files[0];
     const reader = new FileReader();
-
+  
     reader.onloadend = () => {
       const base64Image = reader.result;
       setFormData(prevState => ({
         ...prevState,
-        imagen: base64Image
+        imagen: URL.createObjectURL(file) // Generar URL de la imagen seleccionada
       }));
     };
-
+  
     if (file) {
       reader.readAsDataURL(file);
     }
   }
+  
 
   function resetFormDataAndCloseForm() {
     setFormData({
