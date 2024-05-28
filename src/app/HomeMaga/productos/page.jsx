@@ -100,19 +100,20 @@ export default function ProductPage() {
   function handleImageChange(e) {
     const file = e.target.files[0];
     const reader = new FileReader();
-  
+    
     reader.onloadend = () => {
-      const base64Image = reader.result;
+      const base64Image = reader.result; // Base64-encoded image data
       setFormData(prevState => ({
         ...prevState,
-        imagen: URL.createObjectURL(file) // Generar URL de la imagen seleccionada
+        imagen: base64Image // Store the base64-encoded image data
       }));
     };
-  
+    
     if (file) {
-      reader.readAsDataURL(file);
+      reader.readAsDataURL(file); // Read file content as data URL
     }
   }
+  
   
 
   function resetFormDataAndCloseForm() {
