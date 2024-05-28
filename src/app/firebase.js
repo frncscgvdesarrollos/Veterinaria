@@ -1443,3 +1443,35 @@ export async function togglePromotion(id) {
     console.error("Error updating document: ", error);
   }
 }
+function uploadImageToFirestore(imageFile) {
+  return new Promise((resolve, reject) => {
+    // Create a reference to the Firebase Storage location where you want to store the image
+    const storageRef = storage.ref().child(`images/${imageFile.name}`);
+
+    // Upload the file to Firebase Storage
+    const uploadTask = storageRef.put(imageFile);
+
+    // Listen for state changes, errors, and completion of the upload.
+    uploadTask.on('state_changed',
+      (snapshot) => {
+        // Handle progress, if needed
+      },
+      (error) => {
+        // Handle unsuccessful uploads
+        reject(error);
+      },
+      () => {
+        // Handle successful uploads on complete
+        // Get the download URL for the image
+        uploadTask.snapshot.ref.getDownloadURL()
+          .then((downloadURL) => {
+            // Resolve with the download URL
+            resolve(downloadURL);
+          })
+          .catch((error) => {
+            reject(error);
+          });
+      }
+    );
+  });
+}

@@ -2,7 +2,6 @@
 import React, { useState, useEffect } from 'react';
 import { getProducts, createProduct, deleteProduct, updateProduct, actualizarId, totalVentas ,cancelarCompraTienda , confirmarCompraTienda, borrarRegistroVenta } from '@/app/firebase';
 import Image from 'next/image';
-
 export default function ProductPage() {
   const [products, setProducts] = useState([]);
   const [ventasTienda, setVentasTienda] = useState([]);
@@ -13,7 +12,7 @@ export default function ProductPage() {
     nombre: '',
     descripcion: '',
     categoria: '',
-    imagen: '',
+    imagen: '', // Cambié la imagen a ser almacenada como una URL
     precioCompra: 0,
     precioVenta: 0,
     stock: 0
@@ -40,6 +39,7 @@ export default function ProductPage() {
       })
       .catch(error => console.error('Error fetching sales:', error));
   }
+
 
   function handleCreateProduct() {
     return getProducts()
@@ -113,7 +113,6 @@ export default function ProductPage() {
       reader.readAsDataURL(file); // Read file content as data URL
     }
   }
-  
   
 
   function resetFormDataAndCloseForm() {
