@@ -14,11 +14,11 @@ export default function LlamarA() {
         const tomorrow = new Date(today.getTime() + 24 * 60 * 60 * 1000); // Obtener la fecha de mañana
         const todayAt6pm = new Date(today);
         todayAt6pm.setHours(18, 0, 0, 0); // Establecer la hora a las 6 de la tarde de hoy
-
         const turnosParaHoy = turnos.filter(turno => {
           const turnoDate = turno.selectedDate.toDate ? turno.selectedDate.toDate() : new Date(turno.selectedDate);
-          return turnoDate >= tomorrow && turnoDate < tomorrow && turno.estadoDelTurno === "confirmar";
+          return turnoDate >= todayAt6pm && turnoDate < tomorrow && turno.estadoDelTurno === "confirmar";
         });
+        
 
         setTurnosParaHoy(turnosParaHoy);
         setIsLoading(true);
