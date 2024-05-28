@@ -10,14 +10,14 @@ export default function TurnosParaMañana() {
     const [verMasTurnos, setVerMasTurnos] = useState(false);
     const [todosLosTurnos, setTodosLosTurnos] = useState([]);
 
-    const toDay = new Date();
-    const tomorrow = new Date(toDay);
-    tomorrow.setDate(tomorrow.getDate() + 1);
-    const pasadoMañana = new Date(toDay);
-    pasadoMañana.setDate(pasadoMañana.getDate() + 2);
     
     
     useEffect(() => {
+        const toDay = new Date();
+        const tomorrow = new Date(toDay);
+        tomorrow.setDate(tomorrow.getDate() + 1);
+        const pasadoMañana = new Date(toDay);
+        pasadoMañana.setDate(pasadoMañana.getDate() + 2);
         const getTurnos = () => {
             getTurnosPeluqueria()
             .then((turnosPeluqueria) => {
