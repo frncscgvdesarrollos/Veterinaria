@@ -15,56 +15,56 @@ export default function TurnosParaMañana() {
     tomorrow.setDate(tomorrow.getDate() + 1);
     const pasadoMañana = new Date(toDay);
     pasadoMañana.setDate(pasadoMañana.getDate() + 2);
-    function handleTurnos() {
-        getTurnosPeluqueria()
-            .then((turnosPeluqueria) => {
-                const turnosFuturos = turnosPeluqueria.filter((turno) => {
-                    const selectedDate = turno.selectedDate.toDate ? turno.selectedDate.toDate() : new Date(turno.selectedDate);
-                    return selectedDate > toDay && turno.estadoDelTurno === 'confirmar';
-                });
-                setTodosLosTurnos(turnosFuturos);
-            })
-            .catch((error) => {
-                console.error('Error fetching turnos:', error);
-            });
-    }
     
-    const getTurnos = () => {
-        getTurnosPeluqueria()
+    
+    useEffect(() => {
+        const getTurnos = () => {
+            getTurnosPeluqueria()
             .then((turnosPeluqueria) => {
                 const hoy = turnosPeluqueria.filter(
                     (turno) => {
                         const selectedDate = turno.selectedDate.toDate ? turno.selectedDate.toDate() : new Date(turno.selectedDate);
-                        return selectedDate.toDateString() === toDay.toDateString() && turno.estadoDelTurno === 'confirmar';
-                    }
-                );
-                const mañana = turnosPeluqueria.filter(
-                    (turno) => {
-                        const selectedDate = turno.selectedDate.toDate ? turno.selectedDate.toDate() : new Date(turno.selectedDate);
-                        return selectedDate.toDateString() === tomorrow.toDateString() && turno.estadoDelTurno === 'confirmar';
-                    }
-                );
-                const pasado = turnosPeluqueria.filter(
-                    (turno) => {
-                        const selectedDate = turno.selectedDate.toDate ? turno.selectedDate.toDate() : new Date(turno.selectedDate);
-                        return selectedDate.toDateString() === pasadoMañana.toDateString() && turno.estadoDelTurno === 'confirmar';
-                    }
-                );
-                setTurnosHoy(hoy);
-                setTurnosMañana(mañana);
-                setTurnosPasado(pasado);
-                setIsLoading(false);
-            })
-            .catch((error) => {
-                console.error('Error fetching turnos:', error);
-            });
-    };
-
-    useEffect(() => {
-        getTurnos();
-        handleTurnos();
-    });
-    
+                            return selectedDate.toDateString() === toDay.toDateString() && turno.estadoDelTurno === 'confirmar';
+                        }
+                    );
+                    const mañana = turnosPeluqueria.filter(
+                        (turno) => {
+                            const selectedDate = turno.selectedDate.toDate ? turno.selectedDate.toDate() : new Date(turno.selectedDate);
+                            return selectedDate.toDateString() === tomorrow.toDateString() && turno.estadoDelTurno === 'confirmar';
+                        }
+                    );
+                    const pasado = turnosPeluqueria.filter(
+                        (turno) => {
+                            const selectedDate = turno.selectedDate.toDate ? turno.selectedDate.toDate() : new Date(turno.selectedDate);
+                            return selectedDate.toDateString() === pasadoMañana.toDateString() && turno.estadoDelTurno === 'confirmar';
+                        }
+                    );
+                    setTurnosHoy(hoy);
+                    setTurnosMañana(mañana);
+                    setTurnosPasado(pasado);
+                    setIsLoading(false);
+                })
+                .catch((error) => {
+                    console.error('Error fetching turnos:', error);
+                });
+            };
+            function handleTurnos() {
+                getTurnosPeluqueria()
+                    .then((turnosPeluqueria) => {
+                        const turnosFuturos = turnosPeluqueria.filter((turno) => {
+                            const selectedDate = turno.selectedDate.toDate ? turno.selectedDate.toDate() : new Date(turno.selectedDate);
+                            return selectedDate > toDay && turno.estadoDelTurno === 'confirmar';
+                        });
+                        setTodosLosTurnos(turnosFuturos);
+                    })
+                    .catch((error) => {
+                        console.error('Error fetching turnos:', error);
+                    });
+            }
+            getTurnos();
+            handleTurnos();
+        }, []);
+        
 
     return (
         <div className="m-4 container mx-auto bg-violet-100 p-4 rounded-lg">
