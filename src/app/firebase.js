@@ -765,12 +765,14 @@ export async function verificarCapacidadTurno(selectedDate, selectedTurno) {
       gigante: 0,
       grande: 0,
       mediano: 0,
-      toy: 0
+      toy: 0,
+      total: 0
     };
 
     // Contar el número de perros de cada tamaño en los turnos encontrados
     querySnapshot.forEach((doc) => {
       const data = doc.data();
+      capacidadTurno.total++; // Incrementar el contador total
       if (data.tamaño === "gigante") {
         capacidadTurno.gigante++;
       } else if (data.tamaño === "grande") {
@@ -782,14 +784,19 @@ export async function verificarCapacidadTurno(selectedDate, selectedTurno) {
       }
     });
 
-    // Verificar si se excede la capacidad permitida
-    if (capacidadTurno.gigante === 1) {
+    // Verificar si se excede la capacidad total permitida para la franja horaria
+    if (capacidadTurno.total >= 8) {
+      return false; // No se permite guardar otro turno si ya hay 8 o más turnos en esta franja horaria
+    }
+
+    // Verificar si se excede la capacidad permitida para cada tamaño
+    if (capacidadTurno.gigante >= 1) {
       // Si ya hay un perro gigante, no se permite guardar otro
       return false;
-    } else if (capacidadTurno.grande === 1) {
+    } else if (capacidadTurno.grande >= 1) {
       // Si hay un perro grande, se aplican las restricciones para medianos y toys
       return capacidadTurno.mediano <= 2 && capacidadTurno.toy <= 3;
-    } else if (capacidadTurno.mediano === 3) {
+    } else if (capacidadTurno.mediano >= 3) {
       // Si hay 3 perros medianos, se aplican las restricciones para toys
       return capacidadTurno.toy <= 3;
     } else {
@@ -801,6 +808,7 @@ export async function verificarCapacidadTurno(selectedDate, selectedTurno) {
     return false; // Error al verificar la capacidad
   }
 }
+
 export async function borrarTodosLosTurnos() {
   const q = query(collection(db, "turnosPeluqueria"));
   const querySnapshot = await getDocs(q);
