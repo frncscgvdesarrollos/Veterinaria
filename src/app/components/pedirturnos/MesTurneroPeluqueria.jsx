@@ -101,6 +101,7 @@ export default function MyCalendarPeluqueria() {
             return { ...prevData, id: ultimoTurnoId };
           });
         })
+        
         .catch(function (error) {
           console.error('Error al obtener el último ID de turno:', error);
         });

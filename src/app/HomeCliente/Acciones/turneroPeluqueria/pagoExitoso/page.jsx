@@ -31,11 +31,14 @@ export default function PagoTurnoPeluqueriaExitoso() {
   }, [uid, num]); // Include num in the dependency array
   
   return (
-    <div>
-      <h2>¡Pago exitoso por MercadoPago!</h2>
-      <h3>El turno de peluquería ha sido pagado correctamente.</h3>
-      <h4>¡Gracias por tu compra!</h4>
-      <Link href='/HomeCliente'>Volver</Link>
+    <div className="text-center">
+      <h2 className="text-2xl font-bold text-green-600 mb-4">¡Pago exitoso por MercadoPago!</h2>
+      <h3 className="text-xl font-semibold text-gray-800 mb-2">El turno de peluquería ha sido pagado correctamente.</h3>
+      <h4 className="text-md text-gray-600 mb-6">¡Gracias por tu compra!</h4>
+      <Link href='/HomeCliente' className="block bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded">
+        Volver
+      </Link>
     </div>
   );
+  
 }
