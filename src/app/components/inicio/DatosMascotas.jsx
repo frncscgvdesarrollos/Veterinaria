@@ -161,7 +161,7 @@ export default function MisMascotas() {
                               </div>
                             </div>
                           ))
-                          : <p>No hay postulantes para esta mascota</p>}
+                          : null}
                       </div>
      
                 </div>
@@ -201,6 +201,7 @@ export default function MisMascotas() {
               <li key={index}>
                 {/* Renderizar los detalles de cada vacuna */}
                 <p>Fecha: {new Date(vacuna.fecha).toLocaleDateString()}</p>
+                <p>Tipo Extra: {vacuna.tipoExtra}</p>
               </li>
             ))}
           </ul>

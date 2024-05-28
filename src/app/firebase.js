@@ -196,7 +196,7 @@ export async function actualizarMetodosDePago(ventaId, mp, efectivo, confirmado)
   }
 }
 
-export async function aplicarVacuna(tipo, fecha, uidMascota, nombreMascota) {
+export async function aplicarVacuna(tipoVacuna, tipoExtra, fecha, uidMascota, nombreMascota ) {
   try {
     // Crear una consulta para encontrar la mascota específica
     const q = query(collection(db, "mascotas"), where("uid", "==", uidMascota), where("nombre", "==", nombreMascota));
@@ -209,11 +209,11 @@ export async function aplicarVacuna(tipo, fecha, uidMascota, nombreMascota) {
       // Obtener el primer documento de la consulta (asumiendo que hay uno solo que coincide con uid y nombre)
       const doc = querySnapshot.docs[0];
 
+
       // Actualizar el documento de la mascota agregando una nueva vacuna al carnetSanitario
       await updateDoc(doc.ref, {
-        carnetSanitario: arrayUnion({ tipo: tipo, fecha: fecha })
+        carnetSanitario: arrayUnion({ tipo: tipoVacuna, fecha: fecha, tipoExtra: tipoExtra  })
       });
-
       console.log("Vacuna aplicada correctamente.");
     } else {
       console.log("No se encontró la mascota con los criterios especificados.");
@@ -222,7 +222,6 @@ export async function aplicarVacuna(tipo, fecha, uidMascota, nombreMascota) {
     console.error("Error aplicando la vacuna: ", error);
   }
 }
-
 export async function actualizarId() {
   const q = query(collection(db, "productos"));
   const querySnapshot = await getDocs(q);

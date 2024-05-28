@@ -11,10 +11,11 @@ export default function Mascotas() {
   const [mascotasEncontradas, setMascotasEncontradas] = useState([]);
   const [modalAbierto, setModalAbierto] = useState(false);
   const [mascotaSeleccionada, setMascotaSeleccionada] = useState(null);
+  const [tipoExtra, setTipoVacuna] = useState("");
 
   useEffect(() => {
     const fetchData = () => {
-      return getClientes()
+      getClientes()
         .then(clientesData => {
           setClientes(clientesData);
           return getMascotas();
@@ -32,7 +33,7 @@ export default function Mascotas() {
   }, []);
 
   const buscarMascota = (nombre) => {
-    const mascotasEncontradas = mascotas.filter(mascota => mascota.nombre.toLowerCase() === nombre.toLowerCase());
+    const mascotasEncontradas = mascotas.filter(mascota => mascota.nombre.toLowerCase().includes(nombre.toLowerCase()));
     setMascotasEncontradas(mascotasEncontradas);
   };
 
@@ -55,15 +56,12 @@ export default function Mascotas() {
     setModalAbierto(false);
   };
 
-  const handleAplicarVacuna = (tipoVacuna) => {
-    // Generar la fecha actual
+  const handleAplicarVacuna = (tipo) => {
     const fechaVacuna = new Date();
   
-    // Aplicar la vacuna con la fecha correcta
-    aplicarVacuna(tipoVacuna, fechaVacuna.getTime(), mascotaSeleccionada.uid, mascotaSeleccionada.nombre)
+    aplicarVacuna(tipo, tipoExtra, fechaVacuna.getTime(), mascotaSeleccionada.uid, mascotaSeleccionada.nombre)
       .then(() => {
         console.log("Vacuna aplicada correctamente.");
-        // Actualizar datos de mascotas después de aplicar la vacuna
         return getMascotas();
       })
       .then(mascotasData => {
@@ -73,7 +71,6 @@ export default function Mascotas() {
         console.error("Error al aplicar la vacuna:", error);
       });
   };
-  
 
   return (
     <div className="p-4 md:p-8 bg-purple-50 rounded-lg">
@@ -137,7 +134,7 @@ export default function Mascotas() {
                     <td className="px-4 py-2 text-purple-800">{mascota.raza}</td>
                     <td className="px-4 py-2 text-purple-800">{mascota.tamaño}</td>
                     <td className="px-4 py-2 text-purple-800">{mascota.uid}</td>
-                    <td className="px-4 py-2">
+                    <td className="px-4 py-2text-purple-800">
                       <Image
                         src={mascota.foto}
                         alt={mascota.nombre}
@@ -146,8 +143,8 @@ export default function Mascotas() {
                         className="rounded-full"
                       />
                     </td>
-                    <td  className="px-4 py-2 text-purple-800">{mascota.turnosPeluqueria}	</td>
-                    <td className='px-4 py-2 text-purple-800'> {mascota.turnosConsulta}</td>
+                    <td className="px-4 py-2 text-purple-800">{mascota.turnosPeluqueria}</td>
+                    <td className='px-4 py-2 text-purple-800'>{mascota.turnosConsulta}</td>
                   </tr>
                 ))}
               </tbody>
@@ -164,49 +161,55 @@ export default function Mascotas() {
             <p className="text-purple-800 mb-2">Tamaño: {mascotaSeleccionada.tamaño}</p>
             <p className="text-purple-800 mb-2">Cliente: {mascotaSeleccionada.uid}</p>
             <p className="text-purple-800 mb-2">Carnet Sanitario:</p>
-  
-        <div className='flex flex-col justify-evenly items-center p-4'>
-          <h2 className='text-2xl font-semibold'>APLICAR</h2>
-          <div className='flex justify-center items-center gap-5 my-5'>
-        <button className=' w-1/3 bg-red-500 p-2 rounded-lg text-sm ' onClick={()=>handleAplicarVacuna("antirrabica")}>ANTIRRABICA</button>
-        <button className=' w-1/3 bg-green-500 p-2 rounded-lg text-sm' onClick={()=>handleAplicarVacuna("vacunas")}>VACUNA</button>
-        <button className='w-2/3 bg-blue-500 p-2 rounded-lg text-sm' onClick={()=> handleAplicarVacuna("desparacitaciones")}>DESPARACITACION</button>
-        </div>
-        </div>
-        {mascotaSeleccionada.carnetSanitario && mascotaSeleccionada.carnetSanitario.length > 0 ? (
-  mascotaSeleccionada.carnetSanitario.map((seccion, index) => (
-    <div key={index} className="mb-4 bg-purple-200 p-4 rounded-lg">
-      <div>
-        {seccion.tipo === "antirrabica" && (
-          <>
-            <p className="text-purple-800"><span className="font-semibold">Tipo:</span> Antirrábica</p>
-            <p>Fecha: {new Date(seccion.fecha).toLocaleDateString()}</p>
-          </>
-        )}
-      </div>
-      <div>
-        {seccion.tipo === "vacunas" && (
-          <>
-            <p className="text-purple-800"><span className="font-semibold">Tipo:</span> Vacuna</p>
-            <p>Fecha: {new Date(seccion.fecha).toLocaleDateString()}</p>
-          </>
-        )}
-      </div>
-      <div>
-        {seccion.tipo === "desparacitaciones" && (
-          <>
-            <p className="text-purple-800"><span className="font-semibold">Tipo:</span> Desparasitación</p>
-            <p>Fecha: {new Date(seccion.fecha).toLocaleDateString()}</p>
-          </>
-        )}
-      </div>
-    </div>
-  ))
-) : (
-  <p className="text-purple-800">No hay información en el carnet sanitario.</p>
-)}
 
-
+            <div className='flex flex-col justify-evenly items-center p-4'>
+              <h2 className='text-2xl font-semibold'>APLICAR</h2>
+              <div className='flex justify-center items-center gap-5 my-5'>
+                <div className='flex-col flex justify-center items-center gap-5'>
+                  <input type='text' className='w-[200px] bg-gray-200' onChange={(event) => setTipoVacuna(event.target.value)} placeholder='Ingrese nombre de la vacuna'></input>
+                  <button className='w-full mx-auto bg-green-500 p-2 rounded-lg text-sm' onClick={() => handleAplicarVacuna("vacunas")}>VACUNA</button>
+                </div>
+                
+                <div className='flex-col flex justify-center items-center gap-5'>
+                  <button className='w-full mx-auto bg-red-500 p-2 rounded-lg text-sm' onClick={() => handleAplicarVacuna("antirrabica")}>ANTIRRÁBICA</button>
+                  <button className='w-full mx-auto bg-blue-500 p-2 rounded-lg text-sm' onClick={() => handleAplicarVacuna("desparacitaciones")}>DESPARACITACIÓN</button>
+                </div>
+              </div>
+            </div>
+            
+            {mascotaSeleccionada.carnetSanitario && mascotaSeleccionada.carnetSanitario.length > 0 ? (
+              mascotaSeleccionada.carnetSanitario.map((seccion, index) => (
+                <div key={index} className="mb-4 bg-purple-200 p-4 rounded-lg">
+                  <div>
+                    {seccion.tipo === "antirrabica" && (
+                      <>
+                        <p className="text-purple-800"><span className="font-semibold">Tipo:</span> Antirrábica</p>
+                        <p>Fecha: {new Date(seccion.fecha).toLocaleDateString()}</p>
+                      </>
+                    )}
+                  </div>
+                  <div>
+                    {seccion.tipo === "vacunas" && (
+                      <>
+                        <p className="text-purple-800"><span className="font-semibold">Tipo:</span> Aplicaciones</p>
+                        <p>Fecha: {new Date(seccion.fecha).toLocaleDateString()}</p>
+                        <p>Vacuna: {seccion.vacuna?.tipoExtra}</p>
+                      </>
+                    )}
+                  </div>
+                  <div>
+                    {seccion.tipo === "desparacitaciones" && (
+                      <>
+                        <p className="text-purple-800"><span className="font-semibold">Tipo:</span> Desparasitación</p>
+                        <p>Fecha: {new Date(seccion.fecha).toLocaleDateString()}</p>
+                      </>
+                    )}
+                  </div>
+                </div>
+              ))
+            ) : (
+              <p className="text-purple-800">No hay información en el carnet sanitario.</p>
+            )}
 
             <div className="flex justify-center mt-4">
               <button className="bg-purple-600 text-white px-4 py-2 rounded-lg mr-4 hover:bg-purple-700 focus:outline-none focus:ring focus:border-purple-500" onClick={cerrarModal}>Cerrar</button>
@@ -214,7 +217,6 @@ export default function Mascotas() {
           </div>
         </div>
       )}
-      </div>
-    );
-  }
-  
+    </div>
+  );
+}

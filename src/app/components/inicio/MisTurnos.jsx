@@ -87,7 +87,7 @@ export default function MisTurnos() {
               </div>
               <button
                 onClick={toggleExpand}
-                className="bg-purple-500 bg-opacity-70 text-white px-4 py-2 rounded-md mb-4"
+                className="bg-purple-500 bg-opacity-70 text-white px-4 py-2 rounded-md mb-4 w-full"
               >
                 {expanded ? 'Ocultar turnos adicionales' : `Mostrar ${turnosNoFinalizados.length - 1} turnos adicionales`}
               </button>
@@ -119,8 +119,13 @@ export default function MisTurnos() {
                           </span>
                         </li>
                       </ul>
+                      
                     </div>
                   ))}
+                                <button
+                onClick={toggleExpand}
+                className="bg-red-500 bg-opacity-70 text-white px-4 py-2 rounded-md mb-4 w-full text-center"
+              >Cerrar</button>
                 </div>
               )}
             </div>
