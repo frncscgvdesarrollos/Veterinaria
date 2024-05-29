@@ -239,9 +239,6 @@ export default function MyCalendarPeluqueria() {
     return view === 'month' && (date.getDay() === 0 || date.getDay() === 6 || date < currentDate);
   };
 
-  // useEffect(function () {
-  //   updateVenta();
-  // }, [formData.precio, formData.selectedDate]);
 
   return (
     <div className="container mx-auto p-4 sm:p-6 md:p-8 lg:p-10">

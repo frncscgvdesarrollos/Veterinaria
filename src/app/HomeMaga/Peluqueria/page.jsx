@@ -1,7 +1,6 @@
 'use client'
 import { useState, useEffect } from 'react';
 import { getTurnosPeluqueria, avanzarEstadoTurno, updateCanil } from '../../firebase';
-import Image from 'next/image';
 
 export default function Peluqueria() {
     const [turnos, setTurnos] = useState([]);
@@ -22,7 +21,7 @@ export default function Peluqueria() {
         if (isLoading) {
             fetchData();
         }
-    }, [isLoading]);
+    }, []);
 
     const handleEstadoUpdate = (id, estadoActual) => {
         let proximoEstado;
@@ -73,7 +72,6 @@ export default function Peluqueria() {
                         <tr>
                             <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Turno</th>
                             <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Mascota</th>
-                            <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Foto</th>
                             <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Servicio</th>
                             <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Info</th>
                             <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Canil</th>
@@ -90,9 +88,6 @@ export default function Peluqueria() {
                                 <tr key={index} className={index % 2 === 0 ? 'bg-violet-100' : 'bg-cyan-100'}>
                                     <td className="px-6 py-4 whitespace-nowrap">{index + 1}</td>
                                     <td className="px-6 py-4 whitespace-nowrap">{turno.selectedPet}</td>
-                                    <td className='px-6 py-4 whitespace-nowrap'>
-                                        <Image src={turno.foto} alt={turno.selectedImg} width={50} height={50} className='rounded-full' />
-                                    </td>
                                     <td className="px-6 py-4 whitespace-nowrap">{turno.selectedServicio}</td>
                                     <td className="px-6 py-4 whitespace-nowrap">{turno.info === "Agrega cualquier informacion que quieras dejar aclarada" ? <span>no hay info</span> : turno.info}</td>
                                     <td className="px-6 py-4 whitespace-nowrap">
