@@ -1,12 +1,11 @@
+'use client'
 import React, { useState, useEffect } from 'react';
 import Calendar from 'react-calendar';
 import 'react-calendar/dist/Calendar.css';
 import { postTurnoPeluqueria, getClientes, getMascotas, getLastTurnoPeluqueriaId, obtenerPrecioPorServicioYTamaño, verificarCapacidadTurno, borrarTodosLosTurnos, registroVentaPeluqueria, idVentas, sumarTurnoPeluqueria, sumarTurnoPeluqueriaMascota } from '../../firebase';
-import { UserAuth } from '@/app/context/AuthContext';
+
 
 export default function CargarTurnoPmanual() {
-  const { user } = UserAuth();
-  const uidMaga = user?.uid;
   const [formData, setFormData] = useState({
     id: 0,
     estadoDelTurno: 'confirmar',
@@ -15,7 +14,7 @@ export default function CargarTurnoPmanual() {
     direccion: '',
     telefono: '',
     selectedDate: new Date(),
-    selectedTurno: '',
+    selectedTurno: 'mañana',
     selectedPet: '',
     selectedServicio: '',
     tamaño: '',
@@ -24,7 +23,7 @@ export default function CargarTurnoPmanual() {
     precio: 0,
     info: '',
     canilPeluqueria: 0,
-    uid: uidMaga
+    uid: '',
   });
 
   const [clientes, setClientes] = useState([]);
@@ -49,7 +48,6 @@ export default function CargarTurnoPmanual() {
     mp: false,
     confirmado: false,
   });
-;
 
   useEffect(() => {
     idVentas().then(nuevoId => {
@@ -58,8 +56,7 @@ export default function CargarTurnoPmanual() {
       console.error('Error al obtener el ID de ventas:', error);
     });
     updateVenta();
-  }); 
-  
+  }, []); // <- Agrega un arreglo vacío aquí para ejecutar solo una vez al montar el componente
 
   const updateVenta = () => {
     setVenta((prevVenta) => ({
@@ -73,8 +70,6 @@ export default function CargarTurnoPmanual() {
       fecha_turno: formData.selectedDate,
     }));
   };
-
-
 
   useEffect(() => {
     const fetchClientes = () => {
@@ -104,21 +99,21 @@ export default function CargarTurnoPmanual() {
 
   const handleChange = (e) => {
     const { name, value } = e.target;
-    setFormData({
-      ...formData,
+    setFormData(prevData => ({
+      ...prevData,
       [name]: value
-    });
+    }));
 
     // Actualizar la venta
-    setVenta({
-      ...venta,
+    setVenta(prevVenta => ({
+      ...prevVenta,
       [name]: value
-    });
+    }));
 
     if (name === 'selectedPet') {
       const selectedPet = mascotas.find((pet) => pet.nombre === value);
       if (selectedPet) {
-        setFormData((prevData) => ({
+        setFormData(prevData => ({
           ...prevData,
           tamaño: selectedPet.tamaño,
         }));
@@ -129,7 +124,7 @@ export default function CargarTurnoPmanual() {
       obtenerPrecioPorServicioYTamaño(value, formData.tamaño)
         .then((precio) => {
           console.log('Precio del servicio y tamaño:', precio);
-          setFormData((prevData) => ({
+          setFormData(prevData => ({
             ...prevData,
             precio: precio,
           }));
@@ -149,14 +144,14 @@ export default function CargarTurnoPmanual() {
         .then(clientMascotas => {
           // Establecer las mascotas en el estado
           setMascotas(clientMascotas);
-          setFormData({
-            ...formData,
+          setFormData(prevData => ({
+            ...prevData,
             nombre: selectedClient.nombre,
             apellido: selectedClient.apellido,
             direccion: selectedClient.direccion,
             telefono: selectedClient.telefono,
             uid: selectedClient.usuarioid
-          });
+          }));
 
           // Actualizar userId en la venta
           setVenta(prevVenta => ({
@@ -184,126 +179,126 @@ export default function CargarTurnoPmanual() {
     const uid = selectedClient?.usuarioid;
 
     verificarCapacidadTurno(formData.selectedDate, formData.selectedTurno)
-      .then(capacidadTurno => {
-        if (!capacidadTurno) {
-          alert('La capacidad para este turno está completa. Por favor, elige otro horario.');
-          return;
-        }
-        return Promise.all([
-          sumarTurnoPeluqueriaMascota(uid, formData.selectedPet),
-          sumarTurnoPeluqueria(uid)
-        ]);
-      })
-      .then(() => postTurnoPeluqueria(formData))
-      .then(() => {
-        alert('Turno registrado correctamente.');
+    .then(capacidadTurno => {
+      if (!capacidadTurno) {
+        alert('La capacidad para este turno está completa. Por favor, elige otro horario.');
+        return;
+      }
+      return Promise.all([
+        sumarTurnoPeluqueriaMascota(uid, formData.selectedPet),
+        sumarTurnoPeluqueria(uid)
+      ]);
+    })
+    .then(() => postTurnoPeluqueria(formData))
+    .then(() => {
+      alert('Turno registrado correctamente.');
 
-        const ventaData = {
-          enCurso: false,
-          id: venta.id,
-          userId: formData.uid,
-          createdAt: new Date(),
-          nombre: formData.nombre,
-          apellido: formData.apellido,
-          direccion: formData.direccion,
-          telefono: formData.telefono,
-          precio: formData.precio,
-          productoOservicio: formData.selectedServicio,
-          categoria: "peluqueria",
-          fecha_turno: formData.selectedDate,
-          efectivo: true,
-          mp: false,
-          confirmado: false,
-        };
+      const ventaData = {
+        enCurso: false,
+        id: venta.id,
+        userId: formData.uid,
+        createdAt: new Date(),
+        nombre: formData.nombre,
+        apellido: formData.apellido,
+        direccion: formData.direccion,
+        telefono: formData.telefono,
+        precio: formData.precio,
+        productoOservicio: formData.selectedServicio,
+        categoria: "peluqueria",
+        fecha_turno: formData.selectedDate,
+        efectivo: true,
+        mp: false,
+        confirmado: false,
+      };
 
-        if (!formData.uid) {
-          ventaData.userId = '';
-        }
+      if (!formData.uid) {
+        ventaData.userId = '';
+      }
 
-        return registroVentaPeluqueria(ventaData);
-      })
-      .then(() => {
-        alert('Venta registrada correctamente.');
-      })
-      .catch(error => {
-        console.error('Error al registrar el turno o la venta:', error);
-        alert('Hubo un error al registrar el turno o la venta. Por favor, inténtalo de nuevo.');
-      });
-  };
-
-  const handlePetSelection = (petId) => {
-    const selectedPet = mascotas.find(mascota => mascota.id === petId);
-    setFormData({
-      ...formData,
-      selectedPet: selectedPet.nombre,
-      tamaño: selectedPet.tamaño,
+      return registroVentaPeluqueria(ventaData);
+    })
+    .then(() => {
+      alert('Venta registrada correctamente.');
+    })
+    .catch(error => {
+      console.error('Error al registrar el turno o la venta:', error);
+      alert('Hubo un error al registrar el turno o la venta. Por favor, inténtalo de nuevo.');
     });
-  };
+};
 
-  const handleServiceSelection = (e) => {
-    const selectedServicio = e.target.value;
-    const tamaño = formData.tamaño;
-    if (!tamaño) {
-      alert('Selecciona un tamaño válido para calcular el precio.');
-      return;
-    }
-    obtenerPrecioPorServicioYTamaño(selectedServicio, tamaño)
-      .then(precio => {
-        setFormData({
-          ...formData,
-          selectedServicio,
-          precio,
-        });
-      })
-      .catch(error => {
-        console.error('Error al obtener el precio del servicio:', error);
-      });
-  };
+const handlePetSelection = (petId) => {
+  const selectedPet = mascotas.find(mascota => mascota.id === petId);
+  setFormData(prevData => ({
+    ...prevData,
+    selectedPet: selectedPet.nombre,
+    tamaño: selectedPet.tamaño,
+  }));
+};
 
-  const handleChangeInfo = (e) => {
-    setFormData({
-      ...formData,
-      info: e.target.value
+const handleServiceSelection = (e) => {
+  const selectedServicio = e.target.value;
+  const tamaño = formData.tamaño;
+  if (!tamaño) {
+    alert('Selecciona un tamaño válido para calcular el precio.');
+    return;
+  }
+  obtenerPrecioPorServicioYTamaño(selectedServicio, tamaño)
+    .then(precio => {
+      setFormData(prevData => ({
+        ...prevData,
+        selectedServicio,
+        precio,
+      }));
+    })
+    .catch(error => {
+      console.error('Error al obtener el precio del servicio:', error);
     });
-  };
+};
 
-  const filteredClientes = clientes.filter(cliente =>
-    cliente.nombre.toLowerCase().includes(searchQuery.toLowerCase()) ||
-    cliente.apellido.toLowerCase().includes(searchQuery.toLowerCase())
-  );
+const handleChangeInfo = (e) => {
+  setFormData(prevData => ({
+    ...prevData,
+    info: e.target.value
+  }));
+};
 
-  const tileDisabled = ({ date }) => {
-    const currentDate = new Date();
-    return date.getDay() === 0 || date.getDay() === 6 || date < currentDate;
-  };
+const filteredClientes = clientes.filter(cliente =>
+  cliente.nombre.toLowerCase().includes(searchQuery.toLowerCase()) ||
+  cliente.apellido.toLowerCase().includes(searchQuery.toLowerCase())
+);
 
-  const borrarHandle = () => {
-    borrarTodosLosTurnos().then(() => {
-      alert('Se han borrado todos los turnos');
-    });
-  };
+const tileDisabled = ({ date }) => {
+  const currentDate = new Date();
+  return date.getDay() === 0 || date.getDay() === 6 || date < currentDate;
+};
 
-  const limpiarFormulario = () => {
-    setFormData({
-      id: 0,
-      estadoDelTurno: 'confirmar',
-      nombre: '',
-      apellido: '',
-      direccion: '',
-      telefono: '',
-      selectedDate: new Date(),
-      selectedTurno: 'mañana',
-      selectedPet: '',
-      selectedServicio: '',
-      tamaño: '',
-      transporte: false,
-      pago: false,
-      precio: 0,
-      info: '',
-      canilPeluqueria: 0,
-      uid: ''
-    });
-  };
+const borrarHandle = () => {
+  borrarTodosLosTurnos().then(() => {
+    alert('Se han borrado todos los turnos');
+  });
+};
+
+const limpiarFormulario = () => {
+  setFormData({
+    id: 0,
+    estadoDelTurno: 'confirmar',
+    nombre: '',
+    apellido: '',
+    direccion: '',
+    telefono: '',
+    selectedDate: new Date(),
+    selectedTurno: 'mañana',
+    selectedPet: '',
+    selectedServicio: '',
+    tamaño: '',
+    transporte: false,
+    pago: false,
+    precio: 0,
+    info: '',
+    canilPeluqueria: 0,
+    uid: ''
+  });
+};
 
   return (
     <div className="max-w-md mx-auto p-4 bg-violet-200 rounded-lg shadow-md">
