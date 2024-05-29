@@ -1,4 +1,9 @@
-const [turnos, setTurnos] = useState([]);
+'use client'
+import { useState, useEffect } from 'react';
+import { getTurnosPeluqueria, avanzarEstadoTurno, updateCanil } from '../../firebase';
+
+export default function Peluqueria() {
+    const [turnos, setTurnos] = useState([]);
     const [isLoading, setIsLoading] = useState(true);
 
     useEffect(() => {
@@ -57,7 +62,6 @@ const [turnos, setTurnos] = useState([]);
                 console.error('Error updating turno:', error);
             });
     }
-
     const filteredTurnosManana = turnos.filter(turno => 
         turno.estadoDelTurno !== "confirmar" &&
         turno.estadoDelTurno !== "finalizado" &&
