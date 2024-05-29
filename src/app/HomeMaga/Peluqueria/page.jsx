@@ -147,9 +147,6 @@ export default function Peluqueria() {
                             <tr key={index} className={index % 2 === 0 ? 'bg-violet-100' : 'bg-cyan-100'}>
                                 <td className="px-6 py-4 whitespace-nowrap">{index + 1}</td>
                                 <td className="px-6 py-4 whitespace-nowrap">{turno.selectedPet}</td>
-                                <td className='px-6 py-4 whitespace-nowrap'>
-                                    <Image src={turno.foto} alt={turno.selectedImg} width={50} height={50} className='rounded-full' />
-                                </td>
                                 <td className="px-6 py-4 whitespace-nowrap">{turno.selectedServicio}</td>
                                 <td className="px-6 py-4 whitespace-nowrap">{turno.info === "Agrega cualquier informacion que quieras dejar aclarada" ? <span>no hay info</span> : turno.info}</td>
                                 <td className="px-6 py-4 whitespace-nowrap">
