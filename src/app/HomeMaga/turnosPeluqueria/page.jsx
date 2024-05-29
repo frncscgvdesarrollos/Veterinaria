@@ -1,17 +1,4 @@
 'use client'
-
-El error de "before initialization" suele ocurrir cuando intentas acceder a un estado (state) o una referencia (ref) antes de que estén completamente inicializados. En tu componente VistaTurnosPeluqueriaVeterinaria, estás utilizando tres estados (turnosActivos, turnosFinalizados, turnosCancelados) que se inicializan con useState, y parece que los estás utilizando antes de que se completen sus inicializaciones.
-
-Para solucionar este problema, puedes asegurarte de que los estados se inicialicen correctamente antes de acceder a ellos. Parece que estás utilizando un efecto (useEffect) para cargar los turnos de la peluquería, por lo que puedes agregar verificaciones para asegurarte de que los estados se establezcan antes de intentar acceder a ellos.
-
-Aquí hay algunos cambios que podrías hacer para solucionar este problema:
-
-Verifica si los estados están inicializados antes de renderizarlos en el JSX.
-Muestra algún tipo de indicador de carga mientras los datos se están cargando.
-Aquí te dejo una versión modificada de tu componente que implementa estas sugerencias:
-
-javascript
-Copiar código
 import React, { useState, useEffect } from 'react';
 import { getTurnosPeluqueria, cancelarTurnoPeluqueria } from '@/app/firebase';
 import CargarTurnoPmanual from '@/app/components/admin/CargarTurnoPmanual';
