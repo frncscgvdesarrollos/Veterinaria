@@ -23,7 +23,7 @@ export default function Caja() {
         .catch((error) => {
           console.error("Error fetching data:", error);
         });
-
+  
       calcularVentas()
         .then((totalData) => {
           setTotal(totalData);
@@ -34,6 +34,7 @@ export default function Caja() {
     };
     fetchData();
   }, []);
+  
 
   const filtrarVentasDelDia = (ventasData) => {
     const fechaActual = new Date();
@@ -41,34 +42,34 @@ export default function Caja() {
     const finDia = new Date(fechaActual.getFullYear(), fechaActual.getMonth(), fechaActual.getDate(), 18, 0, 0); // Hasta las 18:00 horas del día actual
     return ventasData.filter((venta) => venta.createdAt.toDate() >= inicioDia && venta.createdAt.toDate() <= finDia);
   };
-
+  
   const calcularTotales = (data) => {
     const mPTotal = data.reduce((total, item) => {
       return item.mp ? total + item.precio : total;
     }, 0);
     setTotalMP(mPTotal);
-
+  
     const efectivoTotal = data.reduce((total, item) => {
       return item.efectivo ? total + item.precio : total;
     }, 0);
     setTotalEfectivo(efectivoTotal);
-
+  
     const peluqueriaTotal = data
       .filter((item) => item.categoria === "peluqueria")
       .reduce((total, item) => total + item.precio, 0);
     setTotalPeluqueria(peluqueriaTotal);
-
+  
     const veterinariaTotal = data
       .filter((item) => item.categoria === "consulta")
       .reduce((total, item) => total + item.precio, 0);
     setTotalVeterinaria(veterinariaTotal);
-
+  
     const tiendaTotal = data
       .filter((item) => item.categoria === "tienda")
       .reduce((total, item) => total + item.precio, 0);
     setTotalTienda(tiendaTotal);
   };
-
+  
   return (
     <div className="p-8">
       <h1 className="text-3xl font-bold mb-4">Caja</h1>
@@ -80,7 +81,7 @@ export default function Caja() {
           {ver ? "Ocultar Ventas" : "Mostrar Ventas"}
         </button>
         <button
-          onClick={eliminarVentas}
+          onClick={() => eliminarVentas()}
           className="bg-red-500 hover:bg-red-600 text-white rounded-lg py-2 px-4 transition duration-300 ease-in-out"
         >
           Eliminar Ventas
