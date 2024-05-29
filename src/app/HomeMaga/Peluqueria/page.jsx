@@ -52,15 +52,16 @@ export default function Peluqueria() {
         turno.estadoDelTurno !== "confirmar" &&
         turno.estadoDelTurno !== "finalizado" &&
         turno.estadoDelTurno !== "cancelado" &&
-        turno.selectedTurno !== "tarde"
+        turno.selectedTurno === "mañana"
     );
-
-    const filteredTurnosTarde = turnos.filter(turno => 
+    
+    const filteredTurnosTarde = turnos.filter(turno =>
         turno.estadoDelTurno !== "confirmar" &&
         turno.estadoDelTurno !== "finalizado" &&
         turno.estadoDelTurno !== "cancelado" &&
-        turno.selectedTurno !== "mañana"
+        turno.selectedTurno === "tarde"
     );
+    
 
     useEffect(() => {
         if (isLoading) {
