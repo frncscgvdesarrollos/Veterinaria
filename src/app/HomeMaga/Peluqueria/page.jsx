@@ -5,6 +5,8 @@ import { getTurnosPeluqueria, avanzarEstadoTurno, updateCanil } from '../../fire
 export default function Peluqueria() {
     const [turnos, setTurnos] = useState([]);
     const [isLoading, setIsLoading] = useState(true);
+    const [filteredTurnosManana, setFilteredTurnosManana] = useState([]);
+    const [filteredTurnosTarde, setFilteredTurnosTarde] = useState([]);
 
     const handleEstadoUpdate = (id, estadoActual) => {
         let proximoEstado;
@@ -48,20 +50,6 @@ export default function Peluqueria() {
                 console.error('Error updating turno:', error);
             });
     }
-    const filteredTurnosManana = turnos.filter(turno => 
-        turno.estadoDelTurno !== "confirmar" &&
-        turno.estadoDelTurno !== "finalizado" &&
-        turno.estadoDelTurno !== "cancelado" &&
-        turno.selectedTurno === "mañana"
-    );
-    
-    const filteredTurnosTarde = turnos.filter(turno =>
-        turno.estadoDelTurno !== "confirmar" &&
-        turno.estadoDelTurno !== "finalizado" &&
-        turno.estadoDelTurno !== "cancelado" &&
-        turno.selectedTurno === "tarde"
-    );
-    
 
     useEffect(() => {
         if (isLoading) {
@@ -76,6 +64,29 @@ export default function Peluqueria() {
                 });
         }
     }, [isLoading]);
+
+    useEffect(() => {
+        const filteredManana = turnos.filter(turno => 
+            turno.estadoDelTurno !== "confirmar" &&
+            turno.estadoDelTurno !== "finalizado" &&
+            turno.estadoDelTurno !== "cancelado" &&
+            turno.selectedTurno === "mañana"
+        );
+
+        setFilteredTurnosManana(filteredManana);
+    }, [turnos]);
+
+    useEffect(() => {
+        const filteredTarde = turnos.filter(turno =>
+            turno.estadoDelTurno !== "confirmar" &&
+            turno.estadoDelTurno !== "finalizado" &&
+            turno.estadoDelTurno !== "cancelado" &&
+            turno.selectedTurno === "tarde"
+        );
+
+        setFilteredTurnosTarde(filteredTarde);
+    }, [turnos]);
+
     return (
         <div className="bg-purple-200 p-4 sm:p-6 md:p-8 lg:p-10 rounded-lg">
             <h1 className="text-3xl font-bold underline text-center mb-6">Peluquería</h1>
