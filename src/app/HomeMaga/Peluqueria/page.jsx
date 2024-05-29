@@ -1,5 +1,5 @@
 'use client'
-import { useState, useEffect } from 'react';
+import { useState, useEffect, useCallback } from 'react';
 import { getTurnosPeluqueria, avanzarEstadoTurno, updateCanil } from '../../firebase';
 
 export default function Peluqueria() {
@@ -21,9 +21,9 @@ export default function Peluqueria() {
         if (isLoading) {
             fetchData();
         }
-    }, []);
+    }, [isLoading]);
 
-    const handleEstadoUpdate = (id, estadoActual) => {
+    const handleEstadoUpdate = useCallback((id, estadoActual) => {
         let proximoEstado;
 
         switch (estadoActual) {
@@ -39,10 +39,9 @@ export default function Peluqueria() {
 
         avanzarEstadoTurno(id)
             .then(() => {
-                setIsLoading(true);
-                setTurnos(turnos.map(turno => {
+                setTurnos(prevTurnos => prevTurnos.map(turno => {
                     if (turno.id === id) {
-                        turno.estadoDelTurno = proximoEstado;
+                        return { ...turno, estadoDelTurno: proximoEstado };
                     }
                     return turno;
                 }));
@@ -50,9 +49,9 @@ export default function Peluqueria() {
             .catch(error => {
                 console.error('Error updating turno:', error);
             });
-    };
+    }, []);
 
-    const handleUpdateCanil = (id, newCanil) => {
+    const handleUpdateCanil = useCallback((id, newCanil) => {
         updateCanil(id, newCanil)
             .then(() => {
                 console.log('Canil updated successfully.');
@@ -61,7 +60,21 @@ export default function Peluqueria() {
             .catch(error => {
                 console.error('Error updating canil:', error);
             });
-    };
+    }, []);
+
+    const filteredTurnosManana = turnos.filter(turno => 
+        turno.estadoDelTurno !== "confirmar" &&
+        turno.estadoDelTurno !== "finalizado" &&
+        turno.estadoDelTurno !== "cancelado" &&
+        turno.selectedTurno !== "tarde"
+    );
+
+    const filteredTurnosTarde = turnos.filter(turno => 
+        turno.estadoDelTurno !== "confirmar" &&
+        turno.estadoDelTurno !== "finalizado" &&
+        turno.estadoDelTurno !== "cancelado" &&
+        turno.selectedTurno !== "mañana"
+    );
 
     return (
         <div className="bg-purple-200 p-4 sm:p-6 md:p-8 lg:p-10 rounded-lg">
@@ -80,42 +93,37 @@ export default function Peluqueria() {
                         </tr>
                     </thead>
                     <tbody className="bg-white divide-y divide-gray-200">
-                        {turnos.map((turno, index) => (
-                            turno.estadoDelTurno !== "confirmar" &&
-                            turno.estadoDelTurno !== "finalizado" &&
-                            turno.estadoDelTurno !== "cancelado" &&
-                            turno.selectedTurno !== "tarde" && (
-                                <tr key={index} className={index % 2 === 0 ? 'bg-violet-100' : 'bg-cyan-100'}>
-                                    <td className="px-6 py-4 whitespace-nowrap">{index + 1}</td>
-                                    <td className="px-6 py-4 whitespace-nowrap">{turno.selectedPet}</td>
-                                    <td className="px-6 py-4 whitespace-nowrap">{turno.selectedServicio}</td>
-                                    <td className="px-6 py-4 whitespace-nowrap">{turno.info === "Agrega cualquier informacion que quieras dejar aclarada" ? <span>no hay info</span> : turno.info}</td>
-                                    <td className="px-6 py-4 whitespace-nowrap">
-                                        <select
-                                            value={turno.canilPeluqueria}
-                                            onChange={(e) => handleUpdateCanil(turno.id, e.target.value)}
-                                        >
-                                            {["1", " 2", "3", "4", "5", "6", "7"].map((canilNumber) => (
-                                                <option key={canilNumber} value={canilNumber}>
-                                                    Canil {canilNumber}
-                                                </option>
-                                            ))}
-                                        </select>
-                                    </td>
-                                    <td className='px-6 py-4 whitespace-nowrap'>{turno.estadoDelTurno}</td>
-                                    <td className='flex justify-center'>
-                                        {turno.estadoDelTurno === "veterinaria" &&
-                                            <button onClick={() => handleEstadoUpdate(turno.id, turno.estadoDelTurno)} className='bg-red-500 p-2 m-2 text-white'>En proceso</button>
-                                        }
-                                        {turno.estadoDelTurno === "proceso" &&
-                                            <button onClick={() => handleEstadoUpdate(turno.id, turno.estadoDelTurno)} className='bg-red-500 p-2 m-2 text-white'>Terminado</button>
-                                        }
-                                        {turno.estadoDelTurno !== "veterinaria" && turno.estadoDelTurno !== "proceso" &&
-                                            <p className='bg-red-500 p-2 m-2 text-white'>EN ESPERA</p>
-                                        }
-                                    </td>
-                                </tr>
-                            )
+                        {filteredTurnosManana.map((turno, index) => (
+                            <tr key={index} className={index % 2 === 0 ? 'bg-violet-100' : 'bg-cyan-100'}>
+                                <td className="px-6 py-4 whitespace-nowrap">{index + 1}</td>
+                                <td className="px-6 py-4 whitespace-nowrap">{turno.selectedPet}</td>
+                                <td className="px-6 py-4 whitespace-nowrap">{turno.selectedServicio}</td>
+                                <td className="px-6 py-4 whitespace-nowrap">{turno.info === "Agrega cualquier informacion que quieras dejar aclarada" ? <span>no hay info</span> : turno.info}</td>
+                                <td className="px-6 py-4 whitespace-nowrap">
+                                    <select
+                                        value={turno.canilPeluqueria}
+                                        onChange={(e) => handleUpdateCanil(turno.id, e.target.value)}
+                                    >
+                                        {["1", "2", "3", "4", "5", "6", "7"].map((canilNumber) => (
+                                            <option key={canilNumber} value={canilNumber}>
+                                                Canil {canilNumber}
+                                            </option>
+                                        ))}
+                                    </select>
+                                </td>
+                                <td className='px-6 py-4 whitespace-nowrap'>{turno.estadoDelTurno}</td>
+                                <td className='flex justify-center'>
+                                    {turno.estadoDelTurno === "veterinaria" &&
+                                        <button onClick={() => handleEstadoUpdate(turno.id, turno.estadoDelTurno)} className='bg-red-500 p-2 m-2 text-white'>En proceso</button>
+                                    }
+                                    {turno.estadoDelTurno === "proceso" &&
+                                        <button onClick={() => handleEstadoUpdate(turno.id, turno.estadoDelTurno)} className='bg-red-500 p-2 m-2 text-white'>Terminado</button>
+                                    }
+                                    {turno.estadoDelTurno !== "veterinaria" && turno.estadoDelTurno !== "proceso" &&
+                                        <p className='bg-red-500 p-2 m-2 text-white'>EN ESPERA</p>
+                                    }
+                                </td>
+                            </tr>
                         ))}
                     </tbody>
                 </table>
@@ -135,45 +143,40 @@ export default function Peluqueria() {
                         </tr>
                     </thead>
                     <tbody className="bg-white divide-y divide-gray-200">
-                        {turnos.map((turno, index) => (
-                            turno.estadoDelTurno !== "confirmar" &&
-                            turno.estadoDelTurno !== "finalizado" &&
-                            turno.estadoDelTurno !== "cancelado" &&
-                            turno.selectedTurno !== "mañana" && (
-                                <tr key={index} className={index % 2 === 0 ? 'bg-violet-100' : 'bg-cyan-100'}>
-                                    <td className="px-6 py-4 whitespace-nowrap">{index + 1}</td>
-                                    <td className="px-6 py-4 whitespace-nowrap">{turno.selectedPet}</td>
-                                    <td className='px-6 py-4 whitespace-nowrap'>
-                                        <Image src={turno.foto} alt={turno.selectedImg} width={50} height={50} className='rounded-full' />
-                                    </td>
-                                    <td className="px-6 py-4 whitespace-nowrap">{turno.selectedServicio}</td>
-                                    <td className="px-6 py-4 whitespace-nowrap">{turno.info === "Agrega cualquier informacion que quieras dejar aclarada" ? <span>no hay info</span> : turno.info}</td>
-                                    <td className="px-6 py-4 whitespace-nowrap">
-                                        <select
-                                            value={turno.canilPeluqueria}
-                                            onChange={(e) => handleUpdateCanil(turno.id, e.target.value)}
-                                        >
-                                            {["1", " 2", "3", "4", "5", "6", "7"].map((canilNumber) => (
-                                                <option key={canilNumber} value={canilNumber}>
-                                                    Canil {canilNumber}
-                                                </option>
-                                            ))}
-                                        </select>
-                                    </td>
-                                    <td className='px-6 py-4 whitespace-nowrap'>{turno.estadoDelTurno}</td>
-                                    <td className='flex justify-center'>
-                                        {turno.estadoDelTurno === "veterinaria" &&
-                                            <button onClick={() => handleEstadoUpdate(turno.id, turno.estadoDelTurno)} className='bg-red-500 p-2 m-2 text-white'>En proceso</button>
-                                        }
-                                        {turno.estadoDelTurno === "proceso" &&
-                                            <button onClick={() => handleEstadoUpdate(turno.id, turno.estadoDelTurno)} className='bg-red-500 p-2 m-2 text-white'>Terminado</button>
-                                        }
-                                        {turno.estadoDelTurno !== "veterinaria" && turno.estadoDelTurno !== "proceso" &&
-                                            <p className='bg-red-500 p-2 m-2 text-white'>EN ESPERA</p>
-                                        }
-                                    </td>
-                                </tr>
-                            )
+                        {filteredTurnosTarde.map((turno, index) => (
+                            <tr key={index} className={index % 2 === 0 ? 'bg-violet-100' : 'bg-cyan-100'}>
+                                <td className="px-6 py-4 whitespace-nowrap">{index + 1}</td>
+                                <td className="px-6 py-4 whitespace-nowrap">{turno.selectedPet}</td>
+                                <td className='px-6 py-4 whitespace-nowrap'>
+                                    <Image src={turno.foto} alt={turno.selectedImg} width={50} height={50} className='rounded-full' />
+                                </td>
+                                <td className="px-6 py-4 whitespace-nowrap">{turno.selectedServicio}</td>
+                                <td className="px-6 py-4 whitespace-nowrap">{turno.info === "Agrega cualquier informacion que quieras dejar aclarada" ? <span>no hay info</span> : turno.info}</td>
+                                <td className="px-6 py-4 whitespace-nowrap">
+                                    <select
+                                        value={turno.canilPeluqueria}
+                                        onChange={(e) => handleUpdateCanil(turno.id, e.target.value)}
+                                    >
+                                        {["1", "2", "3", "4", "5", "6", "7"].map((canilNumber) => (
+                                            <option key={canilNumber} value={canilNumber}>
+                                                Canil {canilNumber}
+                                            </option>
+                                        ))}
+                                    </select>
+                                </td>
+                                <td className='px-6 py-4 whitespace-nowrap'>{turno.estadoDelTurno}</td>
+                                <td className='flex justify-center'>
+                                    {turno.estadoDelTurno === "veterinaria" &&
+                                        <button onClick={() => handleEstadoUpdate(turno.id, turno.estadoDelTurno)} className='bg-red-500 p-2 m-2 text-white'>En proceso</button>
+                                    }
+                                    {turno.estadoDelTurno === "proceso" &&
+                                        <button onClick={() => handleEstadoUpdate(turno.id, turno.estadoDelTurno)} className='bg-red-500 p-2 m-2 text-white'>Terminado</button>
+                                    }
+                                    {turno.estadoDelTurno !== "veterinaria" && turno.estadoDelTurno !== "proceso" &&
+                                        <p className='bg-red-500 p-2 m-2 text-white'>EN ESPERA</p>
+                                    }
+                                </td>
+                            </tr>
                         ))}
                     </tbody>
                 </table>
