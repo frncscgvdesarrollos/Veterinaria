@@ -1,5 +1,5 @@
 'use client'
-import { useState, useEffect, useCallback } from 'react';
+import { useState, useEffect } from 'react';
 import { getTurnosPeluqueria, avanzarEstadoTurno, updateCanil } from '../../firebase';
 
 export default function Peluqueria() {
@@ -20,7 +20,7 @@ export default function Peluqueria() {
         }
     }, [isLoading]);
 
-    const handleEstadoUpdate = useCallback((id, estadoActual) => {
+    function handleEstadoUpdate(id, estadoActual) {
         let proximoEstado;
 
         switch (estadoActual) {
@@ -46,18 +46,22 @@ export default function Peluqueria() {
             .catch(error => {
                 console.error('Error updating turno:', error);
             });
-    }, []);
+    }
 
-    const handleUpdateCanil = useCallback((id, newCanil) => {
-        updateCanil(id, newCanil)
+    function handleUpdateCanil(id, canilNumber) {
+        updateCanil(id, canilNumber)
             .then(() => {
-                console.log('Canil updated successfully.');
-                setIsLoading(true); // Esto recargará los datos después de cambiar el canil
+                setTurnos(prevTurnos => prevTurnos.map(turno => {
+                    if (turno.id === id) {
+                        return { ...turno, canilPeluqueria: canilNumber };
+                    }
+                    return turno;
+                }));
             })
             .catch(error => {
-                console.error('Error updating canil:', error);
+                console.error('Error updating turno:', error);
             });
-    }, []);
+    }
 
     const filteredTurnosManana = turnos.filter(turno => 
         turno.estadoDelTurno !== "confirmar" &&
