@@ -512,6 +512,8 @@ const limpiarFormulario = () => {
               className="mt-1"
             />
           </div>
+          <input type="hidden" name="uid" value="noescliente" />
+          <input type="hidden" name="selectedPet" value="mascotaNoEsCliente" />
 
           <div className="mb-4">
             <label htmlFor="info" className="block text-sm font-medium text-gray-700">Información Adicional</label>
