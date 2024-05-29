@@ -111,7 +111,11 @@ export default function Peluqueria() {
                                         ))}
                                     </select>
                                 </td>
-                                <td className='px-6 py-4 whitespace-nowrap'>{turno.estadoDelTurno}</td>
+                                <td className='px-6 py-4 whitespace-nowrap'>
+                                    {turno.estadoDelTurno && (
+                                        <span>{turno.estadoDelTurno}</span>
+                                    )}
+                                </td>
                                 <td className='flex justify-center'>
                                     {turno.estadoDelTurno === "veterinaria" &&
                                         <button onClick={() => handleEstadoUpdate(turno.id, turno.estadoDelTurno)} className='bg-red-500 p-2 m-2 text-white'>En proceso</button>
@@ -161,7 +165,11 @@ export default function Peluqueria() {
                                         ))}
                                     </select>
                                 </td>
-                                <td className='px-6 py-4 whitespace-nowrap'>{turno.estadoDelTurno}</td>
+                                <td className='px-6 py-4 whitespace-nowrap'>
+                                    {turno.estadoDelTurno && (
+                                        <span>{turno.estadoDelTurno}</span>
+                                    )}
+                                </td>
                                 <td className='flex justify-center'>
                                     {turno.estadoDelTurno === "veterinaria" &&
                                         <button onClick={() => handleEstadoUpdate(turno.id, turno.estadoDelTurno)} className='bg-red-500 p-2 m-2 text-white'>En proceso</button>
