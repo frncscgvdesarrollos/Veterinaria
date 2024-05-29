@@ -73,6 +73,7 @@ export default function Peluqueria() {
         turno.selectedTurno !== "mañana"
     );
 
+
     return (
         <div className="bg-purple-200 p-4 sm:p-6 md:p-8 lg:p-10 rounded-lg">
             <h1 className="text-3xl font-bold underline text-center mb-6">Peluquería</h1>
