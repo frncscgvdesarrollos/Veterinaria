@@ -1,9 +1,4 @@
-'use client'
-import { useState, useEffect } from 'react';
-import { getTurnosPeluqueria, avanzarEstadoTurno, updateCanil } from '../../firebase';
-
-export default function Peluqueria() {
-    const [turnos, setTurnos] = useState([]);
+const [turnos, setTurnos] = useState([]);
     const [isLoading, setIsLoading] = useState(true);
 
     useEffect(() => {
@@ -20,7 +15,7 @@ export default function Peluqueria() {
         }
     }, [isLoading]);
 
-    function handleEstadoUpdate(id, estadoActual) {
+    const handleEstadoUpdate = (id, estadoActual) => {
         let proximoEstado;
 
         switch (estadoActual) {
@@ -48,7 +43,7 @@ export default function Peluqueria() {
             });
     }
 
-    function handleUpdateCanil(id, canilNumber) {
+    const handleUpdateCanil = (id, canilNumber) => {
         updateCanil(id, canilNumber)
             .then(() => {
                 setTurnos(prevTurnos => prevTurnos.map(turno => {
