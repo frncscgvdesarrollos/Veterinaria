@@ -69,7 +69,7 @@ export default function Peluqueria() {
                 .then(data => {
                     setTurnos(data);
                     setIsLoading(false);
-                })
+                }) 
                 .catch(error => {
                     console.error('Error fetching turnos:', error);
                     setIsLoading(false);
