@@ -7,7 +7,7 @@ export default function Peluqueria() {
     const [isLoading, setIsLoading] = useState(true);
 
     useEffect(() => {
-        const fetchData = () => {
+        if (isLoading) {
             getTurnosPeluqueria()
                 .then(data => {
                     setTurnos(data);
@@ -15,11 +15,8 @@ export default function Peluqueria() {
                 })
                 .catch(error => {
                     console.error('Error fetching turnos:', error);
+                    setIsLoading(false);
                 });
-        };
-
-        if (isLoading) {
-            fetchData();
         }
     }, [isLoading]);
 
