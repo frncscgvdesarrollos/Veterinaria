@@ -6,20 +6,6 @@ export default function Peluqueria() {
     const [turnos, setTurnos] = useState([]);
     const [isLoading, setIsLoading] = useState(true);
 
-    useEffect(() => {
-        if (isLoading) {
-            getTurnosPeluqueria()
-                .then(data => {
-                    setTurnos(data);
-                    setIsLoading(false);
-                })
-                .catch(error => {
-                    console.error('Error fetching turnos:', error);
-                    setIsLoading(false);
-                });
-        }
-    }, [isLoading]);
-
     const handleEstadoUpdate = (id, estadoActual) => {
         let proximoEstado;
 
@@ -76,7 +62,19 @@ export default function Peluqueria() {
         turno.selectedTurno !== "mañana"
     );
 
-
+    useEffect(() => {
+        if (isLoading) {
+            getTurnosPeluqueria()
+                .then(data => {
+                    setTurnos(data);
+                    setIsLoading(false);
+                })
+                .catch(error => {
+                    console.error('Error fetching turnos:', error);
+                    setIsLoading(false);
+                });
+        }
+    }, [isLoading]);
     return (
         <div className="bg-purple-200 p-4 sm:p-6 md:p-8 lg:p-10 rounded-lg">
             <h1 className="text-3xl font-bold underline text-center mb-6">Peluquería</h1>
