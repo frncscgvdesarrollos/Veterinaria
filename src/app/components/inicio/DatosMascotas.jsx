@@ -113,7 +113,9 @@ export default function MisMascotas() {
                           src={currentMascota.foto}
                           alt={`Foto de ${currentMascota.nombre}`}
                           loading='lazy'
-                          fill={true}
+                          width={300}
+                          height={200}
+                          className="object-cover"
                         />
                       </div>
                   ) : (
