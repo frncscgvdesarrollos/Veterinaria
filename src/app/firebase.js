@@ -272,7 +272,7 @@ export async function clienteExisteConTerminosTRUE(uid) {
     // Construye la consulta para buscar un cliente con el UID proporcionado y que tenga "terminos" en true
     const clientesQuery = query(
       collection(db, "clientes"), 
-      where("usuarioId", "==", uid),
+      where("usuarioid", "==", uid),
       where("terminos", "==", true)
     );
     

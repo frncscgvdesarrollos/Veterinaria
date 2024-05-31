@@ -29,8 +29,8 @@ export default function Hero() {
           <li className='text-3xl my-10'>¡Todo por la web.... Desde tu casa!</li>
         </ul>
       </div>
-      <div className="flex flex-col  items-center justify-center mb-10 lg:mr-20 ">
-        <Image src={images[currentSlide]} alt="visitas"  width={300} height={300} className='rounded-[100%]'/>
+      <div className="flex flex-col  items-center justify-center mb-10 lg:mr-20 lg:mt-10 ">
+        <Image src={images[currentSlide]} alt="visitas"  width={300} height={300} className='rounded-[100%] imagen'/>
         <h2 className='text-3xl text-white text-center font-bold uppercase tracking-wider mt-10 lg:mt-2 border-b-2 border-yellow-200 mx-auto '>Nuestras visitas!!</h2>
       </div>
     </div>

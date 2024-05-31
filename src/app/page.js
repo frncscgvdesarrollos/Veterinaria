@@ -6,10 +6,11 @@ import Image from 'next/image'; // Importar Image desde next/image
 
 export default function Home() {
   const { user, googleSignIn } = UserAuth();
+  const usuario = user;
   const [showModal, setShowModal] = useState(true);
 
   useEffect(() => {
-    if (user) {
+    if (usuario) {
       redirect("/HomeCliente");
     }
   }, [user]);
@@ -30,7 +31,7 @@ export default function Home() {
     <main className="clase-fondo min-h-screen flex flex-col items-center  pt-24 bg-gradient-to-b from-gray-800 to-indigo-300">
       {showModal && (
         <div className="fixed backgroundModal top-0 left-0 w-full h-full flex justify-center items-center bg-black bg-opacity-50 z-50">
-        <div className="bg-violet-100 p-8 rounded shadow-lg h-full w-full animate-opacity">
+        <div className="bg-violet-100 p-8 rounded shadow-lg animate-opacity w-5/6 h-5/6 my-auto">
           <Image
             src="/LOGO3.svg"
             alt="logo"

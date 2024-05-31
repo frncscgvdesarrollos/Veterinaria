@@ -62,10 +62,16 @@ body{
   border-radius: 50%;
   animation: backgroundAnimation 10s ease-in infinite alternate; /* Se aplica la animación al fondo */
 }
+.imagen{
+  width: auto;
+  height: auto;
+}
 .imagenModal {
   margin-top: 10% !important;
   position: relative;
   margin: auto;
+  width: auto;
+  height: auto;
   box-shadow: -100px 50px 200px #f6e144;
   border-radius: 50%;
   animation: fadeIn 10s ease-in;
@@ -248,6 +254,53 @@ body{
 }
 
 
+.imagenHero {
+  margin-top: 10% !important;
+  position: relative;
+  margin-left: auto;
+  margin-right: auto;
+  width: 300px;
+  height: 300px;
+  border-radius: 50%;
+}
+
+/* 
+.producto {
+  position: relative;
+  perspective: 1000px; 
+}
+
+.producto h1 {
+  position: relative;
+  display: inline-block;
+  transform-style: preserve-3d; 
+  animation: bamboleo 5s ease-in-out infinite alternate;
+}
+.producto h2 {
+  position: relative;
+  display: inline-block;
+  transform-style: preserve-3d; 
+  animation: bamboleo 5s ease-in-out infinite alternate;
+}
+
+.producto h3 {
+  position: relative;
+  display: inline-block;
+  transform-style: preserve-3d; 
+  animation: bamboleo 5s ease-in-out infinite alternate;
+}
+
+@keyframes bamboleo {
+  0% {
+    transform: rotateX(10deg) rotateY(-7deg) translateZ(0); 
+  }
+  50% {
+    transform: rotateX(-10deg) rotateY(5deg) translateZ(40px); 
+  }
+  100% {
+    transform: rotateX(10deg) rotateY(-7deg) translateZ(0); 
+  }
+} */
 
 .producto {
   position: relative;
@@ -340,4 +393,3 @@ body{
     opacity: 1; /* Mantener opacidad de elementos adyacentes */
   }
 }
-

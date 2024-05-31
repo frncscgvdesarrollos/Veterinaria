@@ -9,7 +9,7 @@ export default function Veterinaria() {
         <div className='flex flex-col sm:flex-row justify-between gap-8 w-full mx-auto container-perspective'>
           <div className='w-[300px] mx-auto sm:w-full md:w-[350px] py-5 sm:p-10 border-4 border-yellow-200 rounded-lg bg-pink-200 bg-opacity-40 h-full bg-opacity-80 md:ml-10 lg:ml-10 element2'>
             <div className='w-full flex sm:w-32 md:w-auto mb-2 rounded-full overflow-hidden mx-auto'>
-              <Image src="/vete2.jpg" alt="veterinaria" width={200} height={200} className='scale-100 rounded-lg mx-auto mt-2' />
+              <Image src="/vete2.jpg" alt="veterinaria" width={200} height={200} className='scale-100 rounded-lg mx-auto mt-2 imagen' />
             </div>
             <h3 className='textoVeterinaria text-xl sm:text-3xl font-bold mt-5 mb-4 text-purple-800 text-center'>Chequeos</h3>
             <div className='flex flex-col items-center'>
@@ -25,7 +25,7 @@ export default function Veterinaria() {
           </div>
           <div className='w-[300px] mx-auto  md:mt-20 lg:h-full sm:w-full md:w-[350px] py-5 sm:p-10 border border-4 border-yellow-200 rounded-lg bg-cyan-200 bg-opacity-40 md:mt-40 md:mr-10 element'>
             <div className='w-full flex sm:w-32 md:w-auto mb-2 rounded-full overflow-hidden mx-auto'>
-              <Image src="/salchi2.jpg" alt="veterinaria" width={200} height={200} className='scale-100 rounded-lg mx-auto mt-2' />
+              <Image src="/salchi2.jpg" alt="veterinaria" width={200} height={200} className='scale-100 rounded-lg mx-auto mt-2 imagen' />
             </div>
             <h3 className='textoVeterinaria text-xl sm:text-3xl font-bold text-purple-800 mt-5 mb-4 text-center'>Peluquería</h3>
             <div className='flex flex-col items-center'>

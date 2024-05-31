@@ -56,8 +56,19 @@ export default function MascotasAdopcion() {
 
   return (
     <div className="bg-violet-200 bg-opacity-50 rounded-lg p-5 max-w-screen-lg mx-auto flex flex-col items-center justify-center">
-      <div className="p-5 rounded-lg bg-purple-600 bg-opacity-50 mx-auto text-center py-8">
-        <h1 className="text-3xl sm:text-4xl text-white">¡Adopta a tu mascota!</h1>
+      <div className="flex flex-col items-center justify-center">
+        <div className="p-5 rounded-lg bg-purple-600 bg-opacity-50 mx-auto text-center py-8">
+  <h1 className="text-3xl sm:text-4xl text-white">¡Adopta a tu mascota!</h1>
+  <div className="mt-4 text-lg font-medium text-left">
+    <p className="text-white">Explicación del método de adopción:</p>
+    <ol className="list-decimal list-inside text-white my-2">
+      <li className="my-2">Se postula: Al dueño actual de la mascota le llegará el nombre y el celular de la persona que se postule.</li>
+      <li className="my-2">El dueño actual debe comunicarse con los postulantes.</li>
+      <li className="my-2">Si se confirma la adopción, se pasará la mascota al perfil del nuevo dueño, y la veterinaria será notificada de esto.</li>
+    </ol>
+    <p className="text-white mt-4">Esperamos poder ayudar para que cada vez más perros puedan encontrar su lugar con un dueño responsable.</p>
+  </div>
+</div>
       </div>
 
       <div className="p-5 bg-purple-500 mt-5 bg-opacity-50 rounded-lg mx-auto w-full flex flex-col sm:flex-row items-center">

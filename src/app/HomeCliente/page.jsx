@@ -27,7 +27,7 @@ export default function HomeCliente() {
     return () => {
       window.removeEventListener('resize', handleResize);
     };
-  });
+  }, []);
 
   function verificarCliente(uid) {
     return new Promise((resolve, reject) => {
@@ -36,7 +36,7 @@ export default function HomeCliente() {
           if (cliente) {
             resolve(cliente);
           } else {
-            reject(new Error(`No se encontró ningún cliente con el UID proporcionado: ${uid}`));
+            reject(new Error(`No se encontró ningún cliente con el UID`));
           }
         })
         .catch(error => {
@@ -47,7 +47,7 @@ export default function HomeCliente() {
           if (cliente) {
             resolve(cliente);
           } else {
-            reject(new Error(`No se encontró ningún cliente con el UID proporcionado: ${uid}`));
+            reject(new Error(`No se encontró ningún cliente con el UID}`));
           }
         })
         .catch(error => {
