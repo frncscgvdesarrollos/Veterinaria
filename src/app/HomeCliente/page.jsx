@@ -3,7 +3,6 @@ import { useEffect, useState } from 'react';
 import Veterinaria from '../components/inicio/Veterinaria';
 import MisDatos from '../components/inicio/MisDatos';
 import MisTurnos from '../components/inicio/MisTurnos';
-// import MisCompras from '../components/inicio/MisCompras';
 import DatosMascotas from '../components/inicio/DatosMascotas';
 import Productos from '../components/inicio/Productos';
 import MascotasAdopcion from '../components/inicio/MascotasAdopcion';
@@ -28,7 +27,7 @@ export default function HomeCliente() {
     return () => {
       window.removeEventListener('resize', handleResize);
     };
-  }, []);
+  });
 
   function verificarCliente(uid) {
     return new Promise((resolve, reject) => {
@@ -95,9 +94,6 @@ export default function HomeCliente() {
       <div className="mt-20 w-[360px] lg:w-3/4 mx-auto">
         <Productos />
       </div>
-      {/* <div className="mt-20 p-10 mx-auto">
-        <MisCompras />
-      </div> */}
       <div className="my-8 w-full" id="Adopciones">
         <MascotasAdopcion />
       </div>
