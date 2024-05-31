@@ -14,7 +14,7 @@ export default function Page() {
     const [isLoadingPeluqueria, setIsLoadingPeluqueria] = useState(true);
 
     useEffect(() => {
-        const fetchDataPeluqueria = () => {
+        const fetchTurnosPeluqueria = () => {
             getTurnosPeluqueria()
                 .then(data => {
                     setTurnosPeluqueria(data);
@@ -22,28 +22,12 @@ export default function Page() {
                 })
                 .catch(error => {
                     console.error('Error fetching turnos de peluquería:', error);
-                });
-        };
-
-        if (isLoadingPeluqueria) {
-            fetchDataPeluqueria();
-        }
-    }, [isLoadingPeluqueria]);
-
-    useEffect(() => {
-        const fetchDataTransporte = () => {
-            getTurnosPeluqueria()
-                .then(data => {
-                    setTurnosPeluqueria(data);
                     setIsLoadingPeluqueria(false);
-                })
-                .catch(error => {
-                    console.error('Error fetching turnos de transporte:', error);
                 });
         };
 
         if (isLoadingPeluqueria) {
-            fetchDataTransporte();
+            fetchTurnosPeluqueria();
         }
     }, [isLoadingPeluqueria]);
 
@@ -59,7 +43,6 @@ export default function Page() {
                 Caja
             </div>
             }
-            {/* Tabla de turnos de transporte */}
             <div className="col-span-3 bg-violet-100 shadow-md rounded-md overflow-hidden p-4 sm:p-6 md:p-8 lg:p-10 overflow-x-auto">
                 <h1 className="text-2xl sm:text-lg font-bold text-cyan-800 mb-4">Transporte</h1>
                 <div className="">
@@ -113,7 +96,6 @@ export default function Page() {
                 </div>
             </div>
         
-            {/* Tabla de turnos de peluquería */}
             <div className="col-span-3 bg-violet-100 shadow-md rounded-md overflow-hidden p-4 sm:p-6 md:p-8 lg:p-10">
                 <h2 className="text-2xl sm:text-lg font-bold text-cyan-800 mb-4">Peluquería</h2>
                 <table className="min-w-full divide-y divide-gray-200">

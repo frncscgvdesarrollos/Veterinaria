@@ -16,7 +16,6 @@ export default function MascotasAdopcion() {
     apellido,
     telefono
   }
-  console.log(datosCliente);
   const [mascotas, setMascotas] = useState([]);
   const [isLoading, setIsLoading] = useState(true);
   const [error, setError] = useState(null);

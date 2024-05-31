@@ -705,7 +705,6 @@ export async function getTurnosPeluqueria() {
   querySnapshot.forEach((doc) => {
     turnos.push(doc.data());
   })
-  console.log(turnos)
   return turnos
 }
 export async function getPreciosPorTamaño(servicio, tamaño) {
@@ -1473,5 +1472,38 @@ function uploadImageToFirestore(imageFile) {
           });
       }
     );
+  });
+}
+
+export function turnosVetVerificar(selectedDate, selectedTime) {
+  const q = query(
+    collection(db, "turnosCheckeo"),
+    where("selectedDate", "==", selectedDate)
+  );
+
+  return getDocs(q).then(querySnapshot => {
+    if (!querySnapshot.empty) {
+      const turnosEnFecha = querySnapshot.docs;
+      
+      // Verificar si ya existe un turno a la misma hora
+      const turnoExistente = turnosEnFecha.some(doc => doc.data().selectedTime === selectedTime);
+      if (turnoExistente) {
+        return { exists: true, overLimit: false };
+      }
+
+      // Verificar si hay más de 4 turnos en total para esa fecha
+      if (turnosEnFecha.length >= 4) {
+        return { exists: false, overLimit: true };
+      }
+
+      // No hay conflictos
+      return { exists: false, overLimit: false };
+    } else {
+      // No se encontró ningún turno para esa fecha
+      return { exists: false, overLimit: false };
+    }
+  }).catch(error => {
+    console.error("Error al verificar turnos de veterinaria:", error);
+    throw new Error("Error al verificar turnos de veterinaria");
   });
 }

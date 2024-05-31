@@ -1,17 +1,19 @@
 'use client'
-import{ useEffect, useState } from 'react';
+import { useEffect, useState } from 'react';
 import Calendar from 'react-calendar';
 import 'react-calendar/dist/Calendar.css';
 import { MascotasContext } from '../../context/MascotaContext';
 import { UseClient } from '@/app/context/ClientContext';
 import { UserAuth } from '../../context/AuthContext';
-import { postTurnoChekeo, sumarTurnoCheckeoMascota, sumarTurnoChekeo, getPrecioConsulta } from '../../firebase';
+import { postTurnoChekeo, sumarTurnoCheckeoMascota, sumarTurnoChekeo, getPrecioConsulta, turnosVetVerificar } from '../../firebase';
+import ProductoY from '../mercadopago/ProductoY';
 
-const MyCalendar = () => {
+ export default function MyCalendar()  {
   const { user } = UserAuth();
   const { mascota } = MascotasContext();
   const userId = user?.uid;
   const { datosCliente } = UseClient();
+  const [verificar, setVerificar] = useState(false);
 
   const [formData, setFormData] = useState({
     selectedPet: '',
@@ -73,26 +75,39 @@ const MyCalendar = () => {
 
   const handleFormSubmit = e => {
     e.preventDefault();
-    console.log('Datos del formulario:', formData);
-    postTurnoChekeo(formData)
-      .then(() => {
-        console.log('Turno creado exitosamente');
-        return Promise.all([
-          sumarTurnoChekeo(formData.usuarioId),
-          sumarTurnoCheckeoMascota(formData.usuarioId, formData.selectedPet)
-        ]);
-      })
-      .then(() => {
-        console.log('Turno y contadores actualizados correctamente');
+    turnosVetVerificar(formData.selectedDate, formData.selectedTime)
+      .then(({ exists, overLimit }) => {
+        if (exists) {
+          alert("Ya existe un turno para esta fecha y hora. Por favor, elija otra.");
+          return;
+        }
+
+        if (overLimit) {
+          alert("No se pueden agendar más de 4 turnos en un mismo día. Por favor, elija otra fecha.");
+          return;
+        }
+
+        console.log('Datos del formulario:', formData);
+        return postTurnoChekeo(formData)
+          .then(() => {
+            console.log('Turno creado exitosamente');
+            alert("Turno creado exitosamente");
+            return Promise.all([
+              sumarTurnoChekeo(formData.usuarioId),
+              sumarTurnoCheckeoMascota(formData.usuarioId, formData.selectedPet)
+            ]);
+          })
+          .then(() => {
+            console.log('Turno y contadores actualizados correctamente');
+            alert("Turno y contadores actualizados correctamente");
+            handleVerificar();
+          });
       })
       .catch(error => {
         console.error('Error al crear el turno:', error);
+        alert("Error al crear el turno");
       });
   };
-
-  function handleVerificarTurno(formData) {
-    // Lógica para verificar el turno
-  }
 
   const handleChange = e => {
     const { name, value, type, checked } = e.target;
@@ -107,6 +122,10 @@ const MyCalendar = () => {
     const currentDate = new Date();
     return view === 'month' && (date.getDay() === 0 || date.getDay() === 6 || date < currentDate);
   };
+
+  function handleVerificar () {
+    setVerificar(true);
+  }
 
   return (
     <div className="container mx-auto p-4 lg:p-10 bg-gray-100">
@@ -180,14 +199,15 @@ const MyCalendar = () => {
           />
         </div>
         <button
-          onClick={() => handleVerificarTurno(formData)}
+          type="submit"
           className="bg-blue-500 hover:bg-blue-700 text-white py-2 px-4 rounded-md w-full"
         >
           Verificar turno
         </button>
       </form>
+
+      {verificar && <ProductoY form={formData}/>}	
     </div>
   );
 }
 
-export default MyCalendar;

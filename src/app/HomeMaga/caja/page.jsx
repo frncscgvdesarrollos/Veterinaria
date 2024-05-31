@@ -1,5 +1,5 @@
 'use client';
-import { useEffect, useState } from "react";
+import { useEffect, useState, useMemo, useCallback } from "react";
 import { eliminarVentas, totalVentas, calcularVentas } from "@/app/firebase";
 
 export default function Caja() {
@@ -32,44 +32,34 @@ export default function Caja() {
           console.error("Error fetching total:", error);
         });
     };
+
     fetchData();
   }, []);
-  
 
-  const filtrarVentasDelDia = (ventasData) => {
+  const filtrarVentasDelDia = useCallback((ventasData) => {
     const fechaActual = new Date();
-    const inicioDia = new Date(fechaActual.getFullYear(), fechaActual.getMonth(), fechaActual.getDate() - 1, 18, 0, 0); // Desde las 18:00 horas del día anterior
-    const finDia = new Date(fechaActual.getFullYear(), fechaActual.getMonth(), fechaActual.getDate(), 18, 0, 0); // Hasta las 18:00 horas del día actual
+    const inicioDia = new Date(fechaActual.getFullYear(), fechaActual.getMonth(), fechaActual.getDate() - 1, 18, 0, 0);
+    const finDia = new Date(fechaActual.getFullYear(), fechaActual.getMonth(), fechaActual.getDate(), 18, 0, 0);
     return ventasData.filter((venta) => venta.createdAt.toDate() >= inicioDia && venta.createdAt.toDate() <= finDia);
-  };
-  
-  const calcularTotales = (data) => {
-    const mPTotal = data.reduce((total, item) => {
-      return item.mp ? total + item.precio : total;
-    }, 0);
+  }, []);
+
+  const calcularTotales = useCallback((data) => {
+    const mPTotal = data.reduce((total, item) => item.mp ? total + item.precio : total, 0);
     setTotalMP(mPTotal);
-  
-    const efectivoTotal = data.reduce((total, item) => {
-      return item.efectivo ? total + item.precio : total;
-    }, 0);
+
+    const efectivoTotal = data.reduce((total, item) => item.efectivo ? total + item.precio : total, 0);
     setTotalEfectivo(efectivoTotal);
-  
-    const peluqueriaTotal = data
-      .filter((item) => item.categoria === "peluqueria")
-      .reduce((total, item) => total + item.precio, 0);
+
+    const peluqueriaTotal = data.filter((item) => item.categoria === "peluqueria").reduce((total, item) => total + item.precio, 0);
     setTotalPeluqueria(peluqueriaTotal);
-  
-    const veterinariaTotal = data
-      .filter((item) => item.categoria === "consulta")
-      .reduce((total, item) => total + item.precio, 0);
+
+    const veterinariaTotal = data.filter((item) => item.categoria === "consulta").reduce((total, item) => total + item.precio, 0);
     setTotalVeterinaria(veterinariaTotal);
-  
-    const tiendaTotal = data
-      .filter((item) => item.categoria === "tienda")
-      .reduce((total, item) => total + item.precio, 0);
+
+    const tiendaTotal = data.filter((item) => item.categoria === "tienda").reduce((total, item) => total + item.precio, 0);
     setTotalTienda(tiendaTotal);
-  };
-  
+  }, []);
+
   return (
     <div className="p-8">
       <h1 className="text-3xl font-bold mb-4">Caja</h1>
@@ -96,8 +86,8 @@ export default function Caja() {
         <h4 className="mb-2">Total veterinaria: {totalVeterinaria}</h4>
         <h4 className="mb-4">Total tienda: {totalTienda}</h4>
         <hr className="my-4" />
-        <h5 className="mb-2">Total transporte: {totalPeluqueria / 100 * 10}</h5>
-        <h5 className="mb-2">Total peluquería: {totalPeluqueria / 100 * 20} </h5>
+        <h5 className="mb-2">Total transporte: {(totalPeluqueria / 100) * 10}</h5>
+        <h5 className="mb-2">Total peluquería: {(totalPeluqueria / 100) * 20}</h5>
       </div>
       {ver && (
         <>
