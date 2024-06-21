@@ -4,6 +4,7 @@ import { UserAuth } from '../context/AuthContext';
 import { MascotaContextProvider } from '../context/MascotaContext';
 import { ClientContextProvider } from '../context/ClientContext';
 import Hero from '../components/estructura/hero';
+import Footer from '../components/estructura/Footer';
 
 export default function HomeClientelayout({ children }) {
     const { user } = UserAuth();
@@ -16,6 +17,7 @@ export default function HomeClientelayout({ children }) {
             <ClientContextProvider uid={uid}>
                 <MascotaContextProvider uid={uid}>
                     {children}
+                    <Footer />
                 </MascotaContextProvider>
             </ClientContextProvider>
             : null}

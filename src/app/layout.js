@@ -1,4 +1,3 @@
-import Footer from './components/estructura/Footer'
 import Header from './components/estructura/Header'
 import { AuthContextProvider} from '../app/context/AuthContext';
 import './globals.css'
@@ -6,6 +5,7 @@ import './globals.css'
 export const metadata = {
   title: 'Magali Martin',
   description: 'Veterinaria onLine',
+  favicon: '/LOGO.svg',
 }
 
 export default function RootLayout({ children  }) {
@@ -17,11 +17,9 @@ export default function RootLayout({ children  }) {
       </head>
       <body className='bg-gray-800 flex flex-col'>
         <AuthContextProvider>
-
               <Header />
-                {children}
-              <Footer />
 
+                {children}
         </AuthContextProvider>
       </body>
     </html>

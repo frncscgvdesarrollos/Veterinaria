@@ -2,7 +2,7 @@
 import {MercadoPagoConfig, Preference} from "mercadopago";
 import { redirect } from "next/navigation";
 
-const client = new MercadoPagoConfig({accessToken: 'TEST-4732185295999828-021210-74be192e021f74c875fe9bba82f58ec9-1153230629'});
+const client = new MercadoPagoConfig({accessToken:`${process.env.A}`});
 export default async function ProductosMP( precioFinal ) {
   const precio = precioFinal.precioFinal;
     const preference = await new Preference(client).create({
